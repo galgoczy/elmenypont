@@ -23,3 +23,44 @@ The design medium is **HTML/CSS/JS** — these are prototypes, not production co
 - `README.md` — this file
 - `chats/` — conversation transcripts (read these!)
 - `project/` — the `Elmeny.hu átdizájn 2026` project files (HTML prototypes, assets, components)
+
+---
+
+## Implementation
+
+The **A** direction (`project/Elmenypont Hub - A.dc.html`) has been implemented as a
+production **React + Vite + TypeScript** single-page app in this repo.
+
+### Run it
+
+```bash
+npm install
+npm run dev       # local dev server
+npm run build     # type-check + production build to dist/
+npm run preview   # serve the production build
+```
+
+### Layout
+
+- `index.html` — app entry
+- `src/main.tsx`, `src/App.tsx` — bootstrap + page composition
+- `src/styles/global.css` — design-system tokens (colors/typography), local
+  `@font-face` (Syne + DM Sans), keyframes, base styles
+- `src/hooks/useScene.ts` — the single scroll/resize-driven scene (hero
+  sticky-scroll progress + the rocket following the serpentine SVG path)
+- `src/components/` — one component per section (Nav, Hero, Marquee,
+  TrendSection, WhatWeDo, Services, MoreSelfiematak, OtherServices, IsoScene,
+  WhyUs, Partners, ContactCTA, Footer) plus shared primitives (`Reveal`,
+  `Doodle`, `ImageSlot`, `BeforeAfter`)
+- `public/assets/`, `public/fonts/` — logos, doodles, photos and the bundled
+  variable fonts, copied from the design bundle
+
+The design bundle under `project/` and `chats/` is kept intact as the reference.
+
+### Notes for the client
+
+- The auto-scrolling photo strip in **Mit csinálunk** and the Greenbox/Selfiebox
+  card images are `ImageSlot` placeholders — drop real photos in later by passing
+  a `src` to those slots.
+- Contact address is `hello@elmeny.hu`; the form is a front-end demo (wire it to
+  a backend / mail service before going live).

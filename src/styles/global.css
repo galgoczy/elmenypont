@@ -1,0 +1,166 @@
+/* ============================================================
+   ÉLMÉNYPONT HUB — global styles
+   Ported from the Claude Design "Elmenypont Hub - A" prototype
+   + the bundled design-system tokens (colors / typography).
+   ============================================================ */
+
+/* ---- Local webfonts (offline-capable variable TTFs) --------- */
+@font-face {
+  font-family: 'Syne';
+  src: url('/fonts/Syne-Variable.ttf') format('truetype-variations');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/DMSans-Variable.ttf') format('truetype-variations');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/DMSans-Italic-Variable.ttf') format('truetype-variations');
+  font-weight: 100 1000;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* Master brand: Coral */
+  --coral-50: #fdece8;
+  --coral-100: #fbd3ca;
+  --coral-300: #f2937f;
+  --coral-500: #e94a35; /* primary */
+  --coral-600: #d23a27;
+  --coral-700: #ae2c1c;
+
+  /* Warm neutrals: ink -> cream */
+  --ink-900: #17150d; /* warm near-black */
+  --ink-800: #221f16;
+  --charcoal: #292824;
+  --ink-600: #46433a;
+  --ink-400: #7a766b;
+  --ink-200: #c9c3b6;
+  --cream-200: #ebe4d7;
+  --cream-100: #f6f1e9; /* warm off-white */
+  --white: #ffffff;
+
+  /* AI Selfiemata product accents */
+  --purple-500: #9868f8;
+  --purple-600: #7e45e8;
+  --green-500: #48d880;
+  --teal-500: #28d0b8;
+  --blue-500: #4888f8;
+
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-body: 'DM Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream-100);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--coral-500);
+  color: var(--cream-100);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---- Doodle mask layer (floating background decorations) ----- */
+.ep-doodle {
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  background: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+/* Each decorated section gets its own stacking context so the z-index:-1
+   doodles sit behind the section content but above the page background. */
+.ep-deco {
+  isolation: isolate;
+}
+
+/* ---- Keyframes ---------------------------------------------- */
+@keyframes ep-float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-14px) rotate(var(--r, 0deg)); }
+}
+@keyframes ep-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes ep-marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes ep-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+@keyframes ep-grad {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes ep-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes ep-float2 {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(18px) rotate(calc(var(--r, 0deg) + 8deg)); }
+}
+@keyframes ep-sway {
+  0%, 100% { transform: translate(0, 0) rotate(var(--r, 0deg)); }
+  33% { transform: translate(10px, -12px) rotate(calc(var(--r, 0deg) + 5deg)); }
+  66% { transform: translate(-8px, -6px) rotate(calc(var(--r, 0deg) - 4deg)); }
+}
+@keyframes ep-rocket-idle {
+  0%, 100% { transform: translate(0, 0) rotate(-3deg); }
+  50% { transform: translate(0, -5px) rotate(3deg); }
+}
+@keyframes ep-flame {
+  0%, 100% { opacity: 0.5; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1.25); }
+}
+
+/* Hide the middle nav links on narrow screens (the CTA stays). */
+@media (max-width: 820px) {
+  .ep-nav-link {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
