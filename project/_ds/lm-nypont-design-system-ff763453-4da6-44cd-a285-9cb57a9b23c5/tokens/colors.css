@@ -1,0 +1,75 @@
+/* ============================================================
+   ÉLMÉNYPONT — COLOR TOKENS
+   Warm playfulness, premium build. A deep warm neutral base
+   (ink + cream) + ONE accent pop per surface.
+   "A márka meleg, a termék tech": coral = master brand,
+   purple/cool = AI Selfiemata product accents.
+   ============================================================ */
+:root {
+  /* ---- Master brand: Coral ---------------------------------- */
+  --coral-50:  #FDECE8;
+  --coral-100: #FBD3CA;
+  --coral-300: #F2937F;
+  --coral-500: #E94A35;   /* ⭐ Élménypont primary */
+  --coral-600: #D23A27;
+  --coral-700: #AE2C1C;
+
+  /* ---- Warm neutrals: Ink → Cream --------------------------- */
+  --ink-900:   #17150D;   /* warm near-black — dark/premium base */
+  --ink-800:   #221F16;
+  --charcoal:  #292824;   /* secondary dark surface */
+  --ink-600:   #46433A;
+  --ink-400:   #7A766B;   /* muted text on cream */
+  --ink-200:   #C9C3B6;
+  --cream-200: #EBE4D7;   /* hairlines / cards on cream */
+  --cream-100: #F6F1E9;   /* ⭐ warm off-white — light base */
+  --white:     #FFFFFF;
+
+  /* ---- AI Selfiemata product accents (tech palette) --------- */
+  --purple-500: #9868F8;  /* primary AI accent */
+  --purple-600: #7E45E8;
+  --green-500:  #48D880;
+  --teal-500:   #28D0B8;
+  --blue-500:   #4888F8;
+
+  /* AI signature gradient (use sparingly, product surfaces) */
+  --grad-ai:   linear-gradient(105deg, #9868F8 0%, #4888F8 100%); /* @kind other */
+  --grad-ai-soft: linear-gradient(105deg, rgba(152,104,248,.16), rgba(72,136,248,.16)); /* @kind other */
+
+  /* ============================================================
+     SEMANTIC ALIASES — reference these in components
+     ============================================================ */
+  /* Brand */
+  --brand:            var(--coral-500);
+  --brand-hover:      var(--coral-600);
+  --brand-press:      var(--coral-700);
+  --brand-tint:       var(--coral-50);
+  --product-accent:   var(--purple-500);
+  --product-accent-hover: var(--purple-600);
+
+  /* Surfaces */
+  --surface-base:     var(--cream-100);   /* default light page */
+  --surface-card:     var(--white);
+  --surface-sunken:   var(--cream-200);
+  --surface-dark:     var(--ink-900);     /* premium dark page */
+  --surface-dark-2:   var(--charcoal);
+
+  /* Text on light */
+  --text-strong:      var(--ink-900);
+  --text-body:        var(--ink-800);
+  --text-muted:       var(--ink-400);
+  --text-on-brand:    var(--white);
+  /* Text on dark */
+  --text-inverse:     var(--cream-100);
+  --text-inverse-muted: rgba(246,241,233,.62);
+
+  /* Lines */
+  --border-soft:      var(--cream-200);
+  --border-strong:    var(--ink-200);
+  --border-dark:      rgba(246,241,233,.14);
+
+  /* Feedback */
+  --success: var(--green-500);
+  --info:    var(--blue-500);
+  --focus-ring: rgba(233,74,53,.45);
+}

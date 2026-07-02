@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_ds/lm-nypont-design-system-ff763453-4da6-44cd-a285-9cb57a9b23c5/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/lm-nypont-design-system-ff763453-4da6-44cd-a285-9cb57a9b23c5/tokens/colors.css">
+<link rel="stylesheet" href="_ds/lm-nypont-design-system-ff763453-4da6-44cd-a285-9cb57a9b23c5/tokens/typography.css">
+<link rel="stylesheet" href="_ds/lm-nypont-design-system-ff763453-4da6-44cd-a285-9cb57a9b23c5/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/lm-nypont-design-system-ff763453-4da6-44cd-a285-9cb57a9b23c5/styles.css">
+<script src="_ds/lm-nypont-design-system-ff763453-4da6-44cd-a285-9cb57a9b23c5/_ds_bundle.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"DM Sans",-apple-system,"Segoe UI",Roboto,sans-serif;background:#F6F1E9;color:#17150D;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:#E94A35;color:#F6F1E9}
+  a{color:inherit;text-decoration:none}
+  @keyframes ep-float{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-14px) rotate(var(--r,0deg))}}
+  @keyframes ep-spin{to{transform:rotate(360deg)}}
+  @keyframes ep-marquee{to{transform:translateX(-50%)}}
+  @keyframes ep-pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+  @keyframes ep-grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  @keyframes ep-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes ep-float2{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(18px) rotate(calc(var(--r,0deg) + 8deg))}}
+  @keyframes ep-sway{0%,100%{transform:translate(0,0) rotate(var(--r,0deg))}33%{transform:translate(10px,-12px) rotate(calc(var(--r,0deg) + 5deg))}66%{transform:translate(-8px,-6px) rotate(calc(var(--r,0deg) - 4deg))}}
+  @keyframes ep-rocket-idle{0%,100%{transform:translate(0,0) rotate(-3deg)}50%{transform:translate(0,-5px) rotate(3deg)}}
+  @keyframes ep-flame{0%,100%{opacity:.5;transform:scaleY(.8)}50%{opacity:1;transform:scaleY(1.25)}}
+  .ep-doodle{position:absolute;pointer-events:none;z-index:-1;background:currentColor;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain}
+  .ep-deco{isolation:isolate}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+</style>
+<script src="assets/image-slot.js"></script>
+</helmet>
+<div id="ep-page" style="position:relative;width:100%;overflow-x:hidden">
+
+  <nav style="{{ navStyle }}">
+    <a href="#top" style="position:relative;display:flex;align-items:center;gap:10px">
+      <img src="assets/logo/elmenypont-logo-coral.png" alt="Élménypont" style="height:30px;width:auto;display:block"/>
+      <img src="assets/logo/elmenypont-logo-white.png" alt="" aria-hidden="true" style="position:absolute;left:0;top:0;height:30px;width:auto;display:block;opacity:{{ logoWhiteOp }};transition:opacity .4s"/>
+    </a>
+    <div style="display:flex;align-items:center;gap:34px" data-nav-links>
+      <a href="#szolgaltatasok" style="{{ navLinkStyle }}">Szolgáltatások</a>
+      <a href="#elmeny" style="{{ navLinkStyle }}">Az élmény</a>
+      <a href="#rolunk" style="{{ navLinkStyle }}">Rólunk</a>
+      <a href="#kapcsolat" style="{{ navLinkStyle }}">Kapcsolat</a>
+      <a href="#kapcsolat" style="{{ navCtaStyle }}" onMouseEnter="{{ ctaEnter }}" onMouseLeave="{{ ctaLeave }}">Ajánlatot kérek</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ===== HERO ===== -->
+    <section id="hero" data-hero style="position:relative;height:165vh">
+      <div style="position:sticky;top:0;height:100vh;overflow:hidden;background:{{ heroBg }}">
+        <!-- ambient glow -->
+        <div style="position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 38%, rgba(233,74,53,{{ heroGlow }}) 0%, rgba(233,74,53,0) 55%);pointer-events:none"></div>
+
+        <!-- 3D kiosk stage -->
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;perspective:1400px">
+          <div style="transform:translateY({{ kioskLift }}px) rotateX(8deg) rotateY({{ kioskRot }}deg) scale({{ kioskScale }});transform-style:preserve-3d;transition:none;filter:drop-shadow(0 40px 60px rgba(0,0,0,.5))">
+            <!-- screen box -->
+            <div style="position:relative;width:300px;height:230px;background:linear-gradient(180deg,#fbfbfb,#e9e9e6);border-radius:12px;transform-style:preserve-3d">
+              <div style="position:absolute;inset:16px;border-radius:7px;background:#0a0a0a;overflow:hidden;display:flex;align-items:center;justify-content:center">
+                <div style="position:absolute;inset:0;background:linear-gradient(135deg,#4888F8,#9868F8 55%,#4888F8);opacity:{{ screenOn }}"></div>
+                <span style="position:relative;color:#fff;font-family:Syne;font-weight:700;font-size:20px;letter-spacing:.06em;opacity:{{ screenTextOp }}">AI</span>
+              </div>
+              <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#111;border:2px solid #d8d8d4"></div>
+              <!-- side face for depth -->
+              <div style="position:absolute;right:0;top:0;width:34px;height:230px;background:#cfcfca;transform:rotateY(90deg) translateZ(2px);transform-origin:right;border-radius:0 12px 12px 0"></div>
+            </div>
+            <!-- stand -->
+            <div style="width:46px;height:150px;background:linear-gradient(180deg,#1c1c1c,#070707);margin:0 auto;border-radius:4px"></div>
+            <div style="width:200px;height:18px;background:#080808;margin:-2px auto 0;border-radius:6px;transform:rotateX(60deg);box-shadow:0 30px 40px rgba(0,0,0,.6)"></div>
+          </div>
+        </div>
+
+        <!-- camera flash -->
+        <div style="position:absolute;inset:0;background:#fff;opacity:{{ flashOp }};pointer-events:none;mix-blend-mode:screen"></div>
+
+        <!-- hero copy -->
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 24px;opacity:{{ copyOp }};transform:translateY({{ copyY }}px);pointer-events:{{ copyPe }}">
+          <span style="display:inline-flex;align-items:center;gap:9px;font-family:Syne;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#4888F8,#9868F8 55%,#4888F8);background-size:200% 200%;animation:ep-grad 6s ease infinite;padding:9px 18px;border-radius:100px;margin-bottom:30px"><span style="width:7px;height:7px;border-radius:50%;background:#fff"></span>#1 rendezvény trend · 2026</span>
+          <h1 style="font-family:Syne;font-weight:500;font-size:clamp(46px,8.2vw,116px);line-height:.96;letter-spacing:-.035em;max-width:13ch;color:#17150D">A fotóautomata <span style="font-weight:600;color:#E94A35">újragondolva</span> <span style="display:inline-block;background:#17150D;color:#F6F1E9;padding:.02em .22em .1em;border-radius:.14em;transform:rotate(-1.6deg)">AI&nbsp;Selfiemata.</span></h1>
+          <p style="font-size:clamp(17px,2vw,21px);line-height:1.55;color:#46433A;max-width:48ch;margin-top:28px">Valós idejű AI-képgenerálás a rendezvényeden. A vendég fotóját az AI pár másodperc alatt egyedi, megosztható, brandingelt alkotássá varázsolja.</p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:38px">
+            <a href="#kapcsolat" style="background:#17150D;color:#F6F1E9;font-weight:600;font-size:17px;padding:17px 30px;border-radius:100px;display:inline-flex;align-items:center;gap:9px;transition:transform .25s,box-shadow .25s" onMouseEnter="{{ liftEnter }}" onMouseLeave="{{ liftLeave }}">Kérek bemutatót →</a>
+            <a href="#szolgaltatasok" style="background:transparent;color:#17150D;font-weight:600;font-size:17px;padding:17px 30px;border-radius:100px;border:1.5px solid rgba(0,0,0,.18);transition:background .25s" onMouseEnter="{{ ghostEnter }}" onMouseLeave="{{ ghostLeave }}">Szolgáltatások</a>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:34px">
+            <div style="background:#F6F1E9;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:13px 22px;text-align:left">
+              <div style="font-family:Syne;font-weight:600;font-size:22px;letter-spacing:-.01em;color:#4888F8">9–15 mp</div>
+              <div style="font-size:13px;color:#7A766B;margin-top:2px">AI generálás</div>
+            </div>
+            <div style="background:#F6F1E9;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:13px 22px;text-align:left">
+              <div style="font-family:Syne;font-weight:600;font-size:22px;letter-spacing:-.01em;color:#9868F8">∞ stílus</div>
+              <div style="font-size:13px;color:#7A766B;margin-top:2px">választható téma</div>
+            </div>
+            <div style="background:#F6F1E9;border:1px solid rgba(0,0,0,.07);border-radius:16px;padding:13px 22px;text-align:left">
+              <div style="font-family:Syne;font-weight:600;font-size:22px;letter-spacing:-.01em;color:#E94A35">100%</div>
+              <div style="font-size:13px;color:#7A766B;margin-top:2px">rendezvényre szabva</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- scroll hint -->
+        <div style="position:absolute;bottom:34px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:{{ hintOp }};color:{{ hintColor }}">
+          <span style="font-size:12px;letter-spacing:.16em;text-transform:uppercase">Görgess</span>
+          <span style="width:1px;height:38px;background:currentColor;animation:ep-bob 1.8s ease-in-out infinite"></span>
+        </div>
+      </div>
+    </section>
+    <!-- ===== DOODLE MARQUEE ===== -->
+    <div style="position:relative;background:#17150D;color:#F6F1E9;padding:22px 0;overflow:hidden">
+      <div style="display:flex;width:max-content;gap:54px;align-items:center;animation:ep-marquee 26s linear infinite;white-space:nowrap">
+        <div style="display:flex;gap:54px;align-items:center">
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#E94A35">VILLÁMGYORS AI-KÉP</span>
+          <span style="width:40px;height:40px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-3.png) center/contain no-repeat;mask:url(assets/doodle-3.png) center/contain no-repeat"></span>
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#4888F8">KULCSRAKÉSZEN</span>
+          <span style="width:44px;height:44px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-2.png) center/contain no-repeat;mask:url(assets/doodle-2.png) center/contain no-repeat"></span>
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#9868F8">MEGOSZTHATÓ PILLANAT</span>
+          <span style="width:40px;height:40px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-1.png) center/contain no-repeat;mask:url(assets/doodle-1.png) center/contain no-repeat"></span>
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#48D880">RENDEZVÉNYRE SZABVA</span>
+          <span style="width:42px;height:42px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-6.png) center/contain no-repeat;mask:url(assets/doodle-6.png) center/contain no-repeat"></span>
+        </div>
+        <div style="display:flex;gap:54px;align-items:center" aria-hidden="true">
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#E94A35">VILLÁMGYORS AI-KÉP</span>
+          <span style="width:40px;height:40px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-3.png) center/contain no-repeat;mask:url(assets/doodle-3.png) center/contain no-repeat"></span>
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#4888F8">KULCSRAKÉSZEN</span>
+          <span style="width:44px;height:44px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-2.png) center/contain no-repeat;mask:url(assets/doodle-2.png) center/contain no-repeat"></span>
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#9868F8">MEGOSZTHATÓ PILLANAT</span>
+          <span style="width:40px;height:40px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-1.png) center/contain no-repeat;mask:url(assets/doodle-1.png) center/contain no-repeat"></span>
+          <span style="font-family:Syne;font-weight:700;font-size:30px;letter-spacing:-.01em;color:#48D880">RENDEZVÉNYRE SZABVA</span>
+          <span style="width:42px;height:42px;background:rgba(246,241,233,.5);-webkit-mask:url(assets/doodle-6.png) center/contain no-repeat;mask:url(assets/doodle-6.png) center/contain no-repeat"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 2026 TREND ===== -->
+    <section data-trend style="position:relative;background:#17150D;color:#F6F1E9;padding:clamp(90px,13vw,170px) clamp(24px,6vw,90px) clamp(110px,15vw,200px);overflow:hidden">
+      <span style="position:absolute;right:6vw;top:16%;width:clamp(70px,8vw,110px);height:clamp(70px,8vw,110px);background:rgba(246,241,233,.07);-webkit-mask:url(assets/doodle-2.png) center/contain no-repeat;mask:url(assets/doodle-2.png) center/contain no-repeat;animation:ep-float 7s ease-in-out infinite"></span>
+      <div style="position:relative;max-width:1180px;margin:0 auto">
+        <span data-reveal style="display:inline-block;font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#48D880;margin-bottom:30px">Miért most</span>
+        <h2 data-reveal data-delay="60" style="font-family:Syne;font-weight:500;font-size:clamp(34px,5.6vw,82px);line-height:1.0;letter-spacing:-.035em;max-width:16ch">A rendezvényipar <span style="color:#48D880">legnagyobb trendje</span> 2026-ban az AI&nbsp;élmény.</h2>
+
+        <!-- staggered steps with scroll-flying rocket on a dashed trail -->
+        <div data-trendwrap style="position:relative;margin-top:clamp(60px,9vw,120px)">
+          <!-- serpentine trail: revealed (dotted) behind the rocket via a growing mask -->
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0">
+            <defs>
+              <mask id="ep-trail-mask" maskUnits="userSpaceOnUse">
+                <path d="M12 8 C 12 24, 86 24, 86 42 C 86 60, 12 60, 12 76 C 12 90, 40 92, 62 98" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="{{ trailDash }}"/>
+              </mask>
+            </defs>
+            <path d="M12 8 C 12 24, 86 24, 86 42 C 86 60, 12 60, 12 76 C 12 90, 40 92, 62 98" fill="none" stroke="rgba(246,241,233,.1)" stroke-width=".5" stroke-dasharray="1.3 3.2" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+            <path data-trailpath d="M12 8 C 12 24, 86 24, 86 42 C 86 60, 12 60, 12 76 C 12 90, 40 92, 62 98" fill="none" stroke="#48D880" stroke-width="1" stroke-dasharray="1.3 3.2" stroke-linecap="round" vector-effect="non-scaling-stroke" mask="url(#ep-trail-mask)"/>
+          </svg>
+          <!-- flying rocket -->
+          <span data-rocket style="position:absolute;left:{{ rocketLeft }}%;top:{{ rocketTop }}%;width:52px;height:52px;margin:-26px 0 0 -26px;z-index:2;transition:left .18s ease-out,top .18s ease-out;transform:rotate({{ rocketRot }}deg)">
+            <span style="position:absolute;inset:0;display:block;animation:ep-rocket-idle 2.6s ease-in-out infinite">
+              <span style="position:absolute;inset:0;display:block;background:#48D880;-webkit-mask:url(assets/doodle-1.png) center/contain no-repeat;mask:url(assets/doodle-1.png) center/contain no-repeat;filter:drop-shadow(0 4px 12px rgba(72,216,128,.55))"></span>
+              <span style="position:absolute;left:50%;bottom:-14px;width:10px;height:20px;margin-left:-5px;border-radius:50% 50% 60% 60%;background:linear-gradient(#F2937F,#E94A35);filter:blur(2px);transform-origin:top center;animation:ep-flame .35s ease-in-out infinite;opacity:{{ flameOp }}"></span>
+            </span>
+          </span>
+
+          <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:clamp(48px,7vw,96px)">
+            <div data-reveal style="max-width:34ch;margin-right:auto">
+              <div style="font-family:Syne;font-weight:600;font-size:clamp(56px,7.5vw,104px);line-height:.82;letter-spacing:-.04em;color:#48D880">01</div>
+              <h3 style="font-family:Syne;font-weight:600;font-size:clamp(22px,2.2vw,28px);letter-spacing:-.01em;margin-top:16px">A vendég mindig új élményt vár</h3>
+              <p style="font-size:16px;line-height:1.6;color:rgba(246,241,233,.62);margin-top:12px">Olyat akarnak, amit otthon nem tudnak könnyen megcsinálni, és leesik helyben az álluk.</p>
+            </div>
+            <div data-reveal data-delay="80" style="max-width:36ch;margin-left:auto;text-align:right">
+              <div style="font-family:Syne;font-weight:600;font-size:clamp(56px,7.5vw,104px);line-height:.82;letter-spacing:-.04em;color:#4888F8">02</div>
+              <h3 style="font-family:Syne;font-weight:600;font-size:clamp(22px,2.2vw,28px);letter-spacing:-.01em;margin-top:16px">A megosztható pillanat a marketing</h3>
+              <p style="font-size:16px;line-height:1.6;color:rgba(246,241,233,.62);margin-top:12px">Minden brandingelt kép a te arculatoddal kerül majd fel a közösségi médiába — organikus elérés, AI szuperboost-tal.</p>
+            </div>
+            <div data-reveal data-delay="160" style="max-width:34ch;margin-left:12%">
+              <div style="font-family:Syne;font-weight:600;font-size:clamp(56px,7.5vw,104px);line-height:.82;letter-spacing:-.04em;color:#F2937F">03</div>
+              <h3 style="font-family:Syne;font-weight:600;font-size:clamp(22px,2.2vw,28px);letter-spacing:-.01em;margin-top:16px">Mindenki a saját élményét viszi haza</h3>
+              <p style="font-size:16px;line-height:1.6;color:rgba(246,241,233,.62);margin-top:12px">Személyre szabott, egyedi AI-alkotás — emlék, amit tényleg hazavisznek és megőriznek.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MIT CSINÁLUNK ===== -->
+    <section id="elmeny" class="ep-deco" style="position:relative;background:#F6F1E9;padding:clamp(90px,14vw,180px) clamp(24px,6vw,90px)">
+      <span style="position:absolute;right:6vw;top:60px;width:clamp(90px,11vw,150px);height:clamp(90px,11vw,150px);background:rgba(233,74,53,.16);-webkit-mask:url(assets/doodle-5.png) center/contain no-repeat;mask:url(assets/doodle-5.png) center/contain no-repeat;animation:ep-float 7s ease-in-out infinite" data-reveal></span>
+      <span class="ep-doodle" style="color:rgba(0,0,0,.05);width:96px;height:96px;left:3%;top:30%;-webkit-mask-image:url(assets/doodle-2.png);mask-image:url(assets/doodle-2.png);animation:ep-sway 11s ease-in-out infinite;--r:-10deg"></span>
+      <span class="ep-doodle" style="color:rgba(0,0,0,.045);width:64px;height:64px;left:46%;bottom:14%;-webkit-mask-image:url(assets/doodle-4.png);mask-image:url(assets/doodle-4.png);animation:ep-float2 8s ease-in-out infinite;--r:6deg"></span>
+      <div style="max-width:1180px;margin:0 auto">
+        <span data-reveal style="display:inline-block;font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#E94A35;margin-bottom:30px">Mit csinálunk</span>
+        <h2 data-reveal data-delay="60" style="font-family:Syne;font-weight:500;font-size:clamp(30px,4.2vw,60px);line-height:1.06;letter-spacing:-.03em;max-width:22ch">Interaktív rendezvény­élményeket készítünk. A klasszikus fotóautomatát <span style="color:#E94A35">újragondoltuk:</span> valós idejű AI-val a vendég fotója pár másodperc alatt <span style="color:#9868F8">egyedi, megosztható, brandingelt</span> alkotássá válik.</h2>
+        <p data-reveal data-delay="120" style="font-size:clamp(18px,1.7vw,22px);line-height:1.55;color:#46433A;max-width:52ch;margin-top:30px">Te csak válassz — a technikát, a személyzetet és a teljes hátteret mi hozzuk.</p>
+      </div>
+      <!-- auto-scrolling photo reference strip (user-fillable) -->
+      <div data-reveal data-delay="160" style="margin-top:clamp(44px,6vw,72px);position:relative;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
+        <div style="display:flex;width:max-content;gap:16px;animation:ep-marquee 40s linear infinite">
+          <div style="display:flex;gap:16px">
+            <image-slot id="ref-1" style="width:300px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-2" style="width:260px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-3" style="width:300px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-4" style="width:250px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-5" style="width:300px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-6" style="width:270px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+          </div>
+          <div style="display:flex;gap:16px" aria-hidden="true">
+            <image-slot id="ref-1b" style="width:300px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-2b" style="width:260px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-3b" style="width:300px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-4b" style="width:250px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-5b" style="width:300px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+            <image-slot id="ref-6b" style="width:270px;height:190px;display:block;border-radius:16px;overflow:hidden" shape="rounded" radius="16" fit="cover" placeholder="Rendezvény fotó"></image-slot>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SZOLGÁLTATÁS-REVEAL ===== -->
+    <section id="szolgaltatasok" class="ep-deco" style="position:relative;background:#F6F1E9;padding:0 clamp(24px,6vw,90px) clamp(70px,9vw,120px)">
+      <span class="ep-doodle" style="color:rgba(0,0,0,.05);width:78px;height:78px;right:2%;top:8%;-webkit-mask-image:url(assets/doodle-6.png);mask-image:url(assets/doodle-6.png);animation:ep-float 9s ease-in-out infinite;--r:9deg"></span>
+      <div style="max-width:1180px;margin:0 auto">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:18px;margin-bottom:48px">
+          <h2 data-reveal style="font-family:Syne;font-weight:500;font-size:clamp(28px,3.6vw,52px);line-height:1.02;letter-spacing:-.03em">Amit a rendezvényedre hozunk</h2>
+          <p data-reveal data-delay="80" style="font-size:16px;color:#7A766B;max-width:34ch">Sokféle megoldás, de mindegyik élmény — válassz nyugodtan, a többit intézzük.</p>
+        </div>
+
+        <!-- AI showcase: featured Selfiemata with live before/after -->
+        <div data-reveal data-pop style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(28px,4vw,56px);align-items:center;background:#17150D;border-radius:30px;padding:clamp(28px,3.5vw,52px);overflow:hidden">
+          <div style="position:relative;color:#F6F1E9">
+            <span style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:100px;background:linear-gradient(105deg,#9868F8,#4888F8);background-size:160% 160%;animation:ep-grad 6s ease infinite;font-family:Syne;font-weight:700;font-size:13px;letter-spacing:.08em;color:#fff">AI SELFIEMATA</span>
+            <h3 style="font-family:Syne;font-weight:600;font-size:clamp(34px,3.8vw,54px);letter-spacing:-.02em;line-height:1.02;margin-top:20px">Lehetsz bárki<br>— 10 másodperc alatt.</h3>
+            <p style="font-size:17px;line-height:1.55;color:rgba(246,241,233,.72);margin-top:16px;max-width:42ch">Valós idejű AI-képgenerálás a rendezvényeden. A vendég fotója egyedi, brandingelt, megosztható alkotássá válik — húzd el a csúszkát, és nézd meg élőben.</p>
+            <div style="display:flex;gap:26px;margin-top:28px;flex-wrap:wrap">
+              <div><div style="font-family:Syne;font-weight:700;font-size:28px;color:#9868F8;line-height:1">9–15 mp</div><div style="font-size:13px;color:rgba(246,241,233,.55);margin-top:3px">AI generálás</div></div>
+              <div><div style="font-family:Syne;font-weight:700;font-size:28px;color:#48D880;line-height:1">∞ stílus</div><div style="font-size:13px;color:rgba(246,241,233,.55);margin-top:3px">választható téma</div></div>
+              <div><div style="font-family:Syne;font-weight:700;font-size:28px;color:#28D0B8;line-height:1">100%</div><div style="font-size:13px;color:rgba(246,241,233,.55);margin-top:3px">rendezvényre szabva</div></div>
+            </div>
+            <a href="https://ai.elmeny.hu" style="display:inline-flex;align-items:center;gap:9px;margin-top:30px;font-weight:600;font-size:16px;color:#fff;border:1.5px solid rgba(246,241,233,.28);padding:13px 24px;border-radius:100px;transition:background .3s" onMouseEnter="{{ ghostEnter }}" onMouseLeave="{{ ghostLeave }}">Részletek <span style="display:inline-block">→</span> <span style="opacity:.55;font-weight:400">ai.elmeny.hu</span></a>
+          </div>
+          <div style="position:relative">
+            <x-import component-from-global-scope="LmNypontDesignSystem_ff7634.BeforeAfter" before="assets/photos/original.png" after="assets/photos/style-astronaut.png" before-label="Eredeti" after-label="AI ✦" hint-size="100%,360px"></x-import>
+          </div>
+        </div>
+
+        <!-- AI Videomata -->
+        <a href="https://ai.elmeny.hu" data-reveal data-pop data-delay="120" style="position:relative;border-radius:28px;overflow:hidden;background:#17150D;color:#fff;min-height:440px;display:flex;flex-direction:column;justify-content:flex-end;padding:38px;margin-top:26px;transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s" onMouseEnter="{{ cardEnter }}" onMouseLeave="{{ cardLeave }}">
+          <img src="assets/photos/style-cyberpunk.png" alt="AI Videomata" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"/>
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,21,13,.1) 20%,rgba(23,21,13,.88) 100%);pointer-events:none"></div>
+          <div style="position:absolute;top:30px;left:30px;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:100px;background:linear-gradient(105deg,#9868F8,#4888F8);background-size:160% 160%;animation:ep-grad 6s ease infinite;font-family:Syne;font-weight:700;font-size:13px;letter-spacing:.08em">AI VIDEOMATA</div>
+          <div style="position:relative;pointer-events:none;max-width:48ch">
+            <h3 style="font-family:Syne;font-weight:600;font-size:clamp(32px,3.4vw,46px);letter-spacing:-.02em;line-height:1.04">Lépj be a saját AI-videódba</h3>
+            <p style="font-size:17px;line-height:1.5;color:rgba(255,255,255,.84);margin-top:14px;max-width:44ch">Rúgd be a győztes gólt, szerepelj szuperhősként, vagy legyél rajzfilmsztár! A kész videó azonnal látható, és meg is osztható.</p>
+            <span style="display:inline-flex;align-items:center;gap:9px;margin-top:20px;font-weight:600;font-size:16px;color:#fff">Részletek <span style="display:inline-block;transition:transform .3s">→</span> <span style="opacity:.6;font-weight:400">ai.elmeny.hu</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <!-- ===== TOVÁBBI SELFIEMATÁK ===== -->
+    <section class="ep-deco" style="position:relative;background:#F6F1E9;padding:0 clamp(24px,6vw,90px) clamp(40px,5vw,70px)">
+      <span class="ep-doodle" style="color:rgba(0,0,0,.05);width:88px;height:88px;left:1%;top:30%;-webkit-mask-image:url(assets/doodle-1.png);mask-image:url(assets/doodle-1.png);animation:ep-sway 12s ease-in-out infinite;--r:-7deg"></span>
+      <div style="max-width:1180px;margin:0 auto">
+        <div data-reveal style="display:flex;align-items:center;gap:14px;margin-bottom:26px">
+          <span style="font-family:Syne;font-weight:700;font-size:18px;letter-spacing:.02em">További Selfiematák</span>
+          <span style="flex:1;height:1px;background:rgba(0,0,0,.1)"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
+          <a href="https://greenbox.elmeny.hu" data-reveal data-pop style="background:#F6F1E9;border:1px solid rgba(0,0,0,.08);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s" onMouseEnter="{{ tileEnter }}" onMouseLeave="{{ tileLeave }}">
+            <image-slot id="greenbox" style="width:100%;height:230px;display:block" shape="rect" fit="cover" placeholder="Greenbox háttércsere minta"></image-slot>
+            <div style="padding:28px">
+              <h3 style="font-family:Syne;font-weight:700;font-size:25px;letter-spacing:-.01em">Greenbox Selfiemata</h3>
+              <p style="font-size:16px;line-height:1.5;color:#46433A;margin-top:12px">Bármilyen háttér zöld vászon előtt: egzotikus helyszín vagy a céges arculat.</p>
+              <span style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-weight:600;color:#E94A35">greenbox.elmeny.hu →</span>
+            </div>
+          </a>
+          <a href="https://greenbox.elmeny.hu" data-reveal data-pop data-delay="120" style="background:#F6F1E9;border:1px solid rgba(0,0,0,.08);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s" onMouseEnter="{{ tileEnter }}" onMouseLeave="{{ tileLeave }}">
+            <image-slot id="selfiebox" style="width:100%;height:230px;display:block" shape="rect" fit="cover" placeholder="Selfiebox fotósarok minta"></image-slot>
+            <div style="padding:28px">
+              <h3 style="font-family:Syne;font-weight:700;font-size:25px;letter-spacing:-.01em">Selfiebox</h3>
+              <p style="font-size:16px;line-height:1.5;color:#46433A;margin-top:12px">Klasszikus fotósarok azonnali nyomtatással — egyszerű és mindig működik.</p>
+              <span style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-weight:600;color:#E94A35">greenbox.elmeny.hu →</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== EGYÉB SZOLGÁLTATÁSOK ===== -->
+    <section class="ep-deco" style="position:relative;background:#F6F1E9;padding:0 clamp(24px,6vw,90px) clamp(80px,10vw,130px)">
+      <span class="ep-doodle" style="color:rgba(0,0,0,.045);width:70px;height:70px;right:3%;bottom:12%;-webkit-mask-image:url(assets/doodle-3.png);mask-image:url(assets/doodle-3.png);animation:ep-float2 8.5s ease-in-out infinite;--r:5deg"></span>
+      <div style="max-width:1180px;margin:0 auto">
+        <div data-reveal style="display:flex;align-items:center;gap:14px;margin-bottom:22px">
+          <span style="font-family:Syne;font-weight:700;font-size:18px;letter-spacing:.02em;color:#7A766B">Egyéb szolgáltatások</span>
+          <span style="flex:1;height:1px;background:rgba(0,0,0,.1)"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+          <a href="https://smart-wall.hu" data-reveal style="background:transparent;border:1px solid rgba(0,0,0,.12);border-radius:18px;padding:26px 28px;display:flex;align-items:center;gap:18px;transition:background .35s,border-color .35s" onMouseEnter="{{ rowEnter }}" onMouseLeave="{{ rowLeave }}">
+            <span style="flex:none;width:46px;height:46px;background:#4888F8;-webkit-mask:url(assets/doodle-4.png) center/contain no-repeat;mask:url(assets/doodle-4.png) center/contain no-repeat"></span>
+            <div style="flex:1"><h4 style="font-family:Syne;font-weight:700;font-size:20px">Smart Wall</h4><p style="font-size:15px;color:#46433A;margin-top:4px">Interaktív, érinthető vetített fal: termékbemutató, infografika, játék.</p></div>
+            <span style="color:#7A766B;font-size:20px">→</span>
+          </a>
+          <a href="https://mosaicwall.hu" data-reveal data-delay="80" style="background:transparent;border:1px solid rgba(0,0,0,.12);border-radius:18px;padding:26px 28px;display:flex;align-items:center;gap:18px;transition:background .35s,border-color .35s" onMouseEnter="{{ rowEnter }}" onMouseLeave="{{ rowLeave }}">
+            <span style="flex:none;width:46px;height:46px;background:#48D880;-webkit-mask:url(assets/doodle-5.png) center/contain no-repeat;mask:url(assets/doodle-5.png) center/contain no-repeat"></span>
+            <div style="flex:1"><h4 style="font-family:Syne;font-weight:700;font-size:20px">Mosaic Wall</h4><p style="font-size:15px;color:#46433A;margin-top:4px">A vendégek fotóiból közösen összeálló, nagy közös mozaikkép.</p></div>
+            <span style="color:#7A766B;font-size:20px">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- ===== IZOMETRIKUS JELENET ===== -->
+    <section style="position:relative;background:#F6F1E9;padding:0 clamp(16px,4vw,56px) clamp(80px,10vw,130px)">
+      <div data-reveal style="position:relative;max-width:1280px;margin:0 auto;border-radius:34px;overflow:hidden;background:radial-gradient(120% 120% at 50% 0%, #211d14 0%, #100e09 70%);color:#F6F1E9;padding:clamp(40px,6vw,80px) clamp(24px,5vw,70px) clamp(20px,4vw,40px)">
+        <div style="position:relative;z-index:3;text-align:center;max-width:22ch;margin:0 auto">
+          <span style="display:inline-block;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#F2937F;margin-bottom:18px">Élő, forgatható tér</span>
+          <h2 style="font-family:Syne;font-weight:500;font-size:clamp(28px,4vw,58px);line-height:1.0;letter-spacing:-.03em">Minden rendezvényre <span style="background:linear-gradient(135deg,#4888F8,#9868F8 55%,#4888F8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">(AI)</span> élményt adunk.</h2>
+          <p style="font-size:16px;color:rgba(255,255,255,.6);margin-top:16px">Forgasd körbe a teret, és nézd meg, mi történik egy Élménypont-rendezvényen. Kattints egy állomásra.</p>
+        </div>
+
+        <!-- iso diorama -->
+        <div data-iso onMouseMove="{{ isoMove }}" onMouseLeave="{{ isoLeave }}" style="position:relative;height:clamp(380px,46vw,560px);margin-top:10px;perspective:1500px;cursor:grab">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;transition:transform .3s ease-out;transform:rotateX({{ isoRX }}deg) rotateZ({{ isoRZ }}deg)">
+            <!-- floor -->
+            <div style="position:relative;width:440px;height:440px;transform:rotateX(58deg) rotateZ(-45deg);transform-style:preserve-3d;background:linear-gradient(135deg,#2b2619,#1a160e);border-radius:18px;box-shadow:0 60px 80px rgba(0,0,0,.5);background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:55px 55px">
+              <!-- prop: AI Selfiemata -->
+              <div style="position:absolute;left:70px;top:90px;width:64px;height:64px;background:linear-gradient(135deg,#4888F8,#9868F8);border-radius:8px;transform:translateZ(70px) rotateZ(45deg) rotateX(-58deg);box-shadow:0 20px 30px rgba(0,0,0,.4)"></div>
+              <!-- prop: Greenbox -->
+              <div style="position:absolute;left:250px;top:120px;width:58px;height:58px;background:#48D880;border-radius:8px;transform:translateZ(56px) rotateZ(45deg) rotateX(-58deg);box-shadow:0 20px 30px rgba(0,0,0,.4)"></div>
+              <!-- prop: Smart Wall -->
+              <div style="position:absolute;left:150px;top:250px;width:90px;height:18px;background:#E94A35;border-radius:5px;transform:translateZ(64px) rotateZ(45deg) rotateX(-58deg);box-shadow:0 20px 30px rgba(0,0,0,.4)"></div>
+              <!-- tiny figures -->
+              <div style="position:absolute;left:160px;top:160px;width:14px;height:30px;background:#FFD2C6;border-radius:7px;transform:translateZ(30px) rotateZ(45deg) rotateX(-58deg);animation:ep-bob 1.4s ease-in-out infinite"></div>
+              <div style="position:absolute;left:200px;top:200px;width:14px;height:30px;background:#C9DCFF;border-radius:7px;transform:translateZ(30px) rotateZ(45deg) rotateX(-58deg);animation:ep-bob 1.7s ease-in-out infinite .3s"></div>
+              <div style="position:absolute;left:120px;top:210px;width:14px;height:30px;background:#D6FFE9;border-radius:7px;transform:translateZ(30px) rotateZ(45deg) rotateX(-58deg);animation:ep-bob 1.55s ease-in-out infinite .15s"></div>
+            </div>
+
+            <!-- hotspots (screen-space) -->
+            <a href="https://ai.elmeny.hu" style="position:absolute;left:31%;top:34%;display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none" onMouseEnter="{{ hsEnter }}" onMouseLeave="{{ hsLeave }}">
+              <span style="width:18px;height:18px;border-radius:50%;background:#4888F8;box-shadow:0 0 0 6px rgba(72,136,248,.25);animation:ep-pulse 2s ease-in-out infinite"></span>
+              <span style="font-size:12px;font-weight:600;background:rgba(255,255,255,.95);color:#17150D;padding:5px 11px;border-radius:100px;white-space:nowrap">AI Selfiemata</span>
+            </a>
+            <a href="https://greenbox.elmeny.hu" style="position:absolute;left:60%;top:40%;display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none" onMouseEnter="{{ hsEnter }}" onMouseLeave="{{ hsLeave }}">
+              <span style="width:18px;height:18px;border-radius:50%;background:#48D880;box-shadow:0 0 0 6px rgba(72,216,128,.25);animation:ep-pulse 2s ease-in-out infinite .5s"></span>
+              <span style="font-size:12px;font-weight:600;background:rgba(255,255,255,.95);color:#17150D;padding:5px 11px;border-radius:100px;white-space:nowrap">Greenbox</span>
+            </a>
+            <a href="https://smart-wall.hu" style="position:absolute;left:45%;top:62%;display:flex;flex-direction:column;align-items:center;gap:7px;text-decoration:none" onMouseEnter="{{ hsEnter }}" onMouseLeave="{{ hsLeave }}">
+              <span style="width:18px;height:18px;border-radius:50%;background:#E94A35;box-shadow:0 0 0 6px rgba(233,74,53,.25);animation:ep-pulse 2s ease-in-out infinite 1s"></span>
+              <span style="font-size:12px;font-weight:600;background:rgba(255,255,255,.95);color:#17150D;padding:5px 11px;border-radius:100px;white-space:nowrap">Smart Wall</span>
+            </a>
+          </div>
+          <span style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.04em">Élő 3D tér · hamarosan forgathatóan</span>
+        </div>
+      </div>
+    </section>
+    <!-- ===== MIÉRT MI ===== -->
+    <section id="rolunk" class="ep-deco" style="position:relative;background:#EBE4D7;padding:clamp(80px,11vw,150px) clamp(24px,6vw,90px)">
+      <span class="ep-doodle" style="color:rgba(0,0,0,.05);width:92px;height:92px;right:4%;top:12%;-webkit-mask-image:url(assets/doodle-6.png);mask-image:url(assets/doodle-6.png);animation:ep-sway 10s ease-in-out infinite;--r:8deg"></span>
+      <span class="ep-doodle" style="color:rgba(0,0,0,.04);width:60px;height:60px;left:2%;bottom:8%;-webkit-mask-image:url(assets/doodle-3.png);mask-image:url(assets/doodle-3.png);animation:ep-float 9.5s ease-in-out infinite;--r:-6deg"></span>
+      <div style="max-width:1180px;margin:0 auto">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(34px,5vw,70px);align-items:start">
+          <div data-reveal style="position:sticky;top:120px">
+            <span style="display:inline-block;font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#48D880;margin-bottom:22px">Miért mi</span>
+            <h2 style="font-family:Syne;font-weight:500;font-size:clamp(32px,4.4vw,64px);line-height:1.0;letter-spacing:-.03em">Élmény az<br>eseményeden.</h2>
+            <p style="font-size:17px;line-height:1.55;color:#46433A;margin-top:22px;max-width:38ch">15 éve készítünk rendezvényprogramokat — azon belül is vizuális, fotós élményeket. Hisszük, hogy minden rendezvény lelke az élmény, és a mi dolgunk, hogy ez tartós is legyen.</p>
+            <span style="position:absolute;right:-10px;bottom:-40px;width:96px;height:96px;background:rgba(72,216,128,.3);-webkit-mask:url(assets/doodle-2.png) center/contain no-repeat;mask:url(assets/doodle-2.png) center/contain no-repeat;animation:ep-float 8s ease-in-out infinite"></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div data-reveal style="background:#F6F1E9;border-radius:20px;padding:28px 30px;display:flex;gap:22px;align-items:flex-start">
+              <span style="font-family:Syne;font-weight:600;font-size:26px;color:#48D880;line-height:1">01</span>
+              <div><h3 style="font-family:Syne;font-weight:700;font-size:21px">Kulcsrakész</h3><p style="font-size:16px;color:#46433A;margin-top:6px;line-height:1.5">A teljes technika, alapanyag és profi személyzet felkészült az eseményedre!</p></div>
+            </div>
+            <div data-reveal data-delay="60" style="background:#F6F1E9;border-radius:20px;padding:28px 30px;display:flex;gap:22px;align-items:flex-start">
+              <span style="font-family:Syne;font-weight:600;font-size:26px;color:#48D880;line-height:1">02</span>
+              <div><h3 style="font-family:Syne;font-weight:700;font-size:21px">Gyors</h3><p style="font-size:16px;color:#46433A;margin-top:6px;line-height:1.5">AI-kép 10–15 mp alatt; helyben nyomtatás vagy e-mail küldés.</p></div>
+            </div>
+            <div data-reveal data-delay="120" style="background:#F6F1E9;border-radius:20px;padding:28px 30px;display:flex;gap:22px;align-items:flex-start">
+              <span style="font-family:Syne;font-weight:600;font-size:26px;color:#48D880;line-height:1">03</span>
+              <div><h3 style="font-family:Syne;font-weight:700;font-size:21px">Brandingelhető</h3><p style="font-size:16px;color:#46433A;margin-top:6px;line-height:1.5">Minden a rendezvény arculatára szabható.</p></div>
+            </div>
+            <div data-reveal data-delay="180" style="background:#F6F1E9;border-radius:20px;padding:28px 30px;display:flex;gap:22px;align-items:flex-start">
+              <span style="font-family:Syne;font-weight:600;font-size:26px;color:#48D880;line-height:1">04</span>
+              <div><h3 style="font-family:Syne;font-weight:700;font-size:21px">Korlátlan</h3><p style="font-size:16px;color:#46433A;margin-top:6px;line-height:1.5">A program alatt akár korlátlan kép/nyomat opció.</p></div>
+            </div>
+            <div data-reveal data-delay="240" style="background:#F6F1E9;border-radius:20px;padding:28px 30px;display:flex;gap:22px;align-items:flex-start">
+              <span style="font-family:Syne;font-weight:600;font-size:26px;color:#48D880;line-height:1">05</span>
+              <div><h3 style="font-family:Syne;font-weight:700;font-size:21px">Utólag is</h3><p style="font-size:16px;color:#46433A;margin-top:6px;line-height:1.5">A teljes képanyag megosztható — a te döntésed szerint.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PARTNEREK ===== -->
+    <section style="position:relative;background:#F6F1E9;padding:clamp(60px,8vw,100px) 0;overflow:hidden">
+      <p data-reveal style="text-align:center;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7A766B;margin-bottom:42px">Több száz rendezvényen — ők is velünk dolgoztak</p>
+      <div style="display:flex;width:max-content;gap:64px;align-items:center;animation:ep-marquee 32s linear infinite;opacity:.55">
+        <div style="display:flex;gap:64px;align-items:center">
+          <span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">PARTNER</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">LOGÓ</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">MÁRKA</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">ÜGYFÉL</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">REFERENCIA</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">ESEMÉNY</span>
+        </div>
+        <div style="display:flex;gap:64px;align-items:center" aria-hidden="true">
+          <span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">PARTNER</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">LOGÓ</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">MÁRKA</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">ÜGYFÉL</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">REFERENCIA</span><span style="font-family:Syne;font-weight:700;font-size:30px;color:#17150D">ESEMÉNY</span>
+        </div>
+      </div>
+      <p data-reveal style="text-align:center;font-size:13px;color:#C9C3B6;margin-top:34px">Ide kerülnek a valódi ügyfél- és partnerlogók.</p>
+    </section>
+    <!-- ===== CTA / AJÁNLATKÉRÉS ===== -->
+    <section id="kapcsolat" class="ep-deco" style="position:relative;background:#F6F1E9;padding:clamp(40px,6vw,90px) clamp(24px,6vw,90px) clamp(80px,10vw,130px)">
+      <span class="ep-doodle" style="color:rgba(0,0,0,.05);width:84px;height:84px;left:4%;top:18%;-webkit-mask-image:url(assets/doodle-2.png);mask-image:url(assets/doodle-2.png);animation:ep-float2 9s ease-in-out infinite;--r:-9deg"></span>
+      <span class="ep-doodle" style="color:rgba(0,0,0,.04);width:58px;height:58px;right:5%;bottom:16%;-webkit-mask-image:url(assets/doodle-4.png);mask-image:url(assets/doodle-4.png);animation:ep-sway 11s ease-in-out infinite;--r:7deg"></span>
+      <div data-reveal style="position:relative;max-width:1080px;margin:0 auto;background:#F6F1E9;border:1px solid rgba(0,0,0,.07);border-radius:32px;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+        <div style="padding:clamp(36px,4vw,56px);background:#E94A35;color:#fff;position:relative;overflow:hidden">
+          <span style="position:absolute;right:-30px;bottom:-30px;width:180px;height:180px;background:rgba(255,255,255,.32);-webkit-mask:url(assets/doodle-1.png) center/contain no-repeat;mask:url(assets/doodle-1.png) center/contain no-repeat;animation:ep-float 9s ease-in-out infinite"></span>
+          <span style="display:inline-block;font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:20px">Ajánlatkérés</span>
+          <h2 style="font-family:Syne;font-weight:500;font-size:clamp(28px,3.4vw,48px);line-height:1.0;letter-spacing:-.03em">Kérj személyre<br>szabott ajánlatot.</h2>
+          <p style="font-size:16px;line-height:1.55;color:rgba(255,255,255,.82);margin-top:18px;max-width:34ch">Mondd el, milyen rendezvényt tervezel — 1 munkanapon belül válaszolunk.</p>
+          <div style="margin-top:34px;display:flex;flex-direction:column;gap:14px;position:relative">
+            <a href="tel:+36204680489" style="display:inline-flex;align-items:center;gap:11px;font-weight:600;font-size:17px;color:#fff" onMouseEnter="{{ liftEnter }}" onMouseLeave="{{ liftLeave }}" style-hover="opacity:.8">+36 20 468 0489</a>
+            <a href="{{ emailHref }}" style="display:inline-flex;align-items:center;gap:11px;font-size:16px;color:rgba(255,255,255,.78)">{{ email }}</a>
+          </div>
+        </div>
+        <form onSubmit="{{ onSubmit }}" style="padding:clamp(36px,4vw,56px);display:flex;flex-direction:column;gap:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <input required placeholder="Név" style="{{ inputStyle }}" onFocus="{{ inFocus }}" onBlur="{{ inBlur }}"/>
+            <input required type="email" placeholder="E-mail" style="{{ inputStyle }}" onFocus="{{ inFocus }}" onBlur="{{ inBlur }}"/>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <input placeholder="Telefon (opc.)" style="{{ inputStyle }}" onFocus="{{ inFocus }}" onBlur="{{ inBlur }}"/>
+            <input placeholder="Esemény típusa" style="{{ inputStyle }}" onFocus="{{ inFocus }}" onBlur="{{ inBlur }}"/>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <input placeholder="Időpont" style="{{ inputStyle }}" onFocus="{{ inFocus }}" onBlur="{{ inBlur }}"/>
+            <input placeholder="Vendégszám" style="{{ inputStyle }}" onFocus="{{ inFocus }}" onBlur="{{ inBlur }}"/>
+          </div>
+          <textarea placeholder="Üzenet" rows="3" style="{{ inputStyle }};resize:vertical;font-family:inherit" onFocus="{{ inFocus }}" onBlur="{{ inBlur }}"></textarea>
+          <button type="submit" style="{{ submitStyle }}" onMouseEnter="{{ ctaEnter }}" onMouseLeave="{{ ctaLeave }}">{{ submitLabel }}</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer style="background:#17150D;color:#F6F1E9;padding:clamp(56px,7vw,90px) clamp(24px,6vw,90px) 40px">
+      <div style="max-width:1180px;margin:0 auto">
+        <div style="display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between;align-items:flex-start;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.12)">
+          <div style="max-width:30ch">
+            <img src="assets/logo/elmenypont-logo-white.png" alt="Élménypont" style="height:34px;width:auto;display:block;margin-bottom:20px"/>
+            <p style="font-size:15px;line-height:1.6;color:rgba(255,255,255,.6)">Interaktív rendezvényélmények — AI Selfiemata, Videomata, greenbox és interaktív falak, kulcsrakészen.</p>
+          </div>
+          <div style="display:flex;gap:clamp(34px,5vw,80px);flex-wrap:wrap">
+            <div>
+              <p style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#7A766B;margin-bottom:14px">Elérhetőség</p>
+              <p style="font-size:15px;line-height:1.7;color:rgba(255,255,255,.82)">1135 Budapest,<br>Reitter Ferenc utca 35.<br><a href="tel:+36204680489" style="color:#F2937F">+36 20 468 0489</a><br><a href="{{ emailHref }}" style="color:rgba(255,255,255,.82)">{{ email }}</a></p>
+            </div>
+            <div>
+              <p style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#7A766B;margin-bottom:14px">Kövess</p>
+              <div style="display:flex;flex-direction:column;gap:9px;font-size:15px">
+                <a href="#" style="color:rgba(255,255,255,.82)" style-hover="color:#F2937F">Facebook</a>
+                <a href="#" style="color:rgba(255,255,255,.82)" style-hover="color:#F2937F">Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:rgba(255,255,255,.4);margin-top:28px">© 2026 Élménypont. Minden jog fenntartva.</p>
+      </div>
+    </footer>
+    <!--END-MAIN-->
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { y: 0, heroP: 0, scrolled: false, isoX: 0, isoY: 0, sent: false };
+
+  componentDidMount() {
+    this._onScroll = () => {
+      const hero = document.querySelector('[data-hero]');
+      let heroP = 0;
+      if (hero) {
+        const r = hero.getBoundingClientRect();
+        const total = hero.offsetHeight - window.innerHeight;
+        heroP = Math.min(1, Math.max(0, -r.top / (total || 1)));
+      }
+      // trend-section scroll progress for the flying rocket
+      let trendP = 0;
+      const tw = document.querySelector('[data-trendwrap]');
+      const rk = {};
+      if (tw) {
+        const tr = tw.getBoundingClientRect();
+        const vh = window.innerHeight;
+        trendP = Math.min(1, Math.max(0, (vh * 0.78 - tr.top) / (tr.height * 0.86 || 1)));
+        // rocket follows the actual serpentine path geometry
+        const path = this._trailPath;
+        if (path && this._trailLen) {
+          const L = this._trailLen;
+          const t = trendP;
+          const pt = path.getPointAtLength(t * L);
+          const pt2 = path.getPointAtLength(Math.min(L, t * L + L * 0.02));
+          // viewBox is 0-100 stretched over the container -> % positions
+          rk.rocketLeft = pt.x.toFixed(2);
+          rk.rocketTop = pt.y.toFixed(2);
+          // angle in real pixels (account for non-uniform stretch)
+          const dx = (pt2.x - pt.x) / 100 * tr.width;
+          const dy = (pt2.y - pt.y) / 100 * tr.height;
+          rk.rocketRot = (Math.atan2(dy, dx) * 180 / Math.PI + 45).toFixed(1);
+          rk.trailDash = (1000 * (1 - t)).toFixed(1);
+          rk.flameOp = (t > 0.01 && t < 0.99 ? 1 : 0.2).toFixed(2);
+        }
+      }
+      this.setState({ y: window.scrollY, heroP, trendP, rk, scrolled: window.scrollY > 40 });
+    };
+    // cache the serpentine path geometry for the rocket
+    this._trailPath = document.querySelector('[data-trailpath]');
+    try { this._trailLen = this._trailPath ? this._trailPath.getTotalLength() : 0; } catch (e) { this._trailLen = 0; }
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onScroll, { passive: true });
+    this._onScroll();
+    // path length can settle after layout/fonts
+    setTimeout(() => { try { this._trailLen = this._trailPath ? this._trailPath.getTotalLength() : 0; } catch (e) {} this._onScroll(); }, 300);
+
+    // staggered reveals (progressive enhancement) — never hide content if reduced-motion
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = reduce ? [] : Array.from(document.querySelectorAll('[data-reveal]'));
+    els.forEach(el => {
+      const pop = el.hasAttribute('data-pop');
+      el.style.opacity = '0';
+      el.style.transform = pop ? 'translateY(90px) scale(.9) rotate(-1.5deg)' : 'translateY(34px)';
+      const dur = pop ? '1.05s' : '.9s';
+      const ease = pop ? 'cubic-bezier(.2,.8,.2,1.05)' : 'cubic-bezier(.16,1,.3,1)';
+      el.style.transition = `opacity ${dur} ${ease}, transform ${dur} ${ease}`;
+      el.style.willChange = 'opacity, transform';
+      el.style.transitionDelay = (el.getAttribute('data-delay') || '0') + 'ms';
+    });
+    this._io = new IntersectionObserver((ents) => {
+      ents.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          this._io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(el => this._io.observe(el));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    if (this._io) this._io.disconnect();
+  }
+
+  // easing helper
+  cl(v, a, b) { return Math.min(1, Math.max(0, (v - a) / (b - a))); }
+
+  // rocket position along the staggered trail (matches the SVG path nodes)
+  renderVals() {
+    const p = this.state.heroP;
+    const s = this.state.rk || {};
+    const rk = {
+      rocketLeft: s.rocketLeft ?? '12',
+      rocketTop: s.rocketTop ?? '8',
+      rocketRot: s.rocketRot ?? '45',
+      trailDash: s.trailDash ?? '1000',
+      flameOp: s.flameOp ?? '0.2',
+    };
+    // phases
+    const turn = this.cl(p, 0.02, 0.42);      // kiosk back -> face
+    const flash = this.cl(p, 0.44, 0.54) * (1 - this.cl(p, 0.54, 0.66)); // flash spike
+    const reveal = this.cl(p, 0.56, 0.90);    // cream + copy in
+    const scrolled = this.state.scrolled;
+
+    // dark -> cream background blend
+    const dark = [23, 21, 13], cream = [246, 241, 233];
+    const mix = reveal;
+    const bg = dark.map((d, i) => Math.round(d + (cream[i] - d) * mix));
+    const heroBg = `rgb(${bg[0]},${bg[1]},${bg[2]})`;
+
+    const hintColor = mix > 0.5 ? '#7A766B' : 'rgba(255,255,255,.7)';
+
+    // nav
+    const navDark = !scrolled && mix < 0.5;
+    const navStyle = `position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:${scrolled ? '14px' : '20px'} clamp(20px,5vw,56px);transition:padding .4s,background .4s,box-shadow .4s;background:${scrolled ? 'rgba(247,242,234,.82)' : 'transparent'};backdrop-filter:${scrolled ? 'blur(14px) saturate(1.4)' : 'none'};box-shadow:${scrolled ? '0 1px 0 rgba(0,0,0,.06)' : 'none'}`;
+    const linkCol = navDark ? 'rgba(255,255,255,.85)' : '#17150D';
+    const navLinkStyle = `font-size:15px;font-weight:500;color:${linkCol};transition:color .4s,opacity .2s;opacity:.9`;
+    const navCtaStyle = `font-size:15px;font-weight:600;padding:11px 20px;border-radius:100px;background:${navDark ? '#F6F1E9' : '#17150D'};color:${navDark ? '#17150D' : '#F6F1E9'};transition:transform .25s,background .4s,color .4s`;
+    const logoWhiteOp = navDark ? 1 : 0;
+
+    const hov = (e, t) => { e.currentTarget.style.transform = t; };
+
+    return {
+      heroBg,
+      heroGlow: (0.5 * (1 - mix) * (0.4 + 0.6 * turn)).toFixed(3),
+      kioskRot: (180 - 180 * turn).toFixed(1),
+      kioskScale: (0.9 + 0.12 * turn - 0.5 * reveal).toFixed(3),
+      kioskLift: (reveal * -160).toFixed(0),
+      screenOn: (turn * (1 - 0.4 * reveal)).toFixed(2),
+      screenTextOp: (this.cl(turn, 0.6, 1)).toFixed(2),
+      flashOp: flash.toFixed(2),
+      copyOp: reveal.toFixed(2),
+      copyY: ((1 - reveal) * 40).toFixed(0),
+      copyPe: reveal > 0.6 ? 'auto' : 'none',
+      hintOp: (1 - this.cl(p, 0.0, 0.12)).toFixed(2),
+      hintColor,
+      navStyle, navLinkStyle, navCtaStyle, logoWhiteOp,
+      rocketTop: rk.rocketTop, rocketLeft: rk.rocketLeft, rocketRot: rk.rocketRot, trailDash: rk.trailDash, flameOp: rk.flameOp,
+      liftEnter: (e) => hov(e, 'translateY(-3px)'),
+      liftLeave: (e) => hov(e, 'none'),
+      ghostEnter: (e) => { e.currentTarget.style.background = 'rgba(0,0,0,.05)'; },
+      ghostLeave: (e) => { e.currentTarget.style.background = 'transparent'; },
+      ctaEnter: (e) => hov(e, 'scale(1.04)'),
+      ctaLeave: (e) => hov(e, 'none'),
+      cardEnter: (e) => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 40px 70px -30px rgba(0,0,0,.5)'; const a = e.currentTarget.querySelector('span span'); if (a) a.style.transform = 'translateX(6px)'; },
+      cardLeave: (e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; const a = e.currentTarget.querySelector('span span'); if (a) a.style.transform = 'none'; },
+      tileEnter: (e) => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 30px 50px -28px rgba(0,0,0,.4)'; },
+      tileLeave: (e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; },
+      rowEnter: (e) => { e.currentTarget.style.background = '#F6F1E9'; e.currentTarget.style.borderColor = 'rgba(0,0,0,.18)'; },
+      rowLeave: (e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(0,0,0,.12)'; },
+      isoRX: (6 - this.state.isoY * 12).toFixed(2),
+      isoRZ: (this.state.isoX * 14).toFixed(2),
+      isoMove: (e) => { const r = e.currentTarget.getBoundingClientRect(); this.setState({ isoX: (e.clientX - r.left) / r.width - 0.5, isoY: (e.clientY - r.top) / r.height - 0.5 }); },
+      isoLeave: () => this.setState({ isoX: 0, isoY: 0 }),
+      hsEnter: (e) => { const l = e.currentTarget.querySelector('span:last-child'); if (l) { l.style.transform = 'scale(1.08)'; l.style.transition = 'transform .2s'; } },
+      hsLeave: (e) => { const l = e.currentTarget.querySelector('span:last-child'); if (l) l.style.transform = 'none'; },
+      inputStyle: 'width:100%;background:#F6F1E9;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:14px 16px;font-size:16px;color:#17150D;outline:none;transition:border-color .25s,background .25s',
+      inFocus: (e) => { e.currentTarget.style.borderColor = '#4888F8'; e.currentTarget.style.background = '#F6F1E9'; },
+      inBlur: (e) => { e.currentTarget.style.borderColor = 'rgba(0,0,0,.08)'; e.currentTarget.style.background = '#F6F1E9'; },
+      submitStyle: `margin-top:6px;border:none;cursor:pointer;background:${this.state.sent ? '#48D880' : '#17150D'};color:#F6F1E9;font-family:"DM Sans";font-weight:600;font-size:17px;padding:16px 28px;border-radius:100px;transition:transform .25s,background .3s`,
+      submitLabel: this.state.sent ? 'Köszönjük! Hamarosan jelentkezünk ✓' : 'Ajánlatot kérek →',
+      onSubmit: (e) => { e.preventDefault(); this.setState({ sent: true }); },
+      email: 'hello' + '@' + 'elmeny.hu',
+      emailHref: 'mailto:' + 'hello' + '@' + 'elmeny.hu',
+    };
+  }
+}
+</script>
+</body>
+</html>

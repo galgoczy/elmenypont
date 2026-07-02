@@ -1,0 +1,51 @@
+/* ============================================================
+   ÉLMÉNYPONT — TYPOGRAPHY TOKENS
+   Syne (display) + DM Sans (body) = the "profi" layer.
+   The round logo + doodles supply the "meleg/playful" layer.
+   ============================================================ */
+:root {
+  /* Families */
+  --font-display: 'Syne', system-ui, sans-serif;
+  --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* Weights */
+  --fw-regular: 400; /* @kind font */
+  --fw-medium:  500; /* @kind font */
+  --fw-semibold: 600; /* @kind font */
+  --fw-bold:    700; /* @kind font */
+  --fw-extra:   800; /* @kind font */
+
+  /* Type scale (display uses Syne, tight tracking) */
+  --text-display:  clamp(2.75rem, 6vw, 5rem);   /* hero H1 */
+  --text-h1:       clamp(2.25rem, 4vw, 3.5rem);
+  --text-h2:       clamp(1.75rem, 3vw, 2.5rem);
+  --text-h3:       1.5rem;
+  --text-lg:       1.25rem;
+  --text-body-md:  1.0625rem;   /* ~17px body default */
+  --text-sm:       0.9375rem;
+  --text-xs:       0.8125rem;
+  --text-eyebrow:  0.75rem;      /* "MIÉRT MOST? MIÉRT AI?" labels */
+
+  /* Line heights */
+  --lh-tight:   1.04; /* @kind font */
+  --lh-snug:    1.15; /* @kind font */
+  --lh-normal:  1.55; /* @kind font */
+
+  /* Letter spacing */
+  --ls-display: -0.02em; /* @kind font */
+  --ls-heading: -0.01em; /* @kind font */
+  --ls-body:    0; /* @kind font */
+  --ls-eyebrow: 0.18em; /* @kind font */
+}
+
+/* Convenience composite classes (optional helpers for cards/kits) */
+.ep-display { font-family: var(--font-display); font-weight: var(--fw-bold);
+  font-size: var(--text-display); line-height: var(--lh-tight); letter-spacing: var(--ls-display); }
+.ep-h1 { font-family: var(--font-display); font-weight: var(--fw-bold);
+  font-size: var(--text-h1); line-height: var(--lh-snug); letter-spacing: var(--ls-heading); }
+.ep-h2 { font-family: var(--font-display); font-weight: var(--fw-semibold);
+  font-size: var(--text-h2); line-height: var(--lh-snug); letter-spacing: var(--ls-heading); }
+.ep-body { font-family: var(--font-body); font-weight: var(--fw-regular);
+  font-size: var(--text-body-md); line-height: var(--lh-normal); }
+.ep-eyebrow { font-family: var(--font-body); font-weight: var(--fw-semibold);
+  font-size: var(--text-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; }
