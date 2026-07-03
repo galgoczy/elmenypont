@@ -28,6 +28,7 @@ export function BeforeAfter({
   const [pos, setPos] = useState(start)
   const ref = useRef<HTMLDivElement | null>(null)
   const dragging = useRef(false)
+  const demoRaf = useRef(0)
 
   const move = (clientX: number) => {
     const el = ref.current
@@ -36,6 +37,54 @@ export function BeforeAfter({
     const p = ((clientX - r.left) / r.width) * 100
     setPos(Math.max(0, Math.min(100, p)))
   }
+
+  // one-time demo sweep when first scrolled into view, so visitors instantly
+  // get that the divider is draggable; any interaction cancels it
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const reduce =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) return
+    const KEYS: Array<[number, number]> = [
+      [0, start],
+      [0.42, 80],
+      [0.8, 26],
+      [1, start],
+    ]
+    const ease = (v: number) => 0.5 - Math.cos(v * Math.PI) / 2
+    const io = new IntersectionObserver(
+      (ents) => {
+        if (!ents.some((e) => e.isIntersecting)) return
+        io.disconnect()
+        const t0 = performance.now()
+        const DUR = 2600
+        const step = (now: number) => {
+          if (dragging.current) return
+          const t = Math.min(1, (now - t0) / DUR)
+          let a = KEYS[0]
+          let b = KEYS[KEYS.length - 1]
+          for (let i = 0; i < KEYS.length - 1; i++) {
+            if (t >= KEYS[i][0] && t <= KEYS[i + 1][0]) {
+              a = KEYS[i]
+              b = KEYS[i + 1]
+              break
+            }
+          }
+          const f = ease((t - a[0]) / (b[0] - a[0] || 1))
+          setPos(a[1] + (b[1] - a[1]) * f)
+          if (t < 1) demoRaf.current = requestAnimationFrame(step)
+        }
+        demoRaf.current = requestAnimationFrame(step)
+      },
+      { threshold: 0.55 },
+    )
+    io.observe(el)
+    return () => {
+      io.disconnect()
+      cancelAnimationFrame(demoRaf.current)
+    }
+  }, [start])
 
   useEffect(() => {
     const up = () => {

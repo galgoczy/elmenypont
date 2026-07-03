@@ -73,7 +73,9 @@ body {
   background: var(--cream-100);
   color: var(--ink-900);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden would make body a scroll container and break
+     position: sticky choreography (hero, doodle break) */
+  overflow-x: clip;
 }
 
 ::selection {
@@ -86,11 +88,19 @@ a {
   text-decoration: none;
 }
 
-/* ---- Doodle mask layer (floating background decorations) ----- */
-.ep-doodle {
+/* ---- Doodle mask layer (floating background decorations) -----
+   Split into a positioning wrapper (cursor-parallax via --mxs/--mys)
+   and an inner mask layer that runs its own float keyframes, so the
+   two transforms never fight. */
+.ep-doodle-pos {
   position: absolute;
   pointer-events: none;
   z-index: -1;
+}
+.ep-doodle {
+  display: block;
+  width: 100%;
+  height: 100%;
   background: currentColor;
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
@@ -139,12 +149,115 @@ a {
   66% { transform: translate(-8px, -6px) rotate(calc(var(--r, 0deg) - 4deg)); }
 }
 @keyframes ep-rocket-idle {
-  0%, 100% { transform: translate(0, 0) rotate(-3deg); }
-  50% { transform: translate(0, -5px) rotate(3deg); }
+  0%, 100% { transform: translate(0, 0) rotate(-2deg); }
+  50% { transform: translate(0, -4px) rotate(2deg); }
 }
 @keyframes ep-flame {
-  0%, 100% { opacity: 0.5; transform: scaleY(0.8); }
-  50% { opacity: 1; transform: scaleY(1.25); }
+  0%, 100% { opacity: 0.6; transform: scaleX(0.75); }
+  50% { opacity: 1; transform: scaleX(1.2); }
+}
+
+/* ---- Cursor layer ------------------------------------------- */
+@media (pointer: fine) {
+  .ep-cursor-dot,
+  .ep-cursor-ring {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 200;
+    pointer-events: none;
+    will-change: transform;
+    border-radius: 50%;
+  }
+  .ep-cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--coral-500);
+  }
+  .ep-cursor-ring {
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid rgba(233, 74, 53, 0.5);
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+  .ep-cursor-ring.is-active {
+    border-color: rgba(233, 74, 53, 0.9);
+    background: rgba(233, 74, 53, 0.07);
+  }
+}
+
+/* ---- "Miért most" rocket steps: light up as the rocket passes - */
+.ep-step-num {
+  opacity: 0.3;
+  filter: saturate(0.35);
+  transition: opacity 0.7s ease, filter 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1.3);
+  transform: scale(0.96);
+  transform-origin: left bottom;
+  display: inline-block;
+}
+.ep-step-num.on {
+  opacity: 1;
+  filter: none;
+  transform: scale(1);
+}
+
+/* ---- Rocket sparks ------------------------------------------- */
+.ep-spark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ---- Iso diorama keyframes ----------------------------------- */
+@keyframes ep-tile {
+  0%, 100% { opacity: 0.16; }
+  50% { opacity: 0.95; }
+}
+@keyframes ep-kflash {
+  0%, 46%, 54%, 100% { opacity: 0; }
+  49% { opacity: 0.95; }
+}
+@keyframes ep-photo {
+  0%, 48% { opacity: 0; transform: translateY(0); }
+  56% { opacity: 1; transform: translateY(-10px); }
+  82% { opacity: 1; transform: translateY(-34px); }
+  100% { opacity: 0; transform: translateY(-46px); }
+}
+@keyframes ep-gbflash {
+  0%, 28%, 36%, 100% { opacity: 0; }
+  31% { opacity: 0.85; }
+}
+@keyframes ep-dance1 {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-8px) rotate(5deg); }
+}
+@keyframes ep-dance2 {
+  0%, 100% { transform: translateY(0) scale(1, 0.96); }
+  30% { transform: translateY(-10px) scale(0.98, 1.04) rotate(-4deg); }
+  60% { transform: translateY(-3px) scale(1, 1) rotate(4deg); }
+}
+@keyframes ep-dance3 {
+  0%, 100% { transform: translateX(-3px) rotate(-6deg); }
+  50% { transform: translateX(3px) translateY(-6px) rotate(6deg); }
+}
+@keyframes ep-walkbob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-4px) rotate(2deg); }
+}
+@keyframes ep-stroll {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+@keyframes ep-rise {
+  0% { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.8; }
+  100% { transform: translateY(-140px) scale(1.1) rotate(120deg); opacity: 0; }
 }
 
 /* Hide the middle nav links on narrow screens (the CTA stays). */

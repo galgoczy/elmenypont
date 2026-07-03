@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useRef, type CSSProperties } from 'react'
 
 const WORDS = [
   { text: 'VILLÁMGYORS AI-KÉP', color: '#E94A35', doodle: 3, size: 40 },
@@ -28,6 +28,7 @@ function Row({ hidden }: { hidden?: boolean }) {
               background: 'rgba(246,241,233,.5)',
               WebkitMask: `url(/assets/doodle-${w.doodle}.png) center/contain no-repeat`,
               mask: `url(/assets/doodle-${w.doodle}.png) center/contain no-repeat`,
+              animation: `ep-spin ${16 + i * 4}s linear infinite ${i % 2 ? 'reverse' : ''}`,
             }}
           />
         </span>
@@ -36,30 +37,51 @@ function Row({ hidden }: { hidden?: boolean }) {
   )
 }
 
-/** Doodle marquee: coloured slogans with neutral grey doodles between them. */
+/**
+ * Doodle marquee: coloured slogans with slowly spinning doodles between
+ * them, on a slightly tilted dark band. Pauses on hover so the words are
+ * actually readable when someone leans in.
+ */
 export function Marquee() {
+  const track = useRef<HTMLDivElement | null>(null)
+
   return (
-    <div
-      style={{
-        position: 'relative',
-        background: '#17150D',
-        color: '#F6F1E9',
-        padding: '22px 0',
-        overflow: 'hidden',
-      }}
-    >
+    // sticker-style band laid across the section seam; the inner strip is
+    // tilted and slightly oversized so no gap shows at the rotated corners
+    <div style={{ position: 'relative', zIndex: 5, marginTop: -28, marginBottom: -28 }}>
       <div
         style={{
-          display: 'flex',
-          width: 'max-content',
-          gap: 54,
-          alignItems: 'center',
-          animation: 'ep-marquee 26s linear infinite',
-          whiteSpace: 'nowrap',
+          position: 'relative',
+          width: '104%',
+          marginLeft: '-2%',
+          background: '#17150D',
+          color: '#F6F1E9',
+          padding: '22px 0',
+          overflow: 'hidden',
+          transform: 'rotate(-1.1deg)',
+          boxShadow: '0 18px 44px -22px rgba(0,0,0,.45)',
+        }}
+        onMouseEnter={() => {
+          if (track.current) track.current.style.animationPlayState = 'paused'
+        }}
+        onMouseLeave={() => {
+          if (track.current) track.current.style.animationPlayState = 'running'
         }}
       >
-        <Row />
-        <Row hidden />
+        <div
+          ref={track}
+          style={{
+            display: 'flex',
+            width: 'max-content',
+            gap: 54,
+            alignItems: 'center',
+            animation: 'ep-marquee 26s linear infinite',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <Row />
+          <Row hidden />
+        </div>
       </div>
     </div>
   )

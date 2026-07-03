@@ -1,5 +1,6 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { cl } from '../hooks/useScene'
+import { Magnetic } from './Magnetic'
 
 interface HeroProps {
   heroP: number
@@ -10,6 +11,32 @@ const STAT_CHIPS = [
   { value: '∞ stílus', label: 'választható téma', color: '#9868F8' },
   { value: '100%', label: 'rendezvényre szabva', color: '#E94A35' },
 ]
+
+/** One headline unit rising out of its own mask, scrubbed by the reveal progress. */
+function RiseWord({ p, i, children }: { p: number; i: number; children: ReactNode }) {
+  const w = cl(p, i * 0.09, i * 0.09 + 0.55)
+  return (
+    <span
+      style={{
+        display: 'inline-block',
+        overflow: 'hidden',
+        verticalAlign: 'bottom',
+        padding: '0.08em 0.05em 0.12em',
+        margin: '-0.08em -0.05em -0.12em',
+      }}
+    >
+      <span
+        style={{
+          display: 'inline-block',
+          transform: `translateY(${((1 - w) * 108).toFixed(1)}%) rotate(${((1 - w) * 4).toFixed(2)}deg)`,
+          transformOrigin: 'left bottom',
+        }}
+      >
+        {children}
+      </span>
+    </span>
+  )
+}
 
 /**
  * Sticky scroll-choreographed hero, ported from the prototype:
@@ -59,12 +86,12 @@ export function Hero({ heroP: p }: HeroProps) {
           background: heroBg,
         }}
       >
-        {/* ambient glow */}
+        {/* ambient glow — drifts with the cursor */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            background: `radial-gradient(120% 80% at 50% 38%, rgba(233,74,53,${heroGlow}) 0%, rgba(233,74,53,0) 55%)`,
+            background: `radial-gradient(120% 80% at calc(50% + var(--mxs, 0) * 12%) calc(38% + var(--mys, 0) * 10%), rgba(233,74,53,${heroGlow}) 0%, rgba(233,74,53,0) 55%)`,
             pointerEvents: 'none',
           }}
         />
@@ -82,7 +109,7 @@ export function Hero({ heroP: p }: HeroProps) {
         >
           <div
             style={{
-              transform: `translateY(${kioskLift}px) rotateX(8deg) rotateY(${kioskRot}deg) scale(${kioskScale})`,
+              transform: `translateY(${kioskLift}px) rotateX(calc(8deg + var(--mys, 0) * 6deg)) rotateY(calc(${kioskRot}deg + var(--mxs, 0) * -12deg)) scale(${kioskScale})`,
               transformStyle: 'preserve-3d',
               filter: 'drop-shadow(0 40px 60px rgba(0,0,0,.5))',
             }}
@@ -245,20 +272,29 @@ export function Hero({ heroP: p }: HeroProps) {
               color: '#17150D',
             }}
           >
-            A fotóautomata{' '}
-            <span style={{ fontWeight: 600, color: '#E94A35' }}>újragondolva</span>{' '}
-            <span
-              style={{
-                display: 'inline-block',
-                background: '#17150D',
-                color: '#F6F1E9',
-                padding: '.02em .22em .1em',
-                borderRadius: '.14em',
-                transform: 'rotate(-1.6deg)',
-              }}
-            >
-              AI&nbsp;Selfiemata.
-            </span>
+            <RiseWord p={reveal} i={0}>
+              A
+            </RiseWord>{' '}
+            <RiseWord p={reveal} i={1}>
+              fotóautomata
+            </RiseWord>{' '}
+            <RiseWord p={reveal} i={2}>
+              <span style={{ fontWeight: 600, color: '#E94A35' }}>újragondolva</span>
+            </RiseWord>{' '}
+            <RiseWord p={reveal} i={3}>
+              <span
+                style={{
+                  display: 'inline-block',
+                  background: '#17150D',
+                  color: '#F6F1E9',
+                  padding: '.02em .22em .1em',
+                  borderRadius: '.14em',
+                  transform: 'rotate(-1.6deg)',
+                }}
+              >
+                AI&nbsp;Selfiemata.
+              </span>
+            </RiseWord>
           </h1>
           <p
             style={{
@@ -281,42 +317,47 @@ export function Hero({ heroP: p }: HeroProps) {
               marginTop: 38,
             }}
           >
-            <a
-              href="#kapcsolat"
-              style={{
-                background: '#17150D',
-                color: '#F6F1E9',
-                fontWeight: 600,
-                fontSize: 17,
-                padding: '17px 30px',
-                borderRadius: 100,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 9,
-                transition: 'transform .25s, box-shadow .25s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
-            >
-              Kérek bemutatót →
-            </a>
-            <a
-              href="#szolgaltatasok"
-              style={{
-                background: 'transparent',
-                color: '#17150D',
-                fontWeight: 600,
-                fontSize: 17,
-                padding: '17px 30px',
-                borderRadius: 100,
-                border: '1.5px solid rgba(0,0,0,.18)',
-                transition: 'background .25s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.05)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-            >
-              Szolgáltatások
-            </a>
+            <Magnetic strength={8}>
+              <a
+                href="#kapcsolat"
+                style={{
+                  background: '#17150D',
+                  color: '#F6F1E9',
+                  fontWeight: 600,
+                  fontSize: 17,
+                  padding: '17px 30px',
+                  borderRadius: 100,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 9,
+                  transition: 'box-shadow .3s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 34px -14px rgba(23,21,13,.55)')}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
+              >
+                Kérek bemutatót →
+              </a>
+            </Magnetic>
+            <Magnetic strength={6}>
+              <a
+                href="#szolgaltatasok"
+                style={{
+                  display: 'inline-block',
+                  background: 'transparent',
+                  color: '#17150D',
+                  fontWeight: 600,
+                  fontSize: 17,
+                  padding: '17px 30px',
+                  borderRadius: 100,
+                  border: '1.5px solid rgba(0,0,0,.18)',
+                  transition: 'background .25s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.05)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >
+                Szolgáltatások
+              </a>
+            </Magnetic>
           </div>
           <div
             style={{
@@ -327,22 +368,32 @@ export function Hero({ heroP: p }: HeroProps) {
               marginTop: 34,
             }}
           >
-            {STAT_CHIPS.map((c) => (
-              <div key={c.label} style={chip}>
+            {STAT_CHIPS.map((c, i) => {
+              const cp = cl(reveal, 0.25 + i * 0.12, 0.7 + i * 0.12)
+              return (
                 <div
+                  key={c.label}
                   style={{
-                    fontFamily: 'Syne',
-                    fontWeight: 600,
-                    fontSize: 22,
-                    letterSpacing: '-.01em',
-                    color: c.color,
+                    ...chip,
+                    opacity: cp.toFixed(2),
+                    transform: `translateY(${((1 - cp) * 26).toFixed(1)}px) scale(${(0.94 + cp * 0.06).toFixed(3)})`,
                   }}
                 >
-                  {c.value}
+                  <div
+                    style={{
+                      fontFamily: 'Syne',
+                      fontWeight: 600,
+                      fontSize: 22,
+                      letterSpacing: '-.01em',
+                      color: c.color,
+                    }}
+                  >
+                    {c.value}
+                  </div>
+                  <div style={{ fontSize: 13, color: '#7A766B', marginTop: 2 }}>{c.label}</div>
                 </div>
-                <div style={{ fontSize: 13, color: '#7A766B', marginTop: 2 }}>{c.label}</div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 

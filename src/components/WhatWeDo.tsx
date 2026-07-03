@@ -1,6 +1,7 @@
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
+import { Squiggle } from './Squiggle'
 
 // widths mirror the prototype's varied strip rhythm; ~1/3 height (190px)
 const STRIP = [300, 260, 300, 250, 300, 270]
@@ -79,7 +80,12 @@ export function WhatWeDo() {
           }}
         >
           Interaktív rendezvény&shy;élményeket készítünk. A klasszikus fotóautomatát{' '}
-          <span style={{ color: '#E94A35' }}>újragondoltuk:</span> valós idejű AI-val a vendég
+          <span style={{ color: '#E94A35' }}>
+            <Squiggle color="rgba(233,74,53,.45)" delay={500}>
+              újragondoltuk:
+            </Squiggle>
+          </span>{' '}
+          valós idejű AI-val a vendég
           fotója pár másodperc alatt{' '}
           <span style={{ color: '#9868F8' }}>egyedi, megosztható, brandingelt</span> alkotássá válik.
         </Reveal>

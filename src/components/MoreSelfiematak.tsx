@@ -1,6 +1,7 @@
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
+import { TiltCard } from './TiltCard'
 
 const CARDS = [
   {
@@ -47,49 +48,41 @@ export function MoreSelfiematak() {
           }}
         >
           {CARDS.map((c) => (
-            <Reveal
-              key={c.title}
-              as="a"
-              pop
-              delay={c.delay}
-              href={c.href}
-              style={{
-                background: '#F6F1E9',
-                border: '1px solid rgba(0,0,0,.08)',
-                borderRadius: 22,
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'transform .45s cubic-bezier(.16,1,.3,1), box-shadow .45s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px)'
-                e.currentTarget.style.boxShadow = '0 30px 50px -28px rgba(0,0,0,.4)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'none'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
-              <ImageSlot shape="rect" fit="cover" placeholder={c.slot} style={{ width: '100%', height: 230, display: 'block' }} />
-              <div style={{ padding: 28 }}>
-                <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 25, letterSpacing: '-.01em' }}>
-                  {c.title}
-                </h3>
-                <p style={{ fontSize: 16, lineHeight: 1.5, color: '#46433A', marginTop: 12 }}>{c.body}</p>
-                <span
+            <Reveal key={c.title} pop delay={c.delay}>
+              <TiltCard tilt={5} lift={7} radius={22} hoverShadow="0 34px 56px -28px rgba(0,0,0,.4)" style={{ height: '100%' }}>
+                <a
+                  href={c.href}
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    marginTop: 18,
-                    fontWeight: 600,
-                    color: '#E94A35',
+                    background: '#F6F1E9',
+                    border: '1px solid rgba(0,0,0,.08)',
+                    borderRadius: 22,
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
                   }}
                 >
-                  {c.link}
-                </span>
-              </div>
+                  <ImageSlot shape="rect" fit="cover" placeholder={c.slot} style={{ width: '100%', height: 230, display: 'block' }} />
+                  <div style={{ padding: 28 }}>
+                    <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 25, letterSpacing: '-.01em' }}>
+                      {c.title}
+                    </h3>
+                    <p style={{ fontSize: 16, lineHeight: 1.5, color: '#46433A', marginTop: 12 }}>{c.body}</p>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        marginTop: 18,
+                        fontWeight: 600,
+                        color: '#E94A35',
+                      }}
+                    >
+                      {c.link}
+                    </span>
+                  </div>
+                </a>
+              </TiltCard>
             </Reveal>
           ))}
         </div>

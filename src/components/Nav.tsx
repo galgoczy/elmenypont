@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import { cl } from '../hooks/useScene'
+import { Magnetic } from './Magnetic'
 
 interface NavProps {
   heroP: number
@@ -56,6 +57,22 @@ export function Nav({ heroP, scrolled }: NavProps) {
 
   return (
     <nav style={navStyle}>
+      {/* reading-progress hairline */}
+      <span
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          width: '100%',
+          height: 3,
+          transformOrigin: 'left',
+          transform: 'scaleX(var(--scrollp, 0))',
+          background: 'linear-gradient(90deg,#E94A35,#F2937F)',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      />
       <a href="#top" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
         <img
           src="/assets/logo/elmenypont-logo-coral.png"
@@ -89,14 +106,11 @@ export function Nav({ heroP, scrolled }: NavProps) {
             {l.label}
           </a>
         ))}
-        <a
-          href="#kapcsolat"
-          style={navCtaStyle}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.04)')}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
-        >
-          Ajánlatot kérek
-        </a>
+        <Magnetic strength={5}>
+          <a href="#kapcsolat" style={{ ...navCtaStyle, display: 'inline-block' }}>
+            Ajánlatot kérek
+          </a>
+        </Magnetic>
       </div>
     </nav>
   )

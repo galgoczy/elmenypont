@@ -72,13 +72,28 @@ export function OtherServices() {
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#F6F1E9'
                 e.currentTarget.style.borderColor = 'rgba(0,0,0,.18)'
+                const ic = e.currentTarget.querySelector<HTMLElement>('[data-icon]')
+                if (ic) ic.style.transform = 'rotate(-10deg) scale(1.14)'
+                const ar = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
+                if (ar) {
+                  ar.style.transform = 'translateX(6px)'
+                  ar.style.color = '#17150D'
+                }
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'transparent'
                 e.currentTarget.style.borderColor = 'rgba(0,0,0,.12)'
+                const ic = e.currentTarget.querySelector<HTMLElement>('[data-icon]')
+                if (ic) ic.style.transform = 'none'
+                const ar = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
+                if (ar) {
+                  ar.style.transform = 'none'
+                  ar.style.color = '#7A766B'
+                }
               }}
             >
               <span
+                data-icon
                 style={{
                   flex: 'none',
                   width: 46,
@@ -86,13 +101,14 @@ export function OtherServices() {
                   background: r.color,
                   WebkitMask: `url(/assets/doodle-${r.doodle}.png) center/contain no-repeat`,
                   mask: `url(/assets/doodle-${r.doodle}.png) center/contain no-repeat`,
+                  transition: 'transform .45s cubic-bezier(.2,.8,.2,1.3)',
                 }}
               />
               <div style={{ flex: 1 }}>
                 <h4 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 20 }}>{r.title}</h4>
                 <p style={{ fontSize: 15, color: '#46433A', marginTop: 4 }}>{r.body}</p>
               </div>
-              <span style={{ color: '#7A766B', fontSize: 20 }}>→</span>
+              <span data-arrow style={{ color: '#7A766B', fontSize: 20, transition: 'transform .35s, color .35s' }}>→</span>
             </Reveal>
           ))}
         </div>

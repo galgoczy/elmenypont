@@ -19,15 +19,21 @@ interface DoodleProps {
   duration?: number
   /** base rotation, e.g. '-10deg' */
   rotate?: string
+  /**
+   * Cursor-parallax depth in px: how far the doodle drifts with the pointer
+   * (reads the smoothed --mxs/--mys vars written by CursorFX). Positive
+   * values follow the cursor, negative drift against it.
+   */
+  parallax?: number
   className?: string
   style?: CSSProperties
 }
 
 /**
- * Floating grey doodle decoration. A single-colour PNG doodle is used as a
- * CSS mask filled with `color`, so any tint works. Sits behind section
- * content via the shared `.ep-doodle` class (z-index:-1 inside an
- * `.ep-deco` stacking context).
+ * Floating doodle decoration. A single-colour PNG doodle is used as a CSS
+ * mask filled with `color`. The outer span handles placement + continuous
+ * cursor parallax; the inner span runs the float keyframes, so the two
+ * transforms compose instead of fighting.
  */
 export function Doodle({
   n,
@@ -40,29 +46,39 @@ export function Doodle({
   anim = 'float',
   duration = 8,
   rotate,
+  parallax = 18,
   className,
   style,
 }: DoodleProps) {
   const mask = `url(${DOODLE(n)})`
-  const cls = ['ep-doodle', className].filter(Boolean).join(' ')
+  const cls = ['ep-doodle-pos', className].filter(Boolean).join(' ')
   return (
     <span
       aria-hidden="true"
       className={cls}
       style={{
-        color,
         width: size,
         height: size,
         top,
         right,
         bottom,
         left,
-        WebkitMaskImage: mask,
-        maskImage: mask,
-        animation: `ep-${anim} ${duration}s ease-in-out infinite`,
-        ...(rotate ? ({ ['--r' as string]: rotate } as CSSProperties) : {}),
+        transform: parallax
+          ? `translate3d(calc(var(--mxs, 0) * ${parallax}px), calc(var(--mys, 0) * ${parallax}px), 0)`
+          : undefined,
         ...style,
       }}
-    />
+    >
+      <span
+        className="ep-doodle"
+        style={{
+          color,
+          WebkitMaskImage: mask,
+          maskImage: mask,
+          animation: `ep-${anim} ${duration}s ease-in-out infinite`,
+          ...(rotate ? ({ ['--r' as string]: rotate } as CSSProperties) : {}),
+        }}
+      />
+    </span>
   )
 }

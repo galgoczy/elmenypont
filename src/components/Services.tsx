@@ -2,6 +2,8 @@ import type { CSSProperties } from 'react'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { BeforeAfter } from './BeforeAfter'
+import { TiltCard } from './TiltCard'
+import { Words } from './Words'
 
 const SHOWCASE_STATS = [
   { value: '9–15 mp', label: 'AI generálás', color: '#9868F8' },
@@ -49,7 +51,7 @@ export function Services() {
             marginBottom: 48,
           }}
         >
-          <Reveal
+          <Words
             as="h2"
             style={{
               fontFamily: 'Syne',
@@ -60,7 +62,7 @@ export function Services() {
             }}
           >
             Amit a rendezvényedre hozunk
-          </Reveal>
+          </Words>
           <Reveal as="p" delay={80} style={{ fontSize: 16, color: '#7A766B', maxWidth: '34ch' }}>
             Sokféle megoldás, de mindegyik élmény — válassz nyugodtan, a többit intézzük.
           </Reveal>
@@ -68,7 +70,8 @@ export function Services() {
 
         {/* AI showcase: featured Selfiemata with live before/after */}
         <Reveal
-          pop
+          variant="mask"
+          radius={30}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))',
@@ -160,44 +163,50 @@ export function Services() {
           </div>
         </Reveal>
 
-        {/* AI Videomata */}
-        <Reveal
-          as="a"
-          pop
-          delay={120}
-          href="https://ai.elmeny.hu"
-          style={{
-            position: 'relative',
-            borderRadius: 28,
-            overflow: 'hidden',
-            background: '#17150D',
-            color: '#fff',
-            minHeight: 440,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            padding: 38,
-            marginTop: 26,
-            transition: 'transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'translateY(-8px)'
-            e.currentTarget.style.boxShadow = '0 40px 70px -30px rgba(0,0,0,.5)'
-            const a = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
-            if (a) a.style.transform = 'translateX(6px)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'none'
-            e.currentTarget.style.boxShadow = 'none'
-            const a = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
-            if (a) a.style.transform = 'none'
-          }}
-        >
-          <img
-            src="/assets/photos/style-cyberpunk.png"
-            alt="AI Videomata"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+        {/* AI Videomata — cursor-tilting card with sheen */}
+        <Reveal pop delay={120} style={{ marginTop: 26 }}>
+          <TiltCard tilt={4} lift={8} radius={28} hoverShadow="0 44px 74px -30px rgba(0,0,0,.55)">
+            <a
+              href="https://ai.elmeny.hu"
+              style={{
+                position: 'relative',
+                borderRadius: 28,
+                overflow: 'hidden',
+                background: '#17150D',
+                color: '#fff',
+                minHeight: 440,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-end',
+                padding: 38,
+              }}
+              onMouseEnter={(e) => {
+                const a = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
+                if (a) a.style.transform = 'translateX(6px)'
+                const img = e.currentTarget.querySelector<HTMLElement>('[data-bgimg]')
+                if (img) img.style.transform = 'scale(1.05)'
+              }}
+              onMouseLeave={(e) => {
+                const a = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
+                if (a) a.style.transform = 'none'
+                const img = e.currentTarget.querySelector<HTMLElement>('[data-bgimg]')
+                if (img) img.style.transform = 'scale(1)'
+              }}
+            >
+              <img
+                data-bgimg
+                src="/assets/photos/style-cyberpunk.png"
+                alt="AI Videomata"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 1.1s cubic-bezier(.16,1,.3,1)',
+                  willChange: 'transform',
+                }}
+              />
           <div
             style={{
               position: 'absolute',
@@ -245,7 +254,9 @@ export function Services() {
               Részletek <span data-arrow style={{ display: 'inline-block', transition: 'transform .3s' }}>→</span>{' '}
               <span style={{ opacity: 0.6, fontWeight: 400 }}>ai.elmeny.hu</span>
             </span>
-          </div>
+              </div>
+            </a>
+          </TiltCard>
         </Reveal>
       </div>
     </section>

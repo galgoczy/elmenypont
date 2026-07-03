@@ -1,6 +1,7 @@
 import { useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
+import { Magnetic } from './Magnetic'
 
 const EMAIL = 'hello@elmeny.hu'
 const PHONE_LABEL = '+36 20 468 0489'
@@ -43,6 +44,8 @@ export function ContactCTA() {
       <Doodle n={4} color="rgba(0,0,0,.04)" size={58} right="5%" bottom="16%" anim="sway" duration={11} rotate="7deg" />
 
       <Reveal
+        variant="mask"
+        radius={32}
         style={{
           position: 'relative',
           maxWidth: 1080,
@@ -128,26 +131,28 @@ export function ContactCTA() {
             <input placeholder="Vendégszám" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
           <textarea placeholder="Üzenet" rows={3} style={{ ...inputStyle, resize: 'vertical' }} onFocus={onFocus} onBlur={onBlur} />
-          <button
-            type="submit"
-            style={{
-              marginTop: 6,
-              border: 'none',
-              cursor: 'pointer',
-              background: sent ? '#48D880' : '#17150D',
-              color: '#F6F1E9',
-              fontFamily: 'var(--font-body)',
-              fontWeight: 600,
-              fontSize: 17,
-              padding: '16px 28px',
-              borderRadius: 100,
-              transition: 'transform .25s, background .3s',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.04)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'none')}
-          >
-            {sent ? 'Köszönjük! Hamarosan jelentkezünk ✓' : 'Ajánlatot kérek →'}
-          </button>
+          <Magnetic strength={6} style={{ marginTop: 6, display: 'block' }}>
+            <button
+              type="submit"
+              style={{
+                width: '100%',
+                border: 'none',
+                cursor: 'pointer',
+                background: sent ? '#48D880' : '#17150D',
+                color: '#F6F1E9',
+                fontFamily: 'var(--font-body)',
+                fontWeight: 600,
+                fontSize: 17,
+                padding: '16px 28px',
+                borderRadius: 100,
+                transition: 'background .3s, box-shadow .3s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 30px -14px rgba(23,21,13,.5)')}
+              onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
+            >
+              {sent ? 'Köszönjük! Hamarosan jelentkezünk ✓' : 'Ajánlatot kérek →'}
+            </button>
+          </Magnetic>
         </form>
       </Reveal>
     </section>

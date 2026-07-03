@@ -1,5 +1,7 @@
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
+import { Words } from './Words'
+import { Squiggle } from './Squiggle'
 
 const POINTS = [
   { n: '01', title: 'Kulcsrakész', body: 'A teljes technika, alapanyag és profi személyzet felkészült az eseményedre!', delay: 0 },
@@ -45,7 +47,9 @@ export function WhyUs() {
             >
               Miért mi
             </span>
-            <h2
+            <Words
+              as="h2"
+              stagger={90}
               style={{
                 fontFamily: 'Syne',
                 fontWeight: 500,
@@ -54,10 +58,11 @@ export function WhyUs() {
                 letterSpacing: '-.03em',
               }}
             >
-              Élmény az
-              <br />
-              eseményeden.
-            </h2>
+              <Squiggle color="rgba(72,216,128,.6)" delay={900}>
+                Élmény
+              </Squiggle>{' '}
+              az eseményeden.
+            </Words>
             <p style={{ fontSize: 17, lineHeight: 1.55, color: '#46433A', marginTop: 22, maxWidth: '38ch' }}>
               15 éve készítünk rendezvényprogramokat — azon belül is vizuális, fotós élményeket.
               Hisszük, hogy minden rendezvény lelke az élmény, és a mi dolgunk, hogy ez tartós is
@@ -82,6 +87,7 @@ export function WhyUs() {
             {POINTS.map((p) => (
               <Reveal
                 key={p.n}
+                variant="right"
                 delay={p.delay}
                 style={{
                   background: '#F6F1E9',
@@ -91,8 +97,35 @@ export function WhyUs() {
                   gap: 22,
                   alignItems: 'flex-start',
                 }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.transition = 'transform .45s cubic-bezier(.2,.8,.2,1.2), box-shadow .45s'
+                  el.style.transform = 'translateX(10px)'
+                  el.style.boxShadow = '0 22px 44px -26px rgba(23,21,13,.35)'
+                  const n = el.querySelector<HTMLElement>('[data-num]')
+                  if (n) n.style.transform = 'scale(1.25) rotate(-6deg)'
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.transform = 'translateX(0)'
+                  el.style.boxShadow = 'none'
+                  const n = el.querySelector<HTMLElement>('[data-num]')
+                  if (n) n.style.transform = 'none'
+                }}
               >
-                <span style={{ fontFamily: 'Syne', fontWeight: 600, fontSize: 26, color: '#48D880', lineHeight: 1 }}>
+                <span
+                  data-num
+                  style={{
+                    fontFamily: 'Syne',
+                    fontWeight: 600,
+                    fontSize: 26,
+                    color: '#48D880',
+                    lineHeight: 1,
+                    display: 'inline-block',
+                    transition: 'transform .45s cubic-bezier(.2,.8,.2,1.3)',
+                    transformOrigin: 'center',
+                  }}
+                >
                   {p.n}
                 </span>
                 <div>
