@@ -35,24 +35,16 @@ export function WhatWeDo() {
         padding: 'clamp(90px,14vw,180px) clamp(24px,6vw,90px)',
       }}
     >
-      <Reveal
-        as="span"
-        style={{
-          position: 'absolute',
-          right: '6vw',
-          top: 60,
-          width: 'clamp(90px,11vw,150px)',
-          height: 'clamp(90px,11vw,150px)',
-          background: 'rgba(233,74,53,.16)',
-          WebkitMask: 'url(/assets/doodle-5.png) center/contain no-repeat',
-          mask: 'url(/assets/doodle-5.png) center/contain no-repeat',
-          animation: 'ep-float 7s ease-in-out infinite',
-        }}
-      />
       <Doodle n={2} color="rgba(0,0,0,.05)" size={96} left="3%" top="30%" anim="sway" duration={11} rotate="-10deg" />
       <Doodle n={4} color="rgba(0,0,0,.045)" size={64} left="46%" bottom="14%" anim="float2" duration={8} rotate="6deg" />
 
-      <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', position: 'relative' }}>
+        {/* snapping camera doodle: tilts side to side, flash pops on top;
+            on mobile it shrinks into the bottom-right of the text block */}
+        <span className="ep-camdoodle" aria-hidden="true">
+          <span className="ep-camdoodle-flash" />
+          <span className="ep-camdoodle-body" />
+        </span>
         <Reveal
           as="span"
           style={{

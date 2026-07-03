@@ -48,9 +48,14 @@ function RiseWord({ p, i, children }: { p: number; i: number; children: ReactNod
 const HEAD_W = 300
 const HEAD_H = 230
 const HEAD_D = 150
-const COL_H = 170
-const BASE_W = 230
+// tall telescopic column per the reference sheet: ~1.5x wider (width only,
+// depth unchanged) and much longer than the first iteration
+const COL_W = 80
+const COL_D = 54
+const COL_H = 380
+const BASE_W = 240
 const BASE_H = 14
+const TOTAL_H = HEAD_H + COL_H + BASE_H
 
 function face(w: number, h: number, transform: string, extra?: CSSProperties): CSSProperties {
   return {
@@ -116,7 +121,7 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
     [86, 86],
   ]
   return (
-    <div style={{ position: 'relative', width: HEAD_W, height: 430, transformStyle: 'preserve-3d' }}>
+    <div style={{ position: 'relative', width: HEAD_W, height: TOTAL_H, transformStyle: 'preserve-3d' }}>
       {/* -------- head box -------- */}
       <div style={{ position: 'absolute', left: 0, top: 0, width: HEAD_W, height: HEAD_H, transformStyle: 'preserve-3d' }}>
         {/* front */}
@@ -261,20 +266,21 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
       <div
         style={{
           position: 'absolute',
-          left: (HEAD_W - 54) / 2,
+          left: (HEAD_W - COL_W) / 2,
           top: HEAD_H,
-          width: 54,
+          width: COL_W,
           height: COL_H,
           transformStyle: 'preserve-3d',
         }}
       >
-        <div style={face(54, COL_H, 'translateZ(27px)', { background: 'linear-gradient(180deg,#262626,#0b0b0b)' })}>
-          {/* telescopic seam */}
-          <span style={{ position: 'absolute', left: 6, right: 6, top: 64, height: 3, background: '#000', borderRadius: 2 }} />
+        <div style={face(COL_W, COL_H, `translateZ(${COL_D / 2}px)`, { background: 'linear-gradient(180deg,#262626,#0b0b0b)' })}>
+          {/* telescopic seams */}
+          <span style={{ position: 'absolute', left: 7, right: 7, top: 120, height: 3, background: '#000', borderRadius: 2 }} />
+          <span style={{ position: 'absolute', left: 7, right: 7, top: 250, height: 3, background: '#000', borderRadius: 2 }} />
         </div>
-        <div style={face(54, COL_H, 'rotateY(180deg) translateZ(27px)', { background: '#161616' })} />
-        <div style={face(54, COL_H, 'rotateY(90deg) translateZ(27px)', { background: '#111' })} />
-        <div style={face(54, COL_H, 'rotateY(-90deg) translateZ(27px)', { background: '#111' })} />
+        <div style={face(COL_W, COL_H, `rotateY(180deg) translateZ(${COL_D / 2}px)`, { background: '#161616' })} />
+        <div style={face(COL_D, COL_H, `rotateY(90deg) translateZ(${COL_W / 2}px)`, { background: '#111' })} />
+        <div style={face(COL_D, COL_H, `rotateY(-90deg) translateZ(${COL_W / 2}px)`, { background: '#111' })} />
       </div>
 
       {/* -------- base slab + casters -------- */}
@@ -324,20 +330,21 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
  */
 export function Hero({ heroP: p }: HeroProps) {
   // --- choreography -------------------------------------------------
-  const spin = cl(p, 0.02, 0.52)
+  // full figure facing us → ONE full turn while drifting a bit closer →
+  // flash + sample photo → the copy rises in front while the kiosk just
+  // fades back (no extra zoom, no lift)
+  const spin = cl(p, 0.03, 0.6)
   const spinE = spin * spin * (3 - 2 * spin)
-  const rotY = 180 - 540 * spinE // back view → 1.5 turns → face on
-  const zoom = cl(p, 0.52, 0.72)
-  const zoomE = zoom * zoom * (3 - 2 * zoom)
-  const flash = cl(p, 0.72, 0.75) * (1 - cl(p, 0.755, 0.8))
-  const photoOn = cl(p, 0.75, 0.79)
-  const reveal = cl(p, 0.84, 0.99)
+  const rotY = -360 * spinE
+  const flash = cl(p, 0.63, 0.66) * (1 - cl(p, 0.67, 0.72))
+  const photoOn = cl(p, 0.66, 0.71)
+  const reveal = cl(p, 0.76, 0.95)
 
-  const scale = 0.52 + 0.55 * spinE + 1.5 * zoomE
-  const finalScale = scale * (1 - 0.55 * reveal)
-  const tiltX = 9 - 7 * zoomE
-  // drift down while zooming so the display ends up viewport-centred
-  const ty = 96 * zoomE * scale - 430 * reveal
+  const finalScale = 0.82 + 0.28 * spinE
+  const tiltX = 8 - 4 * spinE
+  // settle slightly lower so the head is more central once face-on
+  const ty = 130 * spinE
+  const kioskOp = 1 - 0.85 * reveal
 
   const mix = reveal
   const dark = [23, 21, 13]
@@ -351,7 +358,7 @@ export function Hero({ heroP: p }: HeroProps) {
   const copyPe: CSSProperties['pointerEvents'] = reveal > 0.6 ? 'auto' : 'none'
   const hintOp = (1 - cl(p, 0, 0.1)).toFixed(2)
   const hintColor = mix > 0.5 ? '#7A766B' : 'rgba(255,255,255,.7)'
-  const shadowOp = (0.55 * (1 - zoomE * 0.7) * (1 - reveal)).toFixed(3)
+  const shadowOp = (0.55 * (1 - reveal)).toFixed(3)
 
   const chip: CSSProperties = {
     background: '#F6F1E9',
@@ -362,7 +369,7 @@ export function Hero({ heroP: p }: HeroProps) {
   }
 
   return (
-    <section id="top" data-hero style={{ position: 'relative', height: '210vh' }}>
+    <section id="top" data-hero style={{ position: 'relative', height: '190vh' }}>
       <div
         style={{
           position: 'sticky',
@@ -398,7 +405,8 @@ export function Hero({ heroP: p }: HeroProps) {
               position: 'relative',
               transform: `translateY(${ty.toFixed(1)}px) rotateX(calc(${tiltX.toFixed(2)}deg + var(--mys, 0) * 5deg)) rotateY(calc(${rotY.toFixed(2)}deg + var(--mxs, 0) * -10deg)) scale(${finalScale.toFixed(3)})`,
               transformStyle: 'preserve-3d',
-              willChange: 'transform',
+              willChange: 'transform, opacity',
+              opacity: kioskOp.toFixed(3),
             }}
           >
             <Kiosk3D turn={spinE} photoOn={photoOn} screenFlash={flash} />
@@ -408,10 +416,10 @@ export function Hero({ heroP: p }: HeroProps) {
               style={{
                 position: 'absolute',
                 left: '50%',
-                top: 442,
-                width: 340,
-                height: 64,
-                transform: 'translateX(-50%) rotateX(90deg) translateZ(-24px)',
+                top: TOTAL_H + 12,
+                width: 360,
+                height: 66,
+                transform: 'translateX(-50%) rotateX(90deg) translateZ(-26px)',
                 borderRadius: '50%',
                 background: `radial-gradient(closest-side, rgba(0,0,0,${shadowOp}), transparent 70%)`,
               }}

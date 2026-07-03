@@ -184,15 +184,24 @@ function SmartWallSprite() {
   )
 }
 
-/** Adult-proportioned dancing silhouette (feet at local 0,0). */
-function DancerFig({ color, pose }: { color: string; pose: 0 | 1 | 2 }) {
+/** Adult-proportioned silhouette (feet at local 0,0). Poses 0-2 dance,
+ *  3-4 are relaxed loitering stances. */
+function DancerFig({ color, pose }: { color: string; pose: 0 | 1 | 2 | 3 | 4 }) {
   const arms =
     pose === 0 ? (
       <path d="M-5 -44 L-16 -60 M5 -44 L16 -34" stroke={color} strokeWidth="4" strokeLinecap="round" />
     ) : pose === 1 ? (
       <path d="M-5 -44 L-15 -33 M5 -44 L15 -59" stroke={color} strokeWidth="4" strokeLinecap="round" />
-    ) : (
+    ) : pose === 2 ? (
       <path d="M-5 -44 L-16 -56 M5 -44 L16 -56" stroke={color} strokeWidth="4" strokeLinecap="round" />
+    ) : pose === 3 ? (
+      <path d="M-5 -44 L-9 -29 M5 -44 L9 -29" stroke={color} strokeWidth="4" strokeLinecap="round" />
+    ) : (
+      // holding a drink
+      <>
+        <path d="M-5 -44 L-9 -30 M5 -44 L13 -38" stroke={color} strokeWidth="4" strokeLinecap="round" />
+        <rect x="11" y="-46" width="5" height="8" rx="1.5" fill="rgba(246,241,233,.85)" />
+      </>
     )
   return (
     <>
@@ -254,14 +263,18 @@ interface PlantProps {
   w: number
   h: number
   shadow?: number
-  /** key for the screen-space label overlay to track */
+  /** key for the screen-space label + click-proxy overlays to track */
   station?: string
-  onPick?: () => void
   children: ReactNode
 }
 
-/** Billboarded paper-cutout standing at (x, y) on the floor, feet planted. */
-function Plant({ x, y, w, h, shadow, station, onPick, children }: PlantProps) {
+/**
+ * Billboarded paper-cutout standing at (x, y) on the floor, feet planted.
+ * The sprite itself never takes pointer events — clicking is handled by
+ * screen-space proxies chasing the projected rects (3D hit-testing is
+ * unreliable for billboards in the back half of the floor).
+ */
+function Plant({ x, y, w, h, shadow, station, children }: PlantProps) {
   const sw = shadow ?? w * 0.92
   return (
     <>
@@ -276,6 +289,7 @@ function Plant({ x, y, w, h, shadow, station, onPick, children }: PlantProps) {
           transform: 'translate(-50%,-50%)',
           borderRadius: '50%',
           background: 'radial-gradient(closest-side, rgba(0,0,0,.42), transparent 72%)',
+          pointerEvents: 'none',
         }}
       />
       <div
@@ -288,35 +302,10 @@ function Plant({ x, y, w, h, shadow, station, onPick, children }: PlantProps) {
           height: h,
           transformOrigin: '50% 100%',
           transform: BILL,
+          pointerEvents: 'none',
         }}
       >
-        {onPick ? (
-          <button
-            type="button"
-            onClick={onPick}
-            style={{
-              position: 'relative',
-              display: 'block',
-              width: '100%',
-              height: '100%',
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.filter = 'brightness(1.12)'
-              e.currentTarget.style.transition = 'filter .25s'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.filter = 'none'
-            }}
-          >
-            {children}
-          </button>
-        ) : (
-          <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: 'none' }}>{children}</div>
-        )}
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>{children}</div>
       </div>
     </>
   )
@@ -337,7 +326,7 @@ const STATIONS = [
     href: 'https://greenbox.elmeny.hu',
     label: 'Greenbox stúdió',
     color: '#48D880',
-    text: 'Zöld hátteres fotóstúdió profi világítással: a vendégek bármilyen helyszín vagy céges arculat elé varázsolhatók.',
+    text: 'Zöld hátteres stúdió-automata profi világítással: a vendégek bármilyen helyszín vagy céges arculat elé varázsolhatók.',
   },
   {
     key: 'smartwall',
@@ -352,16 +341,42 @@ export function IsoScene() {
   const secRef = useRef<HTMLElement | null>(null)
   const stageRef = useRef<HTMLDivElement | null>(null)
   const labelRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const proxyRefs = useRef<Record<string, HTMLButtonElement | null>>({})
   const [active, setActive] = useState<string | null>(null)
-  const activeRef = useRef<string | null>(null)
-  activeRef.current = active
+  const [closing, setClosing] = useState(false)
+  const hideTimer = useRef(0)
+  const closeTimer = useRef(0)
   const movedRef = useRef(0)
+
+  const clearTimers = () => {
+    window.clearTimeout(hideTimer.current)
+    window.clearTimeout(closeTimer.current)
+  }
+  /** fade the card away after 4s unless the pointer is resting on it */
+  const armHide = () => {
+    clearTimers()
+    hideTimer.current = window.setTimeout(() => {
+      setClosing(true)
+      closeTimer.current = window.setTimeout(() => {
+        setActive(null)
+        setClosing(false)
+      }, 600)
+    }, 4000)
+  }
 
   const pick = (key: string) => {
     // ignore the click that ends a drag gesture
     if (movedRef.current > 6) return
+    clearTimers()
+    setClosing(false)
     setActive((a) => (a === key ? null : key))
   }
+
+  useEffect(() => {
+    if (active) armHide()
+    return clearTimers
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active])
 
   useEffect(() => {
     const sec = secRef.current
@@ -380,13 +395,22 @@ export function IsoScene() {
     const positionLabels = () => {
       const sr = stage.getBoundingClientRect()
       bills.forEach(({ key, el }) => {
-        const lab = labelRefs.current[key]
-        if (!el || !lab) return
+        if (!el) return
         const r = el.getBoundingClientRect()
         const x = r.left - sr.left + r.width / 2
         const y = r.top - sr.top - 10
-        lab.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -100%)`
-        lab.style.opacity = '1'
+        const lab = labelRefs.current[key]
+        if (lab) {
+          lab.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -100%)`
+          lab.style.opacity = '1'
+        }
+        // invisible click proxy stretched over the projected sprite rect
+        const proxy = proxyRefs.current[key]
+        if (proxy) {
+          proxy.style.transform = `translate(${(r.left - sr.left).toFixed(1)}px, ${(r.top - sr.top).toFixed(1)}px)`
+          proxy.style.width = `${r.width.toFixed(1)}px`
+          proxy.style.height = `${r.height.toFixed(1)}px`
+        }
       })
     }
 
@@ -460,9 +484,9 @@ export function IsoScene() {
       if (!dragging) {
         spin += vel * dt
         vel *= Math.exp(-2.4 * dt)
-        // keeps turning on its own (also under the cursor); pauses only
-        // while grabbed or while an info card is open
-        if (!activeRef.current) spin += 5.2 * dt
+        // keeps turning on its own — under the cursor and behind an open
+        // info card too; pauses only while actively grabbed
+        spin += 5.2 * dt
       }
       tilt += (tiltT - tilt) * (1 - Math.exp(-6 * dt))
       sec.style.setProperty('--spin', `${spin.toFixed(3)}deg`)
@@ -667,17 +691,17 @@ export function IsoScene() {
               </svg>
 
               {/* stations in three corners */}
-              <Plant x={112} y={100} w={84} h={136} station="selfiemata" onPick={() => pick('selfiemata')}>
+              <Plant x={112} y={100} w={84} h={136} station="selfiemata">
                 <span style={{ display: 'block', ...spriteBox(84, 136) }}>
                   <KioskSprite />
                 </span>
               </Plant>
-              <Plant x={352} y={122} w={168} h={132} station="greenbox" onPick={() => pick('greenbox')}>
+              <Plant x={352} y={122} w={168} h={132} station="greenbox">
                 <span style={{ display: 'block', ...spriteBox(168, 132) }}>
                   <GreenboxSprite />
                 </span>
               </Plant>
-              <Plant x={122} y={368} w={176} h={128} station="smartwall" onPick={() => pick('smartwall')}>
+              <Plant x={122} y={368} w={176} h={128} station="smartwall">
                 <span style={{ display: 'block', ...spriteBox(176, 128) }}>
                   <SmartWallSprite />
                 </span>
@@ -689,8 +713,68 @@ export function IsoScene() {
                   <DanceCornerSprite />
                 </span>
               </Plant>
+
+              {/* loitering guests chatting in the middle, just for mood */}
+              <Plant x={224} y={224} w={36} h={72} shadow={32}>
+                <span style={{ display: 'block', ...spriteBox(36, 72) }}>
+                  <svg viewBox="0 0 36 72" width="100%" height="100%" style={{ display: 'block', overflow: 'visible' }}>
+                    <g transform="translate(18 70) scale(-1 1)">
+                      <g style={{ transformBox: 'fill-box', transformOrigin: '50% 100%', animation: 'ep-idle 3.6s ease-in-out infinite' }}>
+                        <DancerFig color="#4888F8" pose={4} />
+                      </g>
+                    </g>
+                  </svg>
+                </span>
+              </Plant>
+              <Plant x={258} y={244} w={36} h={72} shadow={32}>
+                <span style={{ display: 'block', ...spriteBox(36, 72) }}>
+                  <svg viewBox="0 0 36 72" width="100%" height="100%" style={{ display: 'block', overflow: 'visible' }}>
+                    <g transform="translate(18 70)">
+                      <g style={{ transformBox: 'fill-box', transformOrigin: '50% 100%', animation: 'ep-idle 4.3s ease-in-out infinite .9s' }}>
+                        <DancerFig color="#F2937F" pose={3} />
+                      </g>
+                    </g>
+                  </svg>
+                </span>
+              </Plant>
             </div>
           </div>
+
+          {/* invisible click proxies stretched over the projected sprite
+              rects — 3D hit-testing misses billboards in the back half */}
+          {STATIONS.map((s) => (
+            <button
+              key={`proxy-${s.key}`}
+              type="button"
+              aria-label={s.label}
+              ref={(el) => {
+                proxyRefs.current[s.key] = el
+              }}
+              onClick={() => pick(s.key)}
+              onMouseEnter={() => {
+                const el = stageRef.current?.querySelector<HTMLElement>(`[data-station="${s.key}"]`)
+                if (el) {
+                  el.style.transition = 'filter .25s'
+                  el.style.filter = 'brightness(1.12)'
+                }
+              }}
+              onMouseLeave={() => {
+                const el = stageRef.current?.querySelector<HTMLElement>(`[data-station="${s.key}"]`)
+                if (el) el.style.filter = 'none'
+              }}
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                zIndex: 3,
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                willChange: 'transform',
+              }}
+            />
+          ))}
 
           {/* screen-space station labels — positioned each frame from the
               projected billboard rects */}
@@ -740,9 +824,14 @@ export function IsoScene() {
             </a>
           ))}
 
-          {/* station info card */}
+          {/* station info card — fades away after 4s unless hovered */}
           {activeInfo && (
             <div
+              onMouseEnter={() => {
+                clearTimers()
+                setClosing(false)
+              }}
+              onMouseLeave={armHide}
               style={{
                 position: 'absolute',
                 left: '50%',
@@ -755,7 +844,11 @@ export function IsoScene() {
                 borderRadius: 18,
                 padding: '16px 20px',
                 boxShadow: '0 24px 60px rgba(0,0,0,.5)',
-                animation: 'ep-cardin .35s cubic-bezier(.2,.8,.2,1.1) both',
+                // fill-mode backwards: after the entry animation the inline
+                // opacity (the fade-out) takes over
+                animation: 'ep-cardin .35s cubic-bezier(.2,.8,.2,1.1) backwards',
+                opacity: closing ? 0 : 1,
+                transition: 'opacity .6s ease',
               }}
             >
               <button

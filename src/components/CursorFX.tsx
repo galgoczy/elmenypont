@@ -55,11 +55,11 @@ export function CursorFX() {
     const onOver = (e: PointerEvent) => {
       const t = e.target as HTMLElement | null
       const hot = t?.closest?.('a, button, input, textarea, [data-cursor]')
-      scaleT = hot ? 2 : 1
+      scaleT = hot ? 1.35 : 1
       ringRef.current?.classList.toggle('is-active', !!hot)
     }
     const onDown = () => {
-      scaleT = 0.7
+      scaleT = 0.85
     }
     const onUp = () => {
       scaleT = 1
@@ -81,11 +81,11 @@ export function CursorFX() {
       doc.style.setProperty('--mxs', sx.toFixed(4))
       doc.style.setProperty('--mys', sy.toFixed(4))
       if (seen && dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${dx - 4}px, ${dy - 4}px, 0)`
+        dotRef.current.style.transform = `translate3d(${dx - 5}px, ${dy - 5}px, 0)`
         dotRef.current.style.opacity = '1'
       }
       if (seen && ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${rx - 17}px, ${ry - 17}px, 0) scale(${scale.toFixed(3)})`
+        ringRef.current.style.transform = `translate3d(${rx - 120}px, ${ry - 120}px, 0) scale(${scale.toFixed(3)})`
         ringRef.current.style.opacity = '1'
       }
       raf = requestAnimationFrame(tick)

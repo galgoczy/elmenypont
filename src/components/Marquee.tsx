@@ -47,8 +47,11 @@ export function Marquee() {
 
   return (
     // sticker-style band laid across the section seam; the inner strip is
-    // tilted and slightly oversized so no gap shows at the rotated corners
-    <div style={{ position: 'relative', zIndex: 5, marginTop: -28, marginBottom: -28 }}>
+    // tilted and slightly oversized so no gap shows at the rotated corners.
+    // Top margin stays positive and viewport-scaled: the rotation makes the
+    // band's corners stick out ~1vw above its box, which on wide screens
+    // would otherwise slide over the hero's stat chips.
+    <div style={{ position: 'relative', zIndex: 5, marginTop: 'clamp(18px, 2vw, 44px)', marginBottom: -28 }}>
       <div
         style={{
           position: 'relative',
