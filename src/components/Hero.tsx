@@ -340,10 +340,10 @@ export function Hero({ heroP: p }: HeroProps) {
   const photoOn = cl(p, 0.66, 0.71)
   const reveal = cl(p, 0.76, 0.95)
 
-  const finalScale = 0.82 + 0.28 * spinE
-  const tiltX = 8 - 4 * spinE
-  // settle slightly lower so the head is more central once face-on
-  const ty = 130 * spinE
+  // ends ~20% closer than before, sitting lower and facing us square-on
+  const finalScale = 0.82 + 0.5 * spinE
+  const tiltX = 5 - 4 * spinE
+  const ty = 40 + 150 * spinE
   const kioskOp = 1 - 0.85 * reveal
 
   const mix = reveal

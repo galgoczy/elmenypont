@@ -130,7 +130,7 @@ function SmartWallSprite() {
       {/* wall */}
       <rect x="6" y="6" width="164" height="96" rx="12" fill="#211D14" stroke="rgba(246,241,233,.3)" strokeWidth="2.5" />
       {/* colourful tiles — fade away during the blackout */}
-      <g style={{ animation: 'ep-sw-tiles 12s linear infinite' }}>{tiles}</g>
+      <g style={{ animation: 'ep-sw-tiles 10.5s linear infinite' }}>{tiles}</g>
       {/* blackout board */}
       <rect
         x="10"
@@ -140,7 +140,7 @@ function SmartWallSprite() {
         rx="9"
         fill="#060504"
         opacity="0"
-        style={{ animation: 'ep-sw-dark 12s linear infinite' }}
+        style={{ animation: 'ep-sw-dark 10.5s linear infinite' }}
       />
       {/* hand-drawn rocket doodle on the black board */}
       <path
@@ -154,11 +154,11 @@ function SmartWallSprite() {
         strokeDasharray={1}
         strokeDashoffset={1}
         opacity="0"
-        style={{ animation: 'ep-sw-draw 12s linear infinite' }}
+        style={{ animation: 'ep-sw-draw 10.5s linear infinite' }}
       />
       {/* white sweep flash from the bottom-right corner */}
       <g clipPath="url(#ep-sw-clip)">
-        <g style={{ animation: 'ep-sw-sweep 12s linear infinite' }} opacity="0">
+        <g style={{ animation: 'ep-sw-sweep 10.5s linear infinite' }} opacity="0">
           <rect x="60" y="-80" width="52" height="300" fill="rgba(255,255,255,.85)" transform="rotate(35 88 54)" />
         </g>
       </g>
@@ -175,7 +175,7 @@ function SmartWallSprite() {
         style={{
           transformBox: 'fill-box',
           transformOrigin: '100% 100%',
-          animation: 'ep-sw-arm 12s linear infinite',
+          animation: 'ep-sw-arm 10.5s linear infinite',
         }}
       />
       <rect x="144" y="110" width="4.5" height="16" rx="2.25" fill="#D06B55" />
