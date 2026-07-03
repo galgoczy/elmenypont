@@ -16,8 +16,9 @@ const LINKS = [
 
 export function Nav({ heroP, scrolled }: NavProps) {
   // reveal mix: at the end of the hero the stage turns cream, so the nav
-  // switches from light-on-dark to dark-on-cream.
-  const mix = cl(heroP, 0.56, 0.9)
+  // switches from light-on-dark to dark-on-cream (same window as the
+  // hero's reveal phase).
+  const mix = cl(heroP, 0.84, 0.99)
   const navDark = !scrolled && mix < 0.5
 
   const navStyle: CSSProperties = {

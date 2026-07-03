@@ -38,34 +38,320 @@ function RiseWord({ p, i, children }: { p: number; i: number; children: ReactNod
   )
 }
 
+/* ------------------------------------------------------------------ *
+ *  True-3D kiosk matching the product reference sheet:
+ *  white screen head (camera dot, dark display, photo slot on the
+ *  sides, service door with lock on the back), black telescopic
+ *  column and a flat black base on four casters.
+ * ------------------------------------------------------------------ */
+
+const HEAD_W = 300
+const HEAD_H = 230
+const HEAD_D = 150
+const COL_H = 170
+const BASE_W = 230
+const BASE_H = 14
+
+function face(w: number, h: number, transform: string, extra?: CSSProperties): CSSProperties {
+  return {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    width: w,
+    height: h,
+    margin: `${-h / 2}px 0 0 ${-w / 2}px`,
+    transform,
+    backfaceVisibility: 'hidden',
+    WebkitBackfaceVisibility: 'hidden',
+    ...extra,
+  }
+}
+
+/** Side panel of the head with the horizontal photo-exit slot. */
+function HeadSide({ turn }: { turn: number }) {
+  return (
+    <>
+      <span
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '38%',
+          width: 74,
+          height: 7,
+          margin: '-3.5px 0 0 -37px',
+          borderRadius: 4,
+          background: '#17150d',
+          boxShadow: 'inset 0 1.5px 2px rgba(0,0,0,.8)',
+        }}
+      />
+      {/* faint print emerging mid-rotation, teasing the output */}
+      <span
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '38%',
+          width: 58,
+          height: 40,
+          margin: '-3px 0 0 -29px',
+          borderRadius: 3,
+          background: '#fff',
+          border: '1px solid #d8d8d3',
+          transformOrigin: 'top center',
+          transform: `rotateX(-72deg) scaleY(${(0.4 + 0.6 * turn).toFixed(3)})`,
+          opacity: turn > 0.25 && turn < 0.9 ? 0.9 : 0,
+          transition: 'opacity .3s',
+        }}
+      />
+    </>
+  )
+}
+
+function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number; screenFlash: number }) {
+  const whiteFace = 'linear-gradient(180deg,#fcfcfb,#e9e9e5)'
+  const sideFace = 'linear-gradient(180deg,#f1f1ee,#dededa)'
+  const wheels = [
+    [-86, -86],
+    [86, -86],
+    [-86, 86],
+    [86, 86],
+  ]
+  return (
+    <div style={{ position: 'relative', width: HEAD_W, height: 430, transformStyle: 'preserve-3d' }}>
+      {/* -------- head box -------- */}
+      <div style={{ position: 'absolute', left: 0, top: 0, width: HEAD_W, height: HEAD_H, transformStyle: 'preserve-3d' }}>
+        {/* front */}
+        <div style={face(HEAD_W, HEAD_H, `translateZ(${HEAD_D / 2}px)`, { background: whiteFace, borderRadius: 14 })}>
+          <span
+            style={{
+              position: 'absolute',
+              top: 9,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 16,
+              height: 16,
+              borderRadius: '50%',
+              background: '#111',
+              border: '2px solid #d8d8d4',
+            }}
+          />
+          {/* display */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: '30px 18px 18px',
+              borderRadius: 8,
+              background: 'linear-gradient(150deg,#111110,#050504 65%)',
+              overflow: 'hidden',
+            }}
+          >
+            {/* standby glyph */}
+            <span
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'Syne',
+                fontWeight: 700,
+                fontSize: 19,
+                letterSpacing: '.08em',
+                color: `rgba(246,241,233,${(0.3 * (1 - photoOn)).toFixed(3)})`,
+              }}
+            >
+              AI ✦
+            </span>
+            {/* glass reflection */}
+            <span
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(115deg, rgba(255,255,255,.09) 0%, transparent 30%, transparent 70%, rgba(255,255,255,.05) 100%)',
+                pointerEvents: 'none',
+              }}
+            />
+            {/* generated sample photo */}
+            <img
+              src="/assets/photos/style-astronaut.png"
+              alt=""
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                opacity: photoOn.toFixed(3),
+                transform: `scale(${(1.08 - 0.08 * photoOn).toFixed(3)})`,
+              }}
+            />
+            <span
+              style={{
+                position: 'absolute',
+                left: 10,
+                bottom: 9,
+                padding: '4px 10px',
+                borderRadius: 100,
+                background: 'linear-gradient(105deg,#9868F8,#4888F8)',
+                color: '#fff',
+                fontFamily: 'Syne',
+                fontWeight: 700,
+                fontSize: 11,
+                letterSpacing: '.08em',
+                opacity: photoOn.toFixed(3),
+              }}
+            >
+              AI ✦
+            </span>
+            {/* in-screen flash */}
+            <span
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: '#fff',
+                opacity: screenFlash.toFixed(3),
+                pointerEvents: 'none',
+              }}
+            />
+          </div>
+        </div>
+        {/* back with service door */}
+        <div style={face(HEAD_W, HEAD_H, `rotateY(180deg) translateZ(${HEAD_D / 2}px)`, { background: whiteFace, borderRadius: 14 })}>
+          <span
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              width: 96,
+              height: 96,
+              transform: 'translate(-50%,-50%)',
+              borderRadius: 8,
+              border: '2px solid #d3d3ce',
+              background: 'linear-gradient(180deg,#f7f7f4,#ebebe7)',
+            }}
+          >
+            <span
+              style={{
+                position: 'absolute',
+                right: 9,
+                top: '50%',
+                width: 7,
+                height: 7,
+                marginTop: -3.5,
+                borderRadius: '50%',
+                background: '#9a9a94',
+                boxShadow: 'inset 0 1px 1px rgba(0,0,0,.4)',
+              }}
+            />
+          </span>
+        </div>
+        {/* sides with photo slot */}
+        <div style={face(HEAD_D, HEAD_H, `rotateY(90deg) translateZ(${HEAD_W / 2}px)`, { background: sideFace, borderRadius: 6 })}>
+          <HeadSide turn={turn} />
+        </div>
+        <div style={face(HEAD_D, HEAD_H, `rotateY(-90deg) translateZ(${HEAD_W / 2}px)`, { background: sideFace, borderRadius: 6 })}>
+          <HeadSide turn={turn} />
+        </div>
+        {/* top + bottom */}
+        <div style={face(HEAD_W, HEAD_D, `rotateX(90deg) translateZ(${HEAD_H / 2}px)`, { background: '#f6f6f3', borderRadius: 10 })} />
+        <div style={face(HEAD_W, HEAD_D, `rotateX(-90deg) translateZ(${HEAD_H / 2}px)`, { background: '#cfcfca', borderRadius: 10 })} />
+      </div>
+
+      {/* -------- column -------- */}
+      <div
+        style={{
+          position: 'absolute',
+          left: (HEAD_W - 54) / 2,
+          top: HEAD_H,
+          width: 54,
+          height: COL_H,
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        <div style={face(54, COL_H, 'translateZ(27px)', { background: 'linear-gradient(180deg,#262626,#0b0b0b)' })}>
+          {/* telescopic seam */}
+          <span style={{ position: 'absolute', left: 6, right: 6, top: 64, height: 3, background: '#000', borderRadius: 2 }} />
+        </div>
+        <div style={face(54, COL_H, 'rotateY(180deg) translateZ(27px)', { background: '#161616' })} />
+        <div style={face(54, COL_H, 'rotateY(90deg) translateZ(27px)', { background: '#111' })} />
+        <div style={face(54, COL_H, 'rotateY(-90deg) translateZ(27px)', { background: '#111' })} />
+      </div>
+
+      {/* -------- base slab + casters -------- */}
+      <div
+        style={{
+          position: 'absolute',
+          left: (HEAD_W - BASE_W) / 2,
+          top: HEAD_H + COL_H,
+          width: BASE_W,
+          height: BASE_H,
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        <div style={face(BASE_W, BASE_H, `translateZ(${BASE_W / 2}px)`, { background: '#141414', borderRadius: 3 })} />
+        <div style={face(BASE_W, BASE_H, `rotateY(180deg) translateZ(${BASE_W / 2}px)`, { background: '#0e0e0e', borderRadius: 3 })} />
+        <div style={face(BASE_W, BASE_H, `rotateY(90deg) translateZ(${BASE_W / 2}px)`, { background: '#101010', borderRadius: 3 })} />
+        <div style={face(BASE_W, BASE_H, `rotateY(-90deg) translateZ(${BASE_W / 2}px)`, { background: '#101010', borderRadius: 3 })} />
+        <div style={face(BASE_W, BASE_W, `rotateX(90deg) translateZ(${BASE_H / 2}px)`, { background: 'linear-gradient(135deg,#222,#101010)', borderRadius: 8 })} />
+        {/* casters: two crossed dark planes each — reads as a wheel from every angle */}
+        {wheels.map(([wx, wz], i) => (
+          <div
+            key={i}
+            style={{
+              position: 'absolute',
+              left: BASE_W / 2 + wx - 8,
+              top: BASE_H,
+              width: 16,
+              height: 17,
+              transformStyle: 'preserve-3d',
+              transform: `translateZ(${wz}px)`,
+            }}
+          >
+            <span style={{ position: 'absolute', inset: 0, background: '#0a0a0a', borderRadius: '45%' }} />
+            <span style={{ position: 'absolute', inset: 0, background: '#0a0a0a', borderRadius: '45%', transform: 'rotateY(90deg)' }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 /**
- * Sticky scroll-choreographed hero, ported from the prototype:
- *   kiosk turns from its back to face -> camera flash -> the dark stage
- *   dissolves to cream while the "AI Selfiemata" headline + stat chips fade in.
+ * Sticky scroll-choreographed hero. The kiosk starts far away in full
+ * figure, spins all the way around while gliding closer, the camera
+ * flashes and a generated sample appears on the display — then the dark
+ * stage dissolves to cream while the headline + stat chips rise in.
  */
 export function Hero({ heroP: p }: HeroProps) {
-  const turn = cl(p, 0.02, 0.42)
-  const flash = cl(p, 0.44, 0.54) * (1 - cl(p, 0.54, 0.66))
-  const reveal = cl(p, 0.56, 0.9)
-  const mix = reveal
+  // --- choreography -------------------------------------------------
+  const spin = cl(p, 0.02, 0.52)
+  const spinE = spin * spin * (3 - 2 * spin)
+  const rotY = 180 - 540 * spinE // back view → 1.5 turns → face on
+  const zoom = cl(p, 0.52, 0.72)
+  const zoomE = zoom * zoom * (3 - 2 * zoom)
+  const flash = cl(p, 0.72, 0.75) * (1 - cl(p, 0.755, 0.8))
+  const photoOn = cl(p, 0.75, 0.79)
+  const reveal = cl(p, 0.84, 0.99)
 
-  // dark -> cream background blend
+  const scale = 0.52 + 0.55 * spinE + 1.5 * zoomE
+  const finalScale = scale * (1 - 0.55 * reveal)
+  const tiltX = 9 - 7 * zoomE
+  // drift down while zooming so the display ends up viewport-centred
+  const ty = 96 * zoomE * scale - 430 * reveal
+
+  const mix = reveal
   const dark = [23, 21, 13]
   const cream = [246, 241, 233]
   const bg = dark.map((d, i) => Math.round(d + (cream[i] - d) * mix))
   const heroBg = `rgb(${bg[0]},${bg[1]},${bg[2]})`
 
-  const heroGlow = (0.5 * (1 - mix) * (0.4 + 0.6 * turn)).toFixed(3)
-  const kioskRot = (180 - 180 * turn).toFixed(1)
-  const kioskScale = (0.9 + 0.12 * turn - 0.5 * reveal).toFixed(3)
-  const kioskLift = (reveal * -160).toFixed(0)
-  const screenOn = (turn * (1 - 0.4 * reveal)).toFixed(2)
-  const screenTextOp = cl(turn, 0.6, 1).toFixed(2)
+  const heroGlow = (0.5 * (1 - mix) * (0.35 + 0.65 * spinE)).toFixed(3)
   const copyOp = reveal.toFixed(2)
   const copyY = ((1 - reveal) * 40).toFixed(0)
   const copyPe: CSSProperties['pointerEvents'] = reveal > 0.6 ? 'auto' : 'none'
-  const hintOp = (1 - cl(p, 0, 0.12)).toFixed(2)
+  const hintOp = (1 - cl(p, 0, 0.1)).toFixed(2)
   const hintColor = mix > 0.5 ? '#7A766B' : 'rgba(255,255,255,.7)'
+  const shadowOp = (0.55 * (1 - zoomE * 0.7) * (1 - reveal)).toFixed(3)
 
   const chip: CSSProperties = {
     background: '#F6F1E9',
@@ -76,7 +362,7 @@ export function Hero({ heroP: p }: HeroProps) {
   }
 
   return (
-    <section id="top" data-hero style={{ position: 'relative', height: '165vh' }}>
+    <section id="top" data-hero style={{ position: 'relative', height: '210vh' }}>
       <div
         style={{
           position: 'sticky',
@@ -104,108 +390,30 @@ export function Hero({ heroP: p }: HeroProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            perspective: '1400px',
+            perspective: '1600px',
           }}
         >
           <div
             style={{
-              transform: `translateY(${kioskLift}px) rotateX(calc(8deg + var(--mys, 0) * 6deg)) rotateY(calc(${kioskRot}deg + var(--mxs, 0) * -12deg)) scale(${kioskScale})`,
+              position: 'relative',
+              transform: `translateY(${ty.toFixed(1)}px) rotateX(calc(${tiltX.toFixed(2)}deg + var(--mys, 0) * 5deg)) rotateY(calc(${rotY.toFixed(2)}deg + var(--mxs, 0) * -10deg)) scale(${finalScale.toFixed(3)})`,
               transformStyle: 'preserve-3d',
-              filter: 'drop-shadow(0 40px 60px rgba(0,0,0,.5))',
+              willChange: 'transform',
             }}
           >
-            {/* screen box */}
-            <div
+            <Kiosk3D turn={spinE} photoOn={photoOn} screenFlash={flash} />
+            {/* ground shadow */}
+            <span
+              aria-hidden="true"
               style={{
-                position: 'relative',
-                width: 300,
-                height: 230,
-                background: 'linear-gradient(180deg,#fbfbfb,#e9e9e6)',
-                borderRadius: 12,
-                transformStyle: 'preserve-3d',
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 16,
-                  borderRadius: 7,
-                  background: '#0a0a0a',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(135deg,#4888F8,#9868F8 55%,#4888F8)',
-                    opacity: screenOn,
-                  }}
-                />
-                <span
-                  style={{
-                    position: 'relative',
-                    color: '#fff',
-                    fontFamily: 'Syne',
-                    fontWeight: 700,
-                    fontSize: 20,
-                    letterSpacing: '.06em',
-                    opacity: screenTextOp,
-                  }}
-                >
-                  AI
-                </span>
-              </div>
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 8,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: 16,
-                  height: 16,
-                  borderRadius: '50%',
-                  background: '#111',
-                  border: '2px solid #d8d8d4',
-                }}
-              />
-              {/* side face for depth */}
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: 0,
-                  width: 34,
-                  height: 230,
-                  background: '#cfcfca',
-                  transform: 'rotateY(90deg) translateZ(2px)',
-                  transformOrigin: 'right',
-                  borderRadius: '0 12px 12px 0',
-                }}
-              />
-            </div>
-            {/* stand */}
-            <div
-              style={{
-                width: 46,
-                height: 150,
-                background: 'linear-gradient(180deg,#1c1c1c,#070707)',
-                margin: '0 auto',
-                borderRadius: 4,
-              }}
-            />
-            <div
-              style={{
-                width: 200,
-                height: 18,
-                background: '#080808',
-                margin: '-2px auto 0',
-                borderRadius: 6,
-                transform: 'rotateX(60deg)',
-                boxShadow: '0 30px 40px rgba(0,0,0,.6)',
+                position: 'absolute',
+                left: '50%',
+                top: 442,
+                width: 340,
+                height: 64,
+                transform: 'translateX(-50%) rotateX(90deg) translateZ(-24px)',
+                borderRadius: '50%',
+                background: `radial-gradient(closest-side, rgba(0,0,0,${shadowOp}), transparent 70%)`,
               }}
             />
           </div>

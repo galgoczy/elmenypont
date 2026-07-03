@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Reveal } from './Reveal'
 import { Words } from './Words'
 
@@ -8,13 +8,14 @@ import { Words } from './Words'
  *  The floor is a true 3D plane (rotateX + rotateZ, driven by the
  *  --spin/--tilt custom properties); every prop is a hand-drawn SVG
  *  "paper cutout" planted on the plane and counter-rotated via the
- *  shared --bill transform so it always faces the camera — the classic
- *  pop-up-book look. Drag to spin (with inertia), the scene slowly
- *  auto-rotates when idle, and the cursor tilts the whole diorama.
+ *  shared --bill transform so it always faces the camera. Drag to spin
+ *  (with inertia), the scene keeps rotating on its own — even under
+ *  the cursor — and only pauses while actively grabbed or while a
+ *  station info card is open. Clicking a station opens a one-line
+ *  description card with a "Tovább" link.
  * ------------------------------------------------------------------ */
 
 const FLOOR = 460
-const WALK_PATH = 'M 120 140 C 330 70, 400 290, 250 375 C 120 430, 70 260, 120 140'
 
 /** Shared billboard transform: undoes the floor's rotateZ then rotateX. */
 const BILL = 'rotateZ(calc(var(--spin, -45deg) * -1)) rotateX(calc((58deg + var(--tilt, 0deg)) * -1))'
@@ -30,17 +31,21 @@ function KioskSprite() {
           <stop offset="1" stopColor="#9868F8" />
         </linearGradient>
       </defs>
-      {/* printed photo — rises out from behind the kiosk top */}
-      <g style={{ animation: 'ep-photo 6s ease-in-out infinite' }}>
-        <rect x="28" y="12" width="28" height="34" rx="2.5" fill="#fff" stroke="#D8D2C6" strokeWidth="1.5" />
-        <rect x="31.5" y="15.5" width="21" height="21" rx="1.5" fill="#9868F8" opacity="0.85" />
-        <rect x="31.5" y="40" width="13" height="2.5" rx="1.25" fill="#C9C3B6" />
+      {/* printed photo — slides out of the SIDE slot, behind the body */}
+      <g style={{ animation: 'ep-kphoto 6s ease-in-out infinite' }}>
+        <g transform="translate(58 44)">
+          <rect x="0" y="0" width="26" height="32" rx="2.5" fill="#fff" stroke="#D8D2C6" strokeWidth="1.5" />
+          <rect x="3" y="3" width="20" height="20" rx="1.5" fill="#9868F8" opacity="0.85" />
+          <rect x="3" y="26" width="12" height="2.5" rx="1.25" fill="#C9C3B6" />
+        </g>
       </g>
       {/* stand */}
       <rect x="38" y="92" width="8" height="36" fill="#3A352A" />
       <rect x="22" y="126" width="40" height="8" rx="4" fill="#3A352A" />
       {/* body */}
       <rect x="8" y="6" width="68" height="88" rx="12" fill="url(#ep-kg)" stroke="rgba(255,255,255,.35)" strokeWidth="2.5" />
+      {/* side slot the photo exits from */}
+      <rect x="71.5" y="46" width="4" height="30" rx="2" fill="rgba(11,10,7,.55)" />
       <circle cx="42" cy="12.5" r="3" fill="#0B0A07" stroke="rgba(255,255,255,.6)" strokeWidth="1.5" />
       <rect x="17" y="19" width="50" height="52" rx="6" fill="#0B0A07" />
       <text
@@ -54,7 +59,6 @@ function KioskSprite() {
       </text>
       {/* camera flash */}
       <rect x="17" y="19" width="50" height="52" rx="6" fill="#fff" style={{ animation: 'ep-kflash 6s linear infinite' }} opacity="0" />
-      <rect x="30" y="84" width="24" height="4" rx="2" fill="rgba(0,0,0,.45)" />
     </svg>
   )
 }
@@ -86,6 +90,13 @@ function GreenboxSprite() {
 
 const TILE_COLORS = ['#E94A35', '#4888F8', '#9868F8', '#48D880']
 
+/** Hand-drawn rocket doodle as ONE compound path so a single
+ *  stroke-dashoffset animation "draws" it subpath by subpath. */
+const SW_DOODLE =
+  'M62 76 C56 60 64 42 82 33 C98 39 106 55 99 71 C90 84 71 85 62 76 Z ' +
+  'M76 54 a7 7 0 1 0 14 0 a7 7 0 1 0 -14 0 ' +
+  'M61 78 L48 92 M72 84 L66 96 M94 80 L101 93'
+
 function SmartWallSprite() {
   const tiles: ReactNode[] = []
   for (let r = 0; r < 3; r++) {
@@ -108,67 +119,128 @@ function SmartWallSprite() {
   }
   return (
     <svg viewBox="0 0 176 128" width="100%" height="100%" style={{ display: 'block', overflow: 'visible' }}>
+      <defs>
+        <clipPath id="ep-sw-clip">
+          <rect x="8" y="8" width="160" height="92" rx="10" />
+        </clipPath>
+      </defs>
       {/* feet */}
       <rect x="26" y="100" width="10" height="22" rx="3" fill="#3A352A" />
       <rect x="140" y="100" width="10" height="22" rx="3" fill="#3A352A" />
       {/* wall */}
       <rect x="6" y="6" width="164" height="96" rx="12" fill="#211D14" stroke="rgba(246,241,233,.3)" strokeWidth="2.5" />
-      {tiles}
-      {/* touch highlight */}
+      {/* colourful tiles — fade away during the blackout */}
+      <g style={{ animation: 'ep-sw-tiles 12s linear infinite' }}>{tiles}</g>
+      {/* blackout board */}
+      <rect
+        x="10"
+        y="10"
+        width="156"
+        height="88"
+        rx="9"
+        fill="#060504"
+        opacity="0"
+        style={{ animation: 'ep-sw-dark 12s linear infinite' }}
+      />
+      {/* hand-drawn rocket doodle on the black board */}
+      <path
+        d={SW_DOODLE}
+        fill="none"
+        stroke="#F6F1E9"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        pathLength={1}
+        strokeDasharray={1}
+        strokeDashoffset={1}
+        opacity="0"
+        style={{ animation: 'ep-sw-draw 12s linear infinite' }}
+      />
+      {/* white sweep flash from the bottom-right corner */}
+      <g clipPath="url(#ep-sw-clip)">
+        <g style={{ animation: 'ep-sw-sweep 12s linear infinite' }} opacity="0">
+          <rect x="60" y="-80" width="52" height="300" fill="rgba(255,255,255,.85)" transform="rotate(35 88 54)" />
+        </g>
+      </g>
+      {/* touch highlight where the guest presses */}
       <circle cx="134" cy="66" r="7" fill="none" stroke="#fff" strokeWidth="2" opacity="0.8" style={{ animation: 'ep-pulse 2s ease-in-out infinite' }} />
-      {/* guest touching the wall */}
+      {/* guest touching the wall — the arm presses right before the sweep */}
       <circle cx="150" cy="82" r="7" fill="#E8B48C" />
       <path d="M150 89 q-9 4 -9 21 h18 q0 -17 -9 -21 Z" fill="#F2937F" />
-      <path d="M146 93 L135 70" stroke="#F2937F" strokeWidth="4.5" strokeLinecap="round" />
+      <path
+        d="M146 93 L135 70"
+        stroke="#F2937F"
+        strokeWidth="4.5"
+        strokeLinecap="round"
+        style={{
+          transformBox: 'fill-box',
+          transformOrigin: '100% 100%',
+          animation: 'ep-sw-arm 12s linear infinite',
+        }}
+      />
       <rect x="144" y="110" width="4.5" height="16" rx="2.25" fill="#D06B55" />
       <rect x="151.5" y="110" width="4.5" height="16" rx="2.25" fill="#D06B55" />
     </svg>
   )
 }
 
-interface PersonProps {
-  body: string
-  dark: string
-  skin: string
-  pose?: 0 | 1 | 2
-  anim?: string
-  flip?: boolean
-}
-
-/** Little doodle guest: blob body, round head, dancing via whole-sprite keyframes. */
-function Person({ body, dark, skin, pose = 0, anim = 'ep-dance1 1.6s ease-in-out infinite', flip = false }: PersonProps) {
+/** Adult-proportioned dancing silhouette (feet at local 0,0). */
+function DancerFig({ color, pose }: { color: string; pose: 0 | 1 | 2 }) {
   const arms =
     pose === 0 ? (
-      <path d="M9 22 L2.5 10 M25 22 L31.5 10" stroke={body} strokeWidth="4.5" strokeLinecap="round" />
+      <path d="M-5 -44 L-16 -60 M5 -44 L16 -34" stroke={color} strokeWidth="4" strokeLinecap="round" />
     ) : pose === 1 ? (
-      <path d="M9 24 L2 19 M25 24 L32 29" stroke={body} strokeWidth="4.5" strokeLinecap="round" />
+      <path d="M-5 -44 L-15 -33 M5 -44 L15 -59" stroke={color} strokeWidth="4" strokeLinecap="round" />
     ) : (
-      <>
-        <path d="M9 24 L4 32 M25 22 L30.5 12" stroke={body} strokeWidth="4.5" strokeLinecap="round" />
-        <rect x="27.5" y="4.5" width="6" height="9.5" rx="1.5" fill="#17150D" stroke="rgba(246,241,233,.7)" strokeWidth="1" />
-      </>
+      <path d="M-5 -44 L-16 -56 M5 -44 L16 -56" stroke={color} strokeWidth="4" strokeLinecap="round" />
     )
   return (
-    <svg
-      viewBox="0 0 34 62"
-      width="100%"
-      height="100%"
-      style={{
-        display: 'block',
-        overflow: 'visible',
-        transformOrigin: '50% 100%',
-        animation: anim,
-        transform: flip ? 'scaleX(-1)' : undefined,
-      }}
-    >
-      <rect x="10" y="44" width="5" height="16" rx="2.5" fill={dark} />
-      <rect x="19" y="44" width="5" height="16" rx="2.5" fill={dark} />
-      <rect x="8" y="18" width="18" height="30" rx="9" fill={body} />
+    <>
+      <circle cx="0" cy="-56" r="6.5" fill={color} />
+      <rect x="-6.5" y="-48" width="13" height="23" rx="6.5" fill={color} />
       {arms}
-      <circle cx="17" cy="10" r="8" fill={skin} />
-      <circle cx="14.5" cy="9" r="1.1" fill="#17150D" />
-      <circle cx="19.5" cy="9" r="1.1" fill="#17150D" />
-      <path d="M14 12.5 Q17 15 20 12.5" fill="none" stroke="#17150D" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M-3 -26 L-9 0 M3 -26 L9 -1" stroke={color} strokeWidth="5" strokeLinecap="round" />
+    </>
+  )
+}
+
+/** Dance corner: colour-cycling disco lamps over 2-3 dancing guests. */
+function DanceCornerSprite() {
+  const lampX = [50, 90, 130]
+  return (
+    <svg viewBox="0 0 180 160" width="100%" height="100%" style={{ display: 'block', overflow: 'visible' }}>
+      {/* truss */}
+      <path d="M18 156 L18 14 M162 156 L162 14 M14 14 L166 14" stroke="#3A352A" strokeWidth="4" strokeLinecap="round" />
+      {lampX.map((x, i) => (
+        <g key={i}>
+          {/* light cone */}
+          <polygon
+            points={`${x - 5},26 ${x + 5},26 ${x + 26},150 ${x - 26},150`}
+            opacity="0.16"
+            style={{ animation: `ep-disco 5s linear ${-i * 1.7}s infinite` }}
+          />
+          {/* lamp head */}
+          <path d={`M${x - 7} 14 L${x + 7} 14 L${x + 5} 26 L${x - 5} 26 Z`} fill="#2B2619" stroke="#4A443A" strokeWidth="1.5" />
+          <circle cx={x} cy="27" r="4.5" style={{ animation: `ep-disco 5s linear ${-i * 1.7}s infinite` }} />
+        </g>
+      ))}
+      {/* dancers — outer <g> holds the static position (a CSS transform
+          animation on the same element would override it) */}
+      <g transform="translate(56 152)">
+        <g style={{ transformBox: 'fill-box', transformOrigin: '50% 100%', animation: 'ep-dance1 1.5s ease-in-out infinite' }}>
+          <DancerFig color="#E94A35" pose={0} />
+        </g>
+      </g>
+      <g transform="translate(92 154)">
+        <g style={{ transformBox: 'fill-box', transformOrigin: '50% 100%', animation: 'ep-dance2 1.9s ease-in-out infinite .3s' }}>
+          <DancerFig color="#28D0B8" pose={1} />
+        </g>
+      </g>
+      <g transform="translate(126 152)">
+        <g style={{ transformBox: 'fill-box', transformOrigin: '50% 100%', animation: 'ep-dance3 1.7s ease-in-out infinite .6s' }}>
+          <DancerFig color="#9868F8" pose={2} />
+        </g>
+      </g>
     </svg>
   )
 }
@@ -182,14 +254,14 @@ interface PlantProps {
   w: number
   h: number
   shadow?: number
-  href?: string
   /** key for the screen-space label overlay to track */
   station?: string
+  onPick?: () => void
   children: ReactNode
 }
 
 /** Billboarded paper-cutout standing at (x, y) on the floor, feet planted. */
-function Plant({ x, y, w, h, shadow, href, station, children }: PlantProps) {
+function Plant({ x, y, w, h, shadow, station, onPick, children }: PlantProps) {
   const sw = shadow ?? w * 0.92
   return (
     <>
@@ -218,12 +290,20 @@ function Plant({ x, y, w, h, shadow, href, station, children }: PlantProps) {
           transform: BILL,
         }}
       >
-        {href ? (
-          <a
-            href={href}
-            tabIndex={-1}
-            aria-hidden="true"
-            style={{ position: 'relative', display: 'block', width: '100%', height: '100%' }}
+        {onPick ? (
+          <button
+            type="button"
+            onClick={onPick}
+            style={{
+              position: 'relative',
+              display: 'block',
+              width: '100%',
+              height: '100%',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer',
+            }}
             onMouseEnter={(e) => {
               e.currentTarget.style.filter = 'brightness(1.12)'
               e.currentTarget.style.transition = 'filter .25s'
@@ -233,7 +313,7 @@ function Plant({ x, y, w, h, shadow, href, station, children }: PlantProps) {
             }}
           >
             {children}
-          </a>
+          </button>
         ) : (
           <div style={{ position: 'relative', width: '100%', height: '100%', pointerEvents: 'none' }}>{children}</div>
         )}
@@ -242,61 +322,46 @@ function Plant({ x, y, w, h, shadow, href, station, children }: PlantProps) {
   )
 }
 
-/** A guest strolling around the floor along the drawn dashed route. */
-function Walker({ delay, person }: { delay: string; person: PersonProps }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width: 0,
-        height: 0,
-        offsetPath: `path('${WALK_PATH}')`,
-        offsetRotate: '0deg',
-        animation: `ep-stroll 36s linear infinite ${delay}`,
-      }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          left: -16,
-          top: -58,
-          width: 32,
-          height: 58,
-          transformOrigin: '50% 100%',
-          transform: BILL,
-          pointerEvents: 'none',
-        }}
-      >
-        <span style={{ display: 'block', width: '100%', height: '100%', animation: 'ep-walkbob .7s ease-in-out infinite' }}>
-          <Person {...person} />
-        </span>
-      </div>
-    </div>
-  )
-}
-
 /* ---------- the scene ---------------------------------------------- */
 
 const STATIONS = [
-  { key: 'selfiemata', href: 'https://ai.elmeny.hu', label: 'AI Selfiemata', color: '#4888F8' },
-  { key: 'greenbox', href: 'https://greenbox.elmeny.hu', label: 'Greenbox stúdió', color: '#48D880' },
-  { key: 'smartwall', href: 'https://smart-wall.hu', label: 'Smart Wall', color: '#E94A35' },
-]
-
-const DANCERS: Array<{ x: number; y: number; p: PersonProps }> = [
-  { x: 225, y: 220, p: { body: '#E94A35', dark: '#B93524', skin: '#F4CBA6', pose: 0, anim: 'ep-dance1 1.5s ease-in-out infinite' } },
-  { x: 288, y: 262, p: { body: '#4888F8', dark: '#3567C4', skin: '#C98E62', pose: 1, anim: 'ep-dance2 1.9s ease-in-out infinite .3s', flip: true } },
-  { x: 178, y: 268, p: { body: '#9868F8', dark: '#7449CE', skin: '#8C5B3B', pose: 2, anim: 'ep-dance3 2.1s ease-in-out infinite .15s' } },
-  { x: 252, y: 316, p: { body: '#48D880', dark: '#2FA562', skin: '#F6D7C4', pose: 1, anim: 'ep-dance1 1.7s ease-in-out infinite .5s', flip: true } },
-  { x: 162, y: 182, p: { body: '#F2937F', dark: '#D06B55', skin: '#E8B48C', pose: 0, anim: 'ep-dance2 1.6s ease-in-out infinite .8s' } },
+  {
+    key: 'selfiemata',
+    href: 'https://ai.elmeny.hu',
+    label: 'AI Selfiemata',
+    color: '#4888F8',
+    text: 'A vendég fotójából pár másodperc alatt egyedi, brandingelt AI-kép készül — nyomtatva vagy azonnal megosztva.',
+  },
+  {
+    key: 'greenbox',
+    href: 'https://greenbox.elmeny.hu',
+    label: 'Greenbox stúdió',
+    color: '#48D880',
+    text: 'Zöld hátteres fotóstúdió profi világítással: a vendégek bármilyen helyszín vagy céges arculat elé varázsolhatók.',
+  },
+  {
+    key: 'smartwall',
+    href: 'https://smart-wall.hu',
+    label: 'Smart Wall',
+    color: '#E94A35',
+    text: 'Interaktív, érinthető vetített fal — termékbemutató, infografika és játék egyetlen látványos felületen.',
+  },
 ]
 
 export function IsoScene() {
   const secRef = useRef<HTMLElement | null>(null)
   const stageRef = useRef<HTMLDivElement | null>(null)
   const labelRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const [active, setActive] = useState<string | null>(null)
+  const activeRef = useRef<string | null>(null)
+  activeRef.current = active
+  const movedRef = useRef(0)
+
+  const pick = (key: string) => {
+    // ignore the click that ends a drag gesture
+    if (movedRef.current > 6) return
+    setActive((a) => (a === key ? null : key))
+  }
 
   useEffect(() => {
     const sec = secRef.current
@@ -340,46 +405,49 @@ export function IsoScene() {
     let dragging = false
     let lastX = 0
     let lastMove = performance.now()
-    let lastInteract = -1e9
-    let hover = false
     let raf = 0
     let last = performance.now()
 
     const down = (e: PointerEvent) => {
+      if (e.button !== 0 && e.pointerType === 'mouse') return
       dragging = true
+      movedRef.current = 0
       lastX = e.clientX
       lastMove = performance.now()
       vel = 0
-      lastInteract = performance.now()
-      stage.setPointerCapture(e.pointerId)
       stage.style.cursor = 'grabbing'
     }
+    // window-level move/up: no pointer capture, so station clicks still
+    // land on the stations instead of being retargeted to the stage
     const move = (e: PointerEvent) => {
       const now = performance.now()
       if (dragging) {
-        const d = (e.clientX - lastX) * 0.35
+        // drag right → scene turns right (spin follows the hand)
+        const d = (e.clientX - lastX) * -0.35
         const dtm = Math.max(8, now - lastMove)
+        movedRef.current += Math.abs(e.clientX - lastX)
         lastX = e.clientX
         lastMove = now
         spin += d
         vel = Math.max(-220, Math.min(220, (d / dtm) * 1000))
-        lastInteract = now
       } else {
         const r = stage.getBoundingClientRect()
-        const cy = (e.clientY - r.top) / r.height - 0.5
-        tiltT = cy * -5
+        if (e.clientY >= r.top && e.clientY <= r.bottom && e.clientX >= r.left && e.clientX <= r.right) {
+          const cy = (e.clientY - r.top) / r.height - 0.5
+          tiltT = cy * -5
+        } else {
+          tiltT = 0
+        }
       }
     }
     const up = () => {
+      if (!dragging) return
       dragging = false
       stage.style.cursor = 'grab'
-    }
-    const enter = () => {
-      hover = true
-    }
-    const leave = () => {
-      hover = false
-      tiltT = 0
+      // let the click handler see the travelled distance, then reset
+      window.setTimeout(() => {
+        movedRef.current = 0
+      }, 0)
     }
 
     const tick = (now: number) => {
@@ -392,8 +460,9 @@ export function IsoScene() {
       if (!dragging) {
         spin += vel * dt
         vel *= Math.exp(-2.4 * dt)
-        // slow show-off rotation when nobody is playing with it
-        if (!hover && now - lastInteract > 3000) spin += 2.6 * dt
+        // keeps turning on its own (also under the cursor); pauses only
+        // while grabbed or while an info card is open
+        if (!activeRef.current) spin += 5.2 * dt
       }
       tilt += (tiltT - tilt) * (1 - Math.exp(-6 * dt))
       sec.style.setProperty('--spin', `${spin.toFixed(3)}deg`)
@@ -402,24 +471,21 @@ export function IsoScene() {
     }
 
     stage.addEventListener('pointerdown', down)
-    stage.addEventListener('pointermove', move)
-    stage.addEventListener('pointerup', up)
-    stage.addEventListener('pointercancel', up)
-    stage.addEventListener('pointerenter', enter)
-    stage.addEventListener('pointerleave', leave)
+    window.addEventListener('pointermove', move, { passive: true })
+    window.addEventListener('pointerup', up)
+    window.addEventListener('pointercancel', up)
     raf = requestAnimationFrame(tick)
     return () => {
       stage.removeEventListener('pointerdown', down)
-      stage.removeEventListener('pointermove', move)
-      stage.removeEventListener('pointerup', up)
-      stage.removeEventListener('pointercancel', up)
-      stage.removeEventListener('pointerenter', enter)
-      stage.removeEventListener('pointerleave', leave)
+      window.removeEventListener('pointermove', move)
+      window.removeEventListener('pointerup', up)
+      window.removeEventListener('pointercancel', up)
       cancelAnimationFrame(raf)
     }
   }, [])
 
   const spriteBox = (w: number, h: number): CSSProperties => ({ width: w, height: h })
+  const activeInfo = STATIONS.find((s) => s.key === active)
 
   return (
     <section
@@ -560,19 +626,30 @@ export function IsoScene() {
                 }}
               />
 
-              {/* drawn floor markings */}
+              {/* colour-cycling light wash under the dance corner */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  left: 268,
+                  top: 268,
+                  width: 175,
+                  height: 175,
+                  borderRadius: '50%',
+                  filter: 'blur(10px)',
+                  animation: 'ep-discoglow 5s linear infinite',
+                }}
+              />
+
+              {/* drawn floor markings — dance rings under the disco corner */}
               <svg
                 viewBox={`0 0 ${FLOOR} ${FLOOR}`}
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}
               >
-                {/* walking route */}
-                <path d={WALK_PATH} fill="none" stroke="rgba(72,216,128,.14)" strokeWidth="2.5" strokeDasharray="4 12" strokeLinecap="round" />
-                {/* dance floor rings */}
-                <g style={{ transformOrigin: '230px 252px', animation: 'ep-spin 70s linear infinite' }}>
-                  <circle cx="230" cy="252" r="62" fill="none" stroke="rgba(233,74,53,.4)" strokeWidth="3" strokeDasharray="20 14" strokeLinecap="round" />
-                  <circle cx="230" cy="252" r="88" fill="none" stroke="rgba(246,241,233,.12)" strokeWidth="2" strokeDasharray="5 12" strokeLinecap="round" />
+                <g style={{ transformOrigin: '355px 355px', animation: 'ep-spin 70s linear infinite' }}>
+                  <circle cx="355" cy="355" r="52" fill="none" stroke="rgba(246,241,233,.28)" strokeWidth="3" strokeDasharray="18 13" strokeLinecap="round" />
+                  <circle cx="355" cy="355" r="74" fill="none" stroke="rgba(246,241,233,.12)" strokeWidth="2" strokeDasharray="5 12" strokeLinecap="round" />
                 </g>
-                {/* corner crosses */}
                 {[
                   [56, 56],
                   [404, 56],
@@ -590,34 +667,28 @@ export function IsoScene() {
               </svg>
 
               {/* stations in three corners */}
-              <Plant x={112} y={100} w={84} h={136} href="https://ai.elmeny.hu" station="selfiemata">
+              <Plant x={112} y={100} w={84} h={136} station="selfiemata" onPick={() => pick('selfiemata')}>
                 <span style={{ display: 'block', ...spriteBox(84, 136) }}>
                   <KioskSprite />
                 </span>
               </Plant>
-              <Plant x={352} y={122} w={168} h={132} href="https://greenbox.elmeny.hu" station="greenbox">
+              <Plant x={352} y={122} w={168} h={132} station="greenbox" onPick={() => pick('greenbox')}>
                 <span style={{ display: 'block', ...spriteBox(168, 132) }}>
                   <GreenboxSprite />
                 </span>
               </Plant>
-              <Plant x={122} y={368} w={176} h={128} href="https://smart-wall.hu" station="smartwall">
+              <Plant x={122} y={368} w={176} h={128} station="smartwall" onPick={() => pick('smartwall')}>
                 <span style={{ display: 'block', ...spriteBox(176, 128) }}>
                   <SmartWallSprite />
                 </span>
               </Plant>
 
-              {/* dancing guests */}
-              {DANCERS.map((d, i) => (
-                <Plant key={i} x={d.x} y={d.y} w={34} h={62} shadow={30}>
-                  <span style={{ display: 'block', ...spriteBox(34, 62) }}>
-                    <Person {...d.p} />
-                  </span>
-                </Plant>
-              ))}
-
-              {/* strolling guests */}
-              <Walker delay="0s" person={{ body: '#28D0B8', dark: '#1E9E8C', skin: '#F4CBA6', pose: 2 }} />
-              <Walker delay="-17s" person={{ body: '#F2937F', dark: '#D06B55', skin: '#8C5B3B', pose: 1, flip: true }} />
+              {/* dance corner with disco lamps */}
+              <Plant x={355} y={362} w={180} h={160} shadow={150}>
+                <span style={{ display: 'block', ...spriteBox(180, 160) }}>
+                  <DanceCornerSprite />
+                </span>
+              </Plant>
             </div>
           </div>
 
@@ -630,6 +701,10 @@ export function IsoScene() {
               ref={(el) => {
                 labelRefs.current[s.key] = el
               }}
+              onClick={(e) => {
+                e.preventDefault()
+                pick(s.key)
+              }}
               style={{
                 position: 'absolute',
                 left: 0,
@@ -641,17 +716,15 @@ export function IsoScene() {
                 gap: 7,
                 fontSize: 12,
                 fontWeight: 600,
-                background: 'rgba(255,255,255,.95)',
+                background: active === s.key ? '#fff' : 'rgba(255,255,255,.95)',
                 color: '#17150D',
                 padding: '5px 11px',
                 borderRadius: 100,
                 whiteSpace: 'nowrap',
-                boxShadow: '0 8px 22px rgba(0,0,0,.35)',
+                boxShadow: active === s.key ? `0 10px 26px rgba(0,0,0,.45), 0 0 0 3px ${s.color}66` : '0 8px 22px rgba(0,0,0,.35)',
                 willChange: 'transform',
-                transition: 'opacity .4s',
+                transition: 'opacity .4s, box-shadow .3s',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.boxShadow = `0 10px 26px rgba(0,0,0,.45), 0 0 0 3px ${s.color}55`)}
-              onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '0 8px 22px rgba(0,0,0,.35)')}
             >
               <span
                 style={{
@@ -666,6 +739,57 @@ export function IsoScene() {
               {s.label}
             </a>
           ))}
+
+          {/* station info card */}
+          {activeInfo && (
+            <div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                bottom: 46,
+                transform: 'translateX(-50%)',
+                zIndex: 6,
+                width: 'min(92%, 470px)',
+                background: 'rgba(255,255,255,.97)',
+                color: '#17150D',
+                borderRadius: 18,
+                padding: '16px 20px',
+                boxShadow: '0 24px 60px rgba(0,0,0,.5)',
+                animation: 'ep-cardin .35s cubic-bezier(.2,.8,.2,1.1) both',
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setActive(null)}
+                aria-label="Bezárás"
+                style={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 10,
+                  border: 'none',
+                  background: 'none',
+                  fontSize: 18,
+                  lineHeight: 1,
+                  color: '#7A766B',
+                  cursor: 'pointer',
+                  padding: 4,
+                }}
+              >
+                ×
+              </button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ width: 10, height: 10, borderRadius: '50%', background: activeInfo.color }} />
+                <strong style={{ fontFamily: 'Syne', fontSize: 16 }}>{activeInfo.label}</strong>
+              </div>
+              <p style={{ fontSize: 14, lineHeight: 1.5, color: '#46433A', marginTop: 6 }}>{activeInfo.text}</p>
+              <a
+                href={activeInfo.href}
+                style={{ display: 'inline-block', marginTop: 8, fontWeight: 600, fontSize: 14, color: '#E94A35' }}
+              >
+                Tovább →
+              </a>
+            </div>
+          )}
 
           {/* drag hint */}
           <span
