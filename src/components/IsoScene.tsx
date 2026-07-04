@@ -529,6 +529,10 @@ export function IsoScene() {
           margin: '0 auto',
           borderRadius: 34,
           overflow: 'hidden',
+          // overflow:hidden alone doesn't clip the 3D-transformed floor in
+          // Chromium — contain:paint forces it, so the diorama can't spill
+          // past the card edge on narrow screens
+          contain: 'paint',
           background: 'radial-gradient(120% 120% at 50% 0%, #211d14 0%, #100e09 70%)',
           color: '#F6F1E9',
           padding: 'clamp(40px,6vw,80px) clamp(24px,5vw,70px) clamp(20px,4vw,40px)',
@@ -623,6 +627,7 @@ export function IsoScene() {
           >
             {/* floor plane */}
             <div
+              className="ep-isofloor"
               style={{
                 position: 'relative',
                 width: FLOOR,

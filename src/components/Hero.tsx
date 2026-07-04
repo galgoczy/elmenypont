@@ -343,8 +343,10 @@ export function Hero({ heroP: p }: HeroProps) {
   const flashEnd = cl(p, 0.63, 0.66) * (1 - cl(p, 0.67, 0.72))
   const flash = Math.min(1, flashStart + flashEnd)
   const photoOn = cl(p, 0.66, 0.71)
-  // small breather after the photo lands, before the copy takes over
-  const reveal = cl(p, 0.82, 0.99)
+  // small breather after the photo lands, then the copy finishes early
+  // (by p=0.9) so the finished headline holds on screen for the rest of
+  // the sticky range instead of scrolling away the moment it lands
+  const reveal = cl(p, 0.8, 0.9)
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
@@ -370,7 +372,7 @@ export function Hero({ heroP: p }: HeroProps) {
   const chip: CSSProperties = {}
 
   return (
-    <section id="top" data-hero style={{ position: 'relative', height: '190vh' }}>
+    <section id="top" data-hero style={{ position: 'relative', height: '210vh' }}>
       <div
         style={{
           position: 'sticky',
