@@ -335,18 +335,21 @@ export function Hero({ heroP: p }: HeroProps) {
   // full figure facing us → ONE full turn while drifting a bit closer →
   // flash + sample photo → the copy rises in front while the kiosk just
   // fades back (no extra zoom, no lift)
-  const spin = cl(p, 0.03, 0.6)
+  // (thresholds are tuned to a 225vh section: the kiosk story plays out in
+  // the same scroll distance as before, all the extra height is pure hold
+  // time for the finished headline)
+  const spin = cl(p, 0.026, 0.53)
   const spinE = spin * spin * (3 - 2 * spin)
   const rotY = -360 * spinE
   // a teaser flash right at the start, before the turn begins
-  const flashStart = cl(p, 0.035, 0.06) * (1 - cl(p, 0.07, 0.12))
-  const flashEnd = cl(p, 0.63, 0.66) * (1 - cl(p, 0.67, 0.72))
+  const flashStart = cl(p, 0.031, 0.053) * (1 - cl(p, 0.062, 0.106))
+  const flashEnd = cl(p, 0.554, 0.581) * (1 - cl(p, 0.59, 0.634))
   const flash = Math.min(1, flashStart + flashEnd)
-  const photoOn = cl(p, 0.66, 0.71)
+  const photoOn = cl(p, 0.581, 0.625)
   // small breather after the photo lands, then the copy finishes early
-  // (by p=0.9) so the finished headline holds on screen for the rest of
-  // the sticky range instead of scrolling away the moment it lands
-  const reveal = cl(p, 0.8, 0.9)
+  // (by p=0.79) so the finished headline holds on screen for the last
+  // ~fifth of the sticky range instead of scrolling away as it lands
+  const reveal = cl(p, 0.7, 0.79)
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
@@ -372,7 +375,7 @@ export function Hero({ heroP: p }: HeroProps) {
   const chip: CSSProperties = {}
 
   return (
-    <section id="top" data-hero style={{ position: 'relative', height: '210vh' }}>
+    <section id="top" data-hero style={{ position: 'relative', height: '225vh' }}>
       <div
         style={{
           position: 'sticky',
