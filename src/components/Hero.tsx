@@ -357,6 +357,10 @@ export function Hero({ heroP: p }: HeroProps) {
   const ty = 40 + 150 * spinE
   const kioskOp = 1 - 0.85 * reveal
 
+  // during the hold the finished copy still creeps upward, just barely —
+  // ~24px over the whole remaining sticky range so it never feels frozen
+  const hold = cl(p, 0.79, 1)
+
   const mix = reveal
   const dark = [23, 21, 13]
   const cream = [246, 241, 233]
@@ -365,7 +369,7 @@ export function Hero({ heroP: p }: HeroProps) {
 
   const heroGlow = (0.5 * (1 - mix) * (0.35 + 0.65 * spinE)).toFixed(3)
   const copyOp = reveal.toFixed(2)
-  const copyY = ((1 - reveal) * 40).toFixed(0)
+  const copyY = ((1 - reveal) * 40 - hold * 24).toFixed(1)
   const copyPe: CSSProperties['pointerEvents'] = reveal > 0.6 ? 'auto' : 'none'
   const hintOp = (1 - cl(p, 0, 0.1)).toFixed(2)
   const hintColor = mix > 0.5 ? '#7A766B' : 'rgba(255,255,255,.7)'
