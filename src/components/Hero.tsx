@@ -341,17 +341,17 @@ export function Hero({ heroP: p }: HeroProps) {
   // spin runs 20% quicker in scroll distance; the intro, the flash/photo
   // stretch and the reveal keep their previous pacing — every saved and
   // spare unit goes into the post-reveal hold (now 1.5x longer)
-  const spin = cl(p, 0.026, 0.429)
+  const spin = cl(p, 0.022, 0.365)
   const spinE = spin * spin * (3 - 2 * spin)
   const rotY = -360 * spinE
   // a teaser flash right at the start, before the turn begins
-  const flashStart = cl(p, 0.031, 0.053) * (1 - cl(p, 0.062, 0.106))
-  const flashEnd = cl(p, 0.453, 0.48) * (1 - cl(p, 0.489, 0.533))
+  const flashStart = cl(p, 0.026, 0.045) * (1 - cl(p, 0.053, 0.09))
+  const flashEnd = cl(p, 0.385, 0.408) * (1 - cl(p, 0.416, 0.453))
   const flash = Math.min(1, flashStart + flashEnd)
-  const photoOn = cl(p, 0.48, 0.524)
-  // the landed photo gets its own sticky moment (~2x the old breather)
-  // before the copy takes over, which then holds to the end of the range
-  const reveal = cl(p, 0.66, 0.75)
+  const photoOn = cl(p, 0.408, 0.446)
+  // the landed photo gets a long sticky moment (~350px of scroll) before
+  // the copy takes over, which then holds to the end of the range
+  const reveal = cl(p, 0.711, 0.787)
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
@@ -361,7 +361,7 @@ export function Hero({ heroP: p }: HeroProps) {
 
   // during the hold the finished copy still creeps upward, just barely —
   // ~24px over the whole remaining sticky range so it never feels frozen
-  const hold = cl(p, 0.75, 1)
+  const hold = cl(p, 0.787, 1)
 
   const mix = reveal
   const dark = [23, 21, 13]
@@ -381,7 +381,7 @@ export function Hero({ heroP: p }: HeroProps) {
   const chip: CSSProperties = {}
 
   return (
-    <section id="top" data-hero style={{ position: 'relative', height: '225vh' }}>
+    <section id="top" data-hero style={{ position: 'relative', height: '247vh' }}>
       <div
         style={{
           position: 'sticky',
