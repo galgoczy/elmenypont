@@ -338,7 +338,8 @@ export function Hero({ heroP: p }: HeroProps) {
   const rotY = -360 * spinE
   const flash = cl(p, 0.63, 0.66) * (1 - cl(p, 0.67, 0.72))
   const photoOn = cl(p, 0.66, 0.71)
-  const reveal = cl(p, 0.76, 0.95)
+  // small breather after the photo lands, before the copy takes over
+  const reveal = cl(p, 0.82, 0.99)
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
