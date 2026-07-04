@@ -349,9 +349,9 @@ export function Hero({ heroP: p }: HeroProps) {
   const flashEnd = cl(p, 0.453, 0.48) * (1 - cl(p, 0.489, 0.533))
   const flash = Math.min(1, flashStart + flashEnd)
   const photoOn = cl(p, 0.48, 0.524)
-  // small breather after the photo lands, then the copy finishes early
-  // so the finished headline holds through the rest of the sticky range
-  const reveal = cl(p, 0.599, 0.689)
+  // the landed photo gets its own sticky moment (~2x the old breather)
+  // before the copy takes over, which then holds to the end of the range
+  const reveal = cl(p, 0.66, 0.75)
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
@@ -361,7 +361,7 @@ export function Hero({ heroP: p }: HeroProps) {
 
   // during the hold the finished copy still creeps upward, just barely —
   // ~24px over the whole remaining sticky range so it never feels frozen
-  const hold = cl(p, 0.689, 1)
+  const hold = cl(p, 0.75, 1)
 
   const mix = reveal
   const dark = [23, 21, 13]
