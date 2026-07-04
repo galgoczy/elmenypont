@@ -338,18 +338,20 @@ export function Hero({ heroP: p }: HeroProps) {
   // (thresholds are tuned to a 225vh section: the kiosk story plays out in
   // the same scroll distance as before, all the extra height is pure hold
   // time for the finished headline)
-  const spin = cl(p, 0.026, 0.53)
+  // spin runs 20% quicker in scroll distance; the intro, the flash/photo
+  // stretch and the reveal keep their previous pacing — every saved and
+  // spare unit goes into the post-reveal hold (now 1.5x longer)
+  const spin = cl(p, 0.026, 0.429)
   const spinE = spin * spin * (3 - 2 * spin)
   const rotY = -360 * spinE
   // a teaser flash right at the start, before the turn begins
   const flashStart = cl(p, 0.031, 0.053) * (1 - cl(p, 0.062, 0.106))
-  const flashEnd = cl(p, 0.554, 0.581) * (1 - cl(p, 0.59, 0.634))
+  const flashEnd = cl(p, 0.453, 0.48) * (1 - cl(p, 0.489, 0.533))
   const flash = Math.min(1, flashStart + flashEnd)
-  const photoOn = cl(p, 0.581, 0.625)
+  const photoOn = cl(p, 0.48, 0.524)
   // small breather after the photo lands, then the copy finishes early
-  // (by p=0.79) so the finished headline holds on screen for the last
-  // ~fifth of the sticky range instead of scrolling away as it lands
-  const reveal = cl(p, 0.7, 0.79)
+  // so the finished headline holds through the rest of the sticky range
+  const reveal = cl(p, 0.599, 0.689)
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
@@ -359,7 +361,7 @@ export function Hero({ heroP: p }: HeroProps) {
 
   // during the hold the finished copy still creeps upward, just barely —
   // ~24px over the whole remaining sticky range so it never feels frozen
-  const hold = cl(p, 0.79, 1)
+  const hold = cl(p, 0.689, 1)
 
   const mix = reveal
   const dark = [23, 21, 13]
