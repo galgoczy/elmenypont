@@ -33,7 +33,7 @@ export function WhyUs() {
             alignItems: 'start',
           }}
         >
-          <Reveal style={{ position: 'sticky', top: 120 }}>
+          <Reveal className="ep-whyus-head">
             <span
               style={{
                 display: 'inline-block',

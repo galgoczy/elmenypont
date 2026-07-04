@@ -186,6 +186,8 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
+                // show the top of the photo so the face stays in frame
+                objectPosition: '50% 12%',
                 opacity: photoOn.toFixed(3),
                 transform: `scale(${(1.08 - 0.08 * photoOn).toFixed(3)})`,
               }}
@@ -336,7 +338,10 @@ export function Hero({ heroP: p }: HeroProps) {
   const spin = cl(p, 0.03, 0.6)
   const spinE = spin * spin * (3 - 2 * spin)
   const rotY = -360 * spinE
-  const flash = cl(p, 0.63, 0.66) * (1 - cl(p, 0.67, 0.72))
+  // a teaser flash right at the start, before the turn begins
+  const flashStart = cl(p, 0.035, 0.06) * (1 - cl(p, 0.07, 0.12))
+  const flashEnd = cl(p, 0.63, 0.66) * (1 - cl(p, 0.67, 0.72))
+  const flash = Math.min(1, flashStart + flashEnd)
   const photoOn = cl(p, 0.66, 0.71)
   // small breather after the photo lands, before the copy takes over
   const reveal = cl(p, 0.82, 0.99)
@@ -361,13 +366,8 @@ export function Hero({ heroP: p }: HeroProps) {
   const hintColor = mix > 0.5 ? '#7A766B' : 'rgba(255,255,255,.7)'
   const shadowOp = (0.55 * (1 - reveal)).toFixed(3)
 
-  const chip: CSSProperties = {
-    background: '#F6F1E9',
-    border: '1px solid rgba(0,0,0,.07)',
-    borderRadius: 16,
-    padding: '13px 22px',
-    textAlign: 'left',
-  }
+  // chip visuals live in .ep-chip (global.css) so mobile can compact them
+  const chip: CSSProperties = {}
 
   return (
     <section id="top" data-hero style={{ position: 'relative', height: '190vh' }}>
@@ -390,7 +390,9 @@ export function Hero({ heroP: p }: HeroProps) {
           }}
         />
 
-        {/* 3D kiosk stage */}
+        {/* 3D kiosk stage — while the copy takes over, a soft mask trims
+            the column below the CTA/chips midline so the ghosted leg
+            doesn't run through the text block */}
         <div
           style={{
             position: 'absolute',
@@ -399,6 +401,8 @@ export function Hero({ heroP: p }: HeroProps) {
             alignItems: 'center',
             justifyContent: 'center',
             perspective: '1600px',
+            WebkitMaskImage: `linear-gradient(180deg, #000 ${(100 - reveal * 30).toFixed(1)}%, transparent ${(104 - reveal * 30).toFixed(1)}%)`,
+            maskImage: `linear-gradient(180deg, #000 ${(100 - reveal * 30).toFixed(1)}%, transparent ${(104 - reveal * 30).toFixed(1)}%)`,
           }}
         >
           <div
@@ -576,20 +580,13 @@ export function Hero({ heroP: p }: HeroProps) {
               </a>
             </Magnetic>
           </div>
-          <div
-            style={{
-              display: 'flex',
-              gap: 12,
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              marginTop: 34,
-            }}
-          >
+          <div className="ep-chiprow">
             {STAT_CHIPS.map((c, i) => {
               const cp = cl(reveal, 0.25 + i * 0.12, 0.7 + i * 0.12)
               return (
                 <div
                   key={c.label}
+                  className="ep-chip"
                   style={{
                     ...chip,
                     opacity: cp.toFixed(2),
@@ -597,17 +594,17 @@ export function Hero({ heroP: p }: HeroProps) {
                   }}
                 >
                   <div
+                    className="ep-chip-value"
                     style={{
                       fontFamily: 'Syne',
                       fontWeight: 600,
-                      fontSize: 22,
                       letterSpacing: '-.01em',
                       color: c.color,
                     }}
                   >
                     {c.value}
                   </div>
-                  <div style={{ fontSize: 13, color: '#7A766B', marginTop: 2 }}>{c.label}</div>
+                  <div className="ep-chip-label" style={{ color: '#7A766B', marginTop: 2 }}>{c.label}</div>
                 </div>
               )
             })}

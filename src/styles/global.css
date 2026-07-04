@@ -311,7 +311,8 @@ a {
 .ep-camdoodle {
   position: absolute;
   right: 3vw;
-  top: 230px;
+  top: 50%;
+  transform: translateY(-50%);
   width: clamp(200px, 21vw, 300px);
   height: clamp(200px, 21vw, 300px);
   pointer-events: none;
@@ -345,10 +346,64 @@ a {
   opacity: 0;
 }
 
+/* ---- Hero stat chips: compact to a single row on phones -------- */
+.ep-chiprow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 34px;
+}
+.ep-chip {
+  background: #f6f1e9;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+  padding: 13px 22px;
+  text-align: left;
+}
+.ep-chip-value {
+  font-size: 22px;
+}
+.ep-chip-label {
+  font-size: 13px;
+}
+@media (max-width: 560px) {
+  .ep-chiprow {
+    gap: 7px;
+    flex-wrap: nowrap;
+  }
+  .ep-chip {
+    padding: 8px 10px;
+    border-radius: 12px;
+  }
+  .ep-chip-value {
+    font-size: 14px;
+  }
+  .ep-chip-label {
+    font-size: 9.5px;
+    white-space: nowrap;
+  }
+}
+
 /* Hide the middle nav links on narrow screens (the CTA stays). */
 @media (max-width: 820px) {
   .ep-nav-link {
     display: none;
+  }
+}
+
+/* "Miért mi" intro column: sticky beside the cards on desktop only —
+   on mobile the stacked cards must push it away naturally instead of
+   scrolling underneath it. */
+.ep-whyus-head {
+  position: sticky;
+  top: 120px;
+}
+@media (max-width: 700px) {
+  .ep-whyus-head {
+    /* relative (not static) so the absolute doodle inside stays anchored */
+    position: relative;
+    top: auto;
   }
 }
 

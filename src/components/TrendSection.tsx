@@ -109,6 +109,7 @@ export function TrendSection() {
   const maskRef = useRef<SVGPathElement | null>(null)
   const stepRefs = useRef<(HTMLDivElement | null)[]>([])
   const sparkRefs = useRef<(HTMLSpanElement | null)[]>([])
+  const smokeRefs = useRef<(HTMLSpanElement | null)[]>([])
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -137,8 +138,11 @@ export function TrendSection() {
     let rotS = 0
     let sparkAcc = 0
     let sparkIdx = 0
+    let landS = 0 // smoothed landing progress (post-trail descent)
+    let smoked = false
 
     const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
+    const smooth = (v: number) => v * v * (3 - 2 * v)
 
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick)
@@ -151,19 +155,37 @@ export function TrendSection() {
       // skip all work while far offscreen
       if (r.bottom < -300 || r.top > vh + 300) return
 
-      const t = clamp01((vh * 0.8 - r.top) / (r.height * 0.9 || 1))
+      const tRaw = (vh * 0.8 - r.top) / (r.height * 0.9 || 1)
+      const t = clamp01(tRaw)
       const first = tS < 0
       const k = reduce || first ? 1 : 1 - Math.exp(-6.5 * dt)
       const prev = first ? t : tS
       tS = prev + (t - prev) * k
 
+      // after the trail ends the rocket noses up and settles down onto the
+      // section's bottom edge (the dark→cream boundary)
+      const land = clamp01((tRaw - 1.02) / 0.16)
+      landS += (land - landS) * (reduce || first ? 1 : 1 - Math.exp(-6.5 * dt))
+      const landE = smooth(landS)
+
       const pt = geo.getPointAtLength(tS * L)
       const ahead = geo.getPointAtLength(Math.min(L, tS * L + L * 0.015))
-      const x = (pt.x / 100) * r.width
-      const y = (pt.y / 100) * r.height
+      let x = (pt.x / 100) * r.width
+      let y = (pt.y / 100) * r.height
       const dx = ((ahead.x - pt.x) / 100) * r.width
       const dy = ((ahead.y - pt.y) / 100) * r.height
-      const ang = (Math.atan2(dy, dx) * 180) / Math.PI
+      let ang = (Math.atan2(dy, dx) * 180) / Math.PI
+
+      if (landS > 0.003) {
+        const sec = wrap.closest<HTMLElement>('[data-trend]')
+        if (sec) {
+          const sb = sec.getBoundingClientRect()
+          // tail should kiss the boundary: rocket points up, tail ≈ centre+32
+          const landY = sb.bottom - r.top - 44
+          y = y + (landY - y) * landE
+          ang = -90 // nose up while descending
+        }
+      }
 
       // shortest-arc heading smoothing; the residual becomes the banking tilt
       let d = ang - rotS
@@ -175,8 +197,27 @@ export function TrendSection() {
 
       rocket.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${(rotS + bank).toFixed(2)}deg)`
 
-      // flame + speed lines scale with velocity
-      const boost = Math.min(1, speed * 3)
+      // touchdown: two smoke puffs roll out sideways, once per landing
+      if (landS > 0.9 && !smoked && !reduce) {
+        smoked = true
+        smokeRefs.current.forEach((s, i) => {
+          if (!s) return
+          const dir = i === 0 ? -1 : 1
+          s.style.left = `${(x + dir * 12).toFixed(1)}px`
+          s.style.top = `${(y + 30).toFixed(1)}px`
+          s.animate(
+            [
+              { opacity: 0.75, transform: 'translate(-50%,-50%) scale(0.7)' },
+              { opacity: 0, transform: `translate(calc(-50% + ${dir * 46}px), calc(-50% - 8px)) scale(2.1)` },
+            ],
+            { duration: 1100, easing: 'cubic-bezier(.2,.6,.4,1)' },
+          )
+        })
+      }
+      if (landS < 0.5) smoked = false
+
+      // flame + speed lines scale with velocity; braking burn while landing
+      const boost = Math.max(Math.min(1, speed * 3), landS > 0.02 && landS < 0.96 ? 0.7 : 0)
       const flame = rocket.querySelector<SVGGElement>('[data-flameroot]')
       if (flame) {
         flame.style.transform = `scaleX(${(0.55 + boost * 0.9).toFixed(3)})`
@@ -350,6 +391,31 @@ export function TrendSection() {
               }}
               className="ep-spark"
               style={{ background: SPARK_COLORS[i % SPARK_COLORS.length], zIndex: 1 }}
+            />
+          ))}
+
+          {/* touchdown smoke puffs */}
+          {[0, 1].map((i) => (
+            <span
+              key={`smoke-${i}`}
+              ref={(el) => {
+                smokeRefs.current[i] = el
+              }}
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: 26,
+                height: 26,
+                borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(246,241,233,.8), rgba(246,241,233,0) 70%)',
+                filter: 'blur(1px)',
+                opacity: 0,
+                pointerEvents: 'none',
+                zIndex: 2,
+                willChange: 'transform, opacity',
+              }}
             />
           ))}
 
