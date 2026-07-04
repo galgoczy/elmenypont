@@ -350,8 +350,8 @@ export function Hero({ heroP: p }: HeroProps) {
   const flash = Math.min(1, flashStart + flashEnd)
   const photoOn = cl(p, 0.408, 0.446)
   // the landed photo gets a long sticky moment (~350px of scroll) before
-  // the copy takes over, which then holds to the end of the range
-  const reveal = cl(p, 0.711, 0.787)
+  // the copy rises in — unhurried (~150px) — then holds to the end
+  const reveal = cl(p, 0.711, 0.826)
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
@@ -361,7 +361,7 @@ export function Hero({ heroP: p }: HeroProps) {
 
   // during the hold the finished copy still creeps upward, just barely —
   // ~24px over the whole remaining sticky range so it never feels frozen
-  const hold = cl(p, 0.787, 1)
+  const hold = cl(p, 0.826, 1)
 
   const mix = reveal
   const dark = [23, 21, 13]
