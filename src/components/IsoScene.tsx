@@ -517,7 +517,9 @@ export function IsoScene() {
       style={{
         position: 'relative',
         background: '#F6F1E9',
-        padding: '0 clamp(16px,4vw,56px) clamp(80px,10vw,130px)',
+        // small top gap so the rounded card never touches the full-width
+        // doodle-break panel ending right above it
+        padding: 'clamp(14px,2vw,26px) clamp(16px,4vw,56px) clamp(80px,10vw,130px)',
       }}
     >
       <Reveal
