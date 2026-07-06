@@ -621,23 +621,24 @@ export function IsoScene() {
             style={{
               position: 'absolute',
               inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               transformStyle: 'preserve-3d',
             }}
           >
-            {/* floor plane — the phone downscale lives inside the transform
-                chain (a separate `scale` property composes differently in
-                WebKit and threw the scene off-centre on iPhones) */}
+            {/* floor plane — centred with absolute + translate instead of
+                flexbox: WebKit falls back to safe (start) alignment when a
+                flex item overflows its container, which shoved the rotation
+                pivot off-centre on portrait phones. The phone downscale also
+                lives inside the transform chain for the same reason. */}
             <div
               className="ep-isofloor"
               style={{
-                position: 'relative',
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
                 width: FLOOR,
                 height: FLOOR,
                 transform:
-                  'scale(var(--ep-isoscale, 1)) rotateX(calc(58deg + var(--tilt, 0deg))) rotateZ(var(--spin, -45deg))',
+                  'translate(-50%, -50%) scale(var(--ep-isoscale, 1)) rotateX(calc(58deg + var(--tilt, 0deg))) rotateZ(var(--spin, -45deg))',
                 transformStyle: 'preserve-3d',
                 background: 'linear-gradient(135deg,#2b2619,#1a160e)',
                 borderRadius: 22,
