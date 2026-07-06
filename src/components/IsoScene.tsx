@@ -625,14 +625,17 @@ export function IsoScene() {
               transformStyle: 'preserve-3d',
             }}
           >
-            {/* floor plane */}
+            {/* floor plane — the phone downscale lives inside the transform
+                chain (a separate `scale` property composes differently in
+                WebKit and threw the scene off-centre on iPhones) */}
             <div
               className="ep-isofloor"
               style={{
                 position: 'relative',
                 width: FLOOR,
                 height: FLOOR,
-                transform: 'rotateX(calc(58deg + var(--tilt, 0deg))) rotateZ(var(--spin, -45deg))',
+                transform:
+                  'scale(var(--ep-isoscale, 1)) rotateX(calc(58deg + var(--tilt, 0deg))) rotateZ(var(--spin, -45deg))',
                 transformStyle: 'preserve-3d',
                 background: 'linear-gradient(135deg,#2b2619,#1a160e)',
                 borderRadius: 22,
