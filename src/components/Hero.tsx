@@ -111,7 +111,17 @@ function HeadSide({ turn }: { turn: number }) {
   )
 }
 
-function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number; screenFlash: number }) {
+function Kiosk3D({
+  turn,
+  photo1On,
+  photoOn,
+  screenFlash,
+}: {
+  turn: number
+  photo1On: number
+  photoOn: number
+  screenFlash: number
+}) {
   const whiteFace = 'linear-gradient(180deg,#fcfcfb,#e9e9e5)'
   const sideFace = 'linear-gradient(180deg,#f1f1ee,#dededa)'
   const wheels = [
@@ -149,7 +159,7 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
               overflow: 'hidden',
             }}
           >
-            {/* standby glyph */}
+            {/* standby glyph — gone once the first photo is taken */}
             <span
               style={{
                 position: 'absolute',
@@ -161,11 +171,27 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
                 fontWeight: 700,
                 fontSize: 19,
                 letterSpacing: '.08em',
-                color: `rgba(246,241,233,${(0.3 * (1 - photoOn)).toFixed(3)})`,
+                color: `rgba(246,241,233,${(0.3 * (1 - photo1On)).toFixed(3)})`,
               }}
             >
               AI ✦
             </span>
+            {/* the freshly shot group photo — lands with the first flash and
+                stays on screen through the whole turn */}
+            <img
+              src="/assets/photos/team-original.jpg"
+              alt=""
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: '50% 28%',
+                opacity: photo1On.toFixed(3),
+              }}
+            />
             {/* glass reflection */}
             <span
               style={{
@@ -175,9 +201,9 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
                 pointerEvents: 'none',
               }}
             />
-            {/* generated sample photo */}
+            {/* the AI-transformed version — swaps in with the second flash */}
             <img
-              src="/assets/photos/style-astronaut.png"
+              src="/assets/photos/team-heroes.jpg"
               alt=""
               aria-hidden="true"
               style={{
@@ -186,8 +212,8 @@ function Kiosk3D({ turn, photoOn, screenFlash }: { turn: number; photoOn: number
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                // show the top of the photo so the face stays in frame
-                objectPosition: '50% 12%',
+                // keep the faces in frame
+                objectPosition: '50% 24%',
                 opacity: photoOn.toFixed(3),
                 transform: `scale(${(1.08 - 0.08 * photoOn).toFixed(3)})`,
               }}
@@ -344,10 +370,12 @@ export function Hero({ heroP: p }: HeroProps) {
   const spin = cl(p, 0.022, 0.365)
   const spinE = spin * spin * (3 - 2 * spin)
   const rotY = -360 * spinE
-  // a teaser flash right at the start, before the turn begins
+  // a teaser flash right at the start, before the turn begins — the fresh
+  // group photo lands with it and stays on screen for the whole turn
   const flashStart = cl(p, 0.026, 0.045) * (1 - cl(p, 0.053, 0.09))
   const flashEnd = cl(p, 0.385, 0.408) * (1 - cl(p, 0.416, 0.453))
   const flash = Math.min(1, flashStart + flashEnd)
+  const photo1On = cl(p, 0.038, 0.05)
   const photoOn = cl(p, 0.408, 0.446)
   // the landed photo gets a long sticky moment (~350px of scroll) before
   // the copy rises in — unhurried (~150px) — then holds to the end
@@ -425,7 +453,7 @@ export function Hero({ heroP: p }: HeroProps) {
               opacity: kioskOp.toFixed(3),
             }}
           >
-            <Kiosk3D turn={spinE} photoOn={photoOn} screenFlash={flash} />
+            <Kiosk3D turn={spinE} photo1On={photo1On} photoOn={photoOn} screenFlash={flash} />
             {/* ground shadow */}
             <span
               aria-hidden="true"
