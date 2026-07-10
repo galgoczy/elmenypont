@@ -1,17 +1,37 @@
-import type { CSSProperties } from 'react'
 import { Reveal } from './Reveal'
 
-const NAMES = ['PARTNER', 'LOGÓ', 'MÁRKA', 'ÜGYFÉL', 'REFERENCIA', 'ESEMÉNY']
-
-const name: CSSProperties = { fontFamily: 'Syne', fontWeight: 700, fontSize: 30, color: '#17150D' }
+/**
+ * Real partner marks (monochrome SVGs under /assets/logos), tinted to the
+ * warm ink via CSS masks so they sit quietly in the brand palette.
+ * Coca-Cola and GE are wide wordmarks, the rest are compact — width hints
+ * keep their optical sizes balanced in the strip.
+ */
+const LOGOS = [
+  { slug: 'bosch', name: 'Bosch', w: 110 },
+  { slug: 'coca-cola', name: 'Coca-Cola', w: 120 },
+  { slug: 'siemens', name: 'Siemens', w: 120 },
+  { slug: 'ge', name: 'General Electric', w: 54 },
+  { slug: 'hbo', name: 'HBO', w: 92 },
+  { slug: 'hilton', name: 'Hilton', w: 60 },
+]
 
 function Row({ hidden }: { hidden?: boolean }) {
   return (
-    <div style={{ display: 'flex', gap: 64, alignItems: 'center' }} aria-hidden={hidden || undefined}>
-      {NAMES.map((n, i) => (
-        <span key={i} style={name}>
-          {n}
-        </span>
+    <div style={{ display: 'flex', gap: 76, alignItems: 'center' }} aria-hidden={hidden || undefined}>
+      {LOGOS.map((l) => (
+        <span
+          key={l.slug}
+          role={hidden ? undefined : 'img'}
+          aria-label={hidden ? undefined : l.name}
+          style={{
+            width: l.w,
+            height: 44,
+            flex: 'none',
+            background: '#17150D',
+            WebkitMask: `url(/assets/logos/${l.slug}.svg) center/contain no-repeat`,
+            mask: `url(/assets/logos/${l.slug}.svg) center/contain no-repeat`,
+          }}
+        />
       ))}
     </div>
   )
@@ -29,7 +49,7 @@ export function Partners() {
           letterSpacing: '.14em',
           textTransform: 'uppercase',
           color: '#7A766B',
-          marginBottom: 42,
+          marginBottom: 46,
         }}
       >
         Több száz rendezvényen — ők is velünk dolgoztak
@@ -38,18 +58,15 @@ export function Partners() {
         style={{
           display: 'flex',
           width: 'max-content',
-          gap: 64,
+          gap: 76,
           alignItems: 'center',
           animation: 'ep-marquee 32s linear infinite',
-          opacity: 0.55,
+          opacity: 0.5,
         }}
       >
         <Row />
         <Row hidden />
       </div>
-      <Reveal as="p" style={{ textAlign: 'center', fontSize: 13, color: '#C9C3B6', marginTop: 34 }}>
-        Ide kerülnek a valódi ügyfél- és partnerlogók.
-      </Reveal>
     </section>
   )
 }

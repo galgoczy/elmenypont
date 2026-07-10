@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { cl } from '../hooks/useScene'
 import { Magnetic } from './Magnetic'
 
@@ -378,8 +378,43 @@ export function Hero({ heroP: p }: HeroProps) {
   const photo1On = cl(p, 0.038, 0.05)
   const photoOn = cl(p, 0.408, 0.446)
   // the landed photo gets a long sticky moment (~350px of scroll) before
-  // the copy rises in — unhurried (~150px) — then holds to the end
-  const reveal = cl(p, 0.711, 0.826)
+  // the copy rises in, then holds to the end. Scroll only sets the TARGET —
+  // the reveal itself chases it with a ~1s time constant, so a hard flick
+  // can't skip the entrance: the words always play their rise in full.
+  const revealT = cl(p, 0.711, 0.826)
+  const revealRef = useRef(revealT)
+  revealRef.current = revealT
+  const [reveal, setReveal] = useState(0)
+  useEffect(() => {
+    const reduce =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      // no inertia under reduced motion — track the scroll directly
+      let raf = 0
+      const sync = () => {
+        raf = requestAnimationFrame(sync)
+        setReveal((s) => (s === revealRef.current ? s : revealRef.current))
+      }
+      raf = requestAnimationFrame(sync)
+      return () => cancelAnimationFrame(raf)
+    }
+    let raf = 0
+    let last = performance.now()
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick)
+      const dt = Math.min(0.05, (now - last) / 1000)
+      last = now
+      setReveal((s) => {
+        const t = revealRef.current
+        const n = s + (t - s) * (1 - Math.exp(-3.4 * dt))
+        // snap + bail out near rest so React skips re-renders while idle
+        if (Math.abs(t - n) < 0.001) return t
+        return n
+      })
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [])
 
   // ends ~20% closer than before, sitting lower and facing us square-on
   const finalScale = 0.82 + 0.5 * spinE
@@ -600,7 +635,7 @@ export function Hero({ heroP: p }: HeroProps) {
             </Magnetic>
             <Magnetic strength={6}>
               <a
-                href="#szolgaltatasok"
+                href="#elmeny"
                 style={{
                   display: 'inline-block',
                   background: 'transparent',
