@@ -8,10 +8,10 @@ import { Reveal } from './Reveal'
  */
 const LOGOS = [
   { slug: 'bosch', name: 'Bosch', w: 155 },
-  { slug: 'coca-cola', name: 'Coca-Cola', w: 170 },
-  { slug: 'siemens', name: 'Siemens', w: 170 },
+  { slug: 'coca-cola', name: 'Coca-Cola', w: 220 },
+  { slug: 'siemens', name: 'Siemens', w: 220 },
   { slug: 'ge', name: 'General Electric', w: 76 },
-  { slug: 'hbo', name: 'HBO', w: 130 },
+  { slug: 'hbo', name: 'HBO', w: 170 },
   { slug: 'hilton', name: 'Hilton', w: 84 },
 ]
 
@@ -22,7 +22,7 @@ function Row({ hidden }: { hidden?: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }} aria-hidden={hidden || undefined}>
       {LOGOS.map((l) => (
-        <span key={l.slug} style={{ flex: 'none', paddingRight: 96 }}>
+        <span key={l.slug} style={{ flex: 'none', paddingRight: 56 }}>
           <span
             role={hidden ? undefined : 'img'}
             aria-label={hidden ? undefined : l.name}

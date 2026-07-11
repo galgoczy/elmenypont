@@ -66,6 +66,11 @@
 
 html {
   scroll-behavior: smooth;
+  /* one snap point lives at the hero's "copy revealed" position with
+     snap-stop: always — momentum scrolls come to rest there so the
+     headline entrance always gets seen; a fresh gesture continues on.
+     Proximity mode leaves the rest of the page unaffected. */
+  scroll-snap-type: y proximity;
 }
 
 body {

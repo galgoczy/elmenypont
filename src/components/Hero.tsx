@@ -442,6 +442,21 @@ export function Hero({ heroP: p }: HeroProps) {
 
   return (
     <section id="top" data-hero style={{ position: 'relative', height: '247vh' }}>
+      {/* scroll-snap marker at p≈0.87 (copy fully risen): momentum comes to
+          rest here, so the entrance always gets seen — a fresh gesture is
+          needed to continue past the hero */}
+      <span
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '128vh',
+          left: 0,
+          width: 1,
+          height: 1,
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+        }}
+      />
       <div
         style={{
           position: 'sticky',
