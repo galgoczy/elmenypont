@@ -163,11 +163,10 @@ export function Services() {
           </div>
         </Reveal>
 
-        {/* AI Videomata — cursor-tilting card with sheen */}
+        {/* AI Videomata — cursor-tilting card with sheen (no page yet) */}
         <Reveal pop delay={120} style={{ marginTop: 26 }}>
           <TiltCard tilt={4} lift={8} radius={28} hoverShadow="0 44px 74px -30px rgba(0,0,0,.55)">
-            <a
-              href="https://ai.elmeny.hu"
+            <div
               style={{
                 position: 'relative',
                 borderRadius: 28,
@@ -181,14 +180,10 @@ export function Services() {
                 padding: 38,
               }}
               onMouseEnter={(e) => {
-                const a = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
-                if (a) a.style.transform = 'translateX(6px)'
                 const img = e.currentTarget.querySelector<HTMLElement>('[data-bgimg]')
                 if (img) img.style.transform = 'scale(1.05)'
               }}
               onMouseLeave={(e) => {
-                const a = e.currentTarget.querySelector<HTMLElement>('[data-arrow]')
-                if (a) a.style.transform = 'none'
                 const img = e.currentTarget.querySelector<HTMLElement>('[data-bgimg]')
                 if (img) img.style.transform = 'scale(1)'
               }}
@@ -247,15 +242,19 @@ export function Services() {
                 gap: 9,
                 marginTop: 20,
                 fontWeight: 600,
-                fontSize: 16,
-                color: '#fff',
+                fontSize: 13,
+                letterSpacing: '.14em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,.9)',
+                border: '1.5px solid rgba(255,255,255,.35)',
+                padding: '9px 16px',
+                borderRadius: 100,
               }}
             >
-              Részletek <span data-arrow style={{ display: 'inline-block', transition: 'transform .3s' }}>→</span>{' '}
-              <span style={{ opacity: 0.6, fontWeight: 400 }}>ai.elmeny.hu</span>
+              Hamarosan
             </span>
               </div>
-            </a>
+            </div>
           </TiltCard>
         </Reveal>
       </div>

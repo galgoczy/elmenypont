@@ -7,8 +7,9 @@ import { Squiggle } from './Squiggle'
 const STRIP = [300, 260, 300, 250, 300, 270]
 
 function StripRow({ hidden }: { hidden?: boolean }) {
+  // trailing padding instead of a track gap keeps the -50% loop seamless
   return (
-    <div style={{ display: 'flex', gap: 16 }} aria-hidden={hidden || undefined}>
+    <div style={{ display: 'flex', gap: 16, paddingRight: 16 }} aria-hidden={hidden || undefined}>
       {STRIP.map((w, i) => (
         <ImageSlot
           key={i}
@@ -32,7 +33,9 @@ export function WhatWeDo() {
       style={{
         position: 'relative',
         background: '#F6F1E9',
-        padding: 'clamp(90px,14vw,180px) clamp(24px,6vw,90px)',
+        padding: 'clamp(45px,7vw,90px) clamp(24px,6vw,90px) clamp(90px,14vw,180px)',
+        // anchor lands so the heading sits one line below the fixed nav
+        scrollMarginTop: 'calc(110px - clamp(45px, 7vw, 90px))',
       }}
     >
       <Doodle n={2} color="rgba(0,0,0,.05)" size={96} left="3%" top="30%" anim="sway" duration={11} rotate="-10deg" />
@@ -111,7 +114,6 @@ export function WhatWeDo() {
           style={{
             display: 'flex',
             width: 'max-content',
-            gap: 16,
             animation: 'ep-marquee 40s linear infinite',
           }}
         >

@@ -227,6 +227,11 @@ a {
   0%, 100% { transform: translateY(0) rotate(-1.5deg); }
   50% { transform: translateY(-2.5px) rotate(1.5deg); }
 }
+/* gentle downward nudge for the "Ismerd meg!" arrow */
+@keyframes ep-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
 @keyframes ep-stroll {
   from { offset-distance: 0%; }
   to { offset-distance: 100%; }

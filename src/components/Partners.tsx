@@ -7,31 +7,35 @@ import { Reveal } from './Reveal'
  * keep their optical sizes balanced in the strip.
  */
 const LOGOS = [
-  { slug: 'bosch', name: 'Bosch', w: 110 },
-  { slug: 'coca-cola', name: 'Coca-Cola', w: 120 },
-  { slug: 'siemens', name: 'Siemens', w: 120 },
-  { slug: 'ge', name: 'General Electric', w: 54 },
-  { slug: 'hbo', name: 'HBO', w: 92 },
-  { slug: 'hilton', name: 'Hilton', w: 60 },
+  { slug: 'bosch', name: 'Bosch', w: 155 },
+  { slug: 'coca-cola', name: 'Coca-Cola', w: 170 },
+  { slug: 'siemens', name: 'Siemens', w: 170 },
+  { slug: 'ge', name: 'General Electric', w: 76 },
+  { slug: 'hbo', name: 'HBO', w: 130 },
+  { slug: 'hilton', name: 'Hilton', w: 84 },
 ]
 
+/** Item spacing lives INSIDE the row (padding-right on each item): a gap on
+ *  the track container would offset the -50% loop point and make the
+ *  marquee visibly jump every cycle. */
 function Row({ hidden }: { hidden?: boolean }) {
   return (
-    <div style={{ display: 'flex', gap: 76, alignItems: 'center' }} aria-hidden={hidden || undefined}>
+    <div style={{ display: 'flex', alignItems: 'center' }} aria-hidden={hidden || undefined}>
       {LOGOS.map((l) => (
-        <span
-          key={l.slug}
-          role={hidden ? undefined : 'img'}
-          aria-label={hidden ? undefined : l.name}
-          style={{
-            width: l.w,
-            height: 44,
-            flex: 'none',
-            background: '#17150D',
-            WebkitMask: `url(/assets/logos/${l.slug}.svg) center/contain no-repeat`,
-            mask: `url(/assets/logos/${l.slug}.svg) center/contain no-repeat`,
-          }}
-        />
+        <span key={l.slug} style={{ flex: 'none', paddingRight: 96 }}>
+          <span
+            role={hidden ? undefined : 'img'}
+            aria-label={hidden ? undefined : l.name}
+            style={{
+              display: 'block',
+              width: l.w,
+              height: 62,
+              background: '#17150D',
+              WebkitMask: `url(/assets/logos/${l.slug}.svg) center/contain no-repeat`,
+              mask: `url(/assets/logos/${l.slug}.svg) center/contain no-repeat`,
+            }}
+          />
+        </span>
       ))}
     </div>
   )
@@ -58,7 +62,6 @@ export function Partners() {
         style={{
           display: 'flex',
           width: 'max-content',
-          gap: 76,
           alignItems: 'center',
           animation: 'ep-marquee 32s linear infinite',
           opacity: 0.5,

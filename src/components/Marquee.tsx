@@ -16,8 +16,9 @@ const wordStyle = (color: string): CSSProperties => ({
 })
 
 function Row({ hidden }: { hidden?: boolean }) {
+  // trailing padding instead of a track gap keeps the -50% loop seamless
   return (
-    <div style={{ display: 'flex', gap: 54, alignItems: 'center' }} aria-hidden={hidden || undefined}>
+    <div style={{ display: 'flex', gap: 54, alignItems: 'center', paddingRight: 54 }} aria-hidden={hidden || undefined}>
       {WORDS.map((w, i) => (
         <span key={i} style={{ display: 'contents' }}>
           <span style={wordStyle(w.color)}>{w.text}</span>
@@ -76,7 +77,6 @@ export function Marquee() {
           style={{
             display: 'flex',
             width: 'max-content',
-            gap: 54,
             alignItems: 'center',
             animation: 'ep-marquee 26s linear infinite',
             whiteSpace: 'nowrap',

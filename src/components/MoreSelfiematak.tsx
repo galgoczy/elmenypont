@@ -13,11 +13,12 @@ const CARDS = [
     delay: 0,
   },
   {
-    href: 'https://greenbox.elmeny.hu',
+    // no standalone page — the CTA leads to the quote form instead
+    href: '#kapcsolat',
     slot: 'Selfiebox fotósarok minta',
     title: 'Selfiebox',
     body: 'Klasszikus fotósarok azonnali nyomtatással — egyszerű és mindig működik.',
-    link: 'greenbox.elmeny.hu →',
+    link: 'Kérj ajánlatot →',
     delay: 120,
   },
 ]
