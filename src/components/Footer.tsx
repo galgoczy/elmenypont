@@ -44,14 +44,17 @@ export function Footer() {
                 <a href="https://ai.elmeny.hu" style={{ color: 'rgba(255,255,255,.82)' }}>
                   AI fotóautomata bérlés rendezvényre
                 </a>
-                <a href="#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a href="/greenbox" style={{ color: 'rgba(255,255,255,.82)' }}>
+                  Greenbox Selfiemata
+                </a>
+                <a href="/smart-wall" style={{ color: 'rgba(255,255,255,.82)' }}>
+                  Smart Wall — interaktív fal
+                </a>
+                <a href="/mosaic-wall" style={{ color: 'rgba(255,255,255,.82)' }}>
+                  Mosaic Wall — mozaikfal
+                </a>
+                <a href="/#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
                   AI Videomata
-                </a>
-                <a href="#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
-                  Greenbox stúdió-automata
-                </a>
-                <a href="#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
-                  Smart Wall és Mosaic Wall
                 </a>
               </div>
             </div>

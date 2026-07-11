@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server'
-import App from './App'
+import { Page } from './Page'
 
 /**
  * Build-time entry for static prerendering (scripts/prerender.mjs). Renders
@@ -7,6 +7,6 @@ import App from './App'
  * the client bundle then re-renders over it on load. Effects never run here,
  * so components must not touch window/document during the render phase.
  */
-export function render(_path: string): string {
-  return renderToString(<App />)
+export function render(path: string): string {
+  return renderToString(<Page path={path} />)
 }

@@ -3,8 +3,12 @@ import { cl } from '../hooks/useScene'
 import { Magnetic } from './Magnetic'
 
 interface NavProps {
-  heroP: number
+  /** hero scroll progress — omit on subpages (they have no dark hero) */
+  heroP?: number
   scrolled: boolean
+  /** prefix for the section anchors: '' on the home page, '/' on subpages
+   *  so the links lead back to the home page's sections */
+  base?: string
 }
 
 const LINKS = [
@@ -14,7 +18,7 @@ const LINKS = [
   { href: '#kapcsolat', label: 'Kapcsolat' },
 ]
 
-export function Nav({ heroP, scrolled }: NavProps) {
+export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
   // reveal mix: at the end of the hero the stage turns cream, so the nav
   // switches from light-on-dark to dark-on-cream (same window as the
   // hero's reveal phase).
@@ -74,7 +78,7 @@ export function Nav({ heroP, scrolled }: NavProps) {
           pointerEvents: 'none',
         }}
       />
-      <a href="#top" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
+      <a href={base ? base : '#top'} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
         <img
           src="/assets/logo/elmenypont-logo-coral.png"
           alt="Élménypont"
@@ -100,7 +104,7 @@ export function Nav({ heroP, scrolled }: NavProps) {
         {LINKS.map((l) => (
           <a
             key={l.href}
-            href={l.href}
+            href={`${base}${l.href}`}
             style={navLinkStyle}
             className="ep-nav-link"
           >

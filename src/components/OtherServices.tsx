@@ -3,7 +3,7 @@ import { Doodle } from './Doodle'
 
 const ROWS = [
   {
-    href: 'https://smart-wall.hu',
+    href: '/smart-wall',
     doodle: 4,
     color: '#4888F8',
     title: 'Smart Wall',
@@ -11,7 +11,7 @@ const ROWS = [
     delay: 0,
   },
   {
-    href: 'https://mosaicwall.hu',
+    href: '/mosaic-wall',
     doodle: 5,
     color: '#48D880',
     title: 'Mosaic Wall',

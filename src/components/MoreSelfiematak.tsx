@@ -5,11 +5,11 @@ import { TiltCard } from './TiltCard'
 
 const CARDS = [
   {
-    href: 'https://greenbox.elmeny.hu',
+    href: '/greenbox',
     slot: 'Greenbox háttércsere minta',
     title: 'Greenbox Selfiemata',
     body: 'Bármilyen háttér zöld vászon előtt: egzotikus helyszín vagy a céges arculat.',
-    link: 'greenbox.elmeny.hu →',
+    link: 'Greenbox fotózás bérlés →',
     delay: 0,
   },
   {
