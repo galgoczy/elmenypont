@@ -3,6 +3,9 @@ import { useEffect, useRef, type CSSProperties } from 'react'
 const ROW1 = 'AI SELFIEMATA ✦ GREENBOX ✦ SMART WALL ✦ MOSAIC WALL ✦ '
 const ROW2 = 'EGY TÉRBEN ✹ EGY CSAPATTÓL ✹ KULCSRAKÉSZEN ✹ '
 
+/** extra scroll (px) the finished panel stays pinned before releasing */
+const HOLD_PX = 80
+
 const rowStyle: CSSProperties = {
   fontFamily: 'Syne',
   fontWeight: 700,
@@ -42,7 +45,10 @@ export function DoodleBreak() {
       const r = sec.getBoundingClientRect()
       const vh = window.innerHeight
       if (r.bottom < -100 || r.top > vh + 100) return
-      const target = Math.min(1, Math.max(0, -r.top / (r.height - vh || 1)))
+      // progress completes HOLD_PX before the sticky releases: the finished
+      // panel stays pinned and unchanged for that stretch of scroll — a
+      // breather to take the slogan in — while the doodles keep floating
+      const target = Math.min(1, Math.max(0, -r.top / (r.height - vh - HOLD_PX || 1)))
       p += (target - p) * (1 - Math.exp(-9 * dt))
       sec.style.setProperty('--p', p.toFixed(4))
     }
@@ -64,7 +70,11 @@ export function DoodleBreak() {
   })
 
   return (
-    <section ref={secRef} aria-hidden="true" style={{ position: 'relative', height: '170vh', background: '#F6F1E9' }}>
+    <section
+      ref={secRef}
+      aria-hidden="true"
+      style={{ position: 'relative', height: `calc(170vh + ${HOLD_PX}px)`, background: '#F6F1E9' }}
+    >
       <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
         {/* coral panel blooming from a dot */}
         <div

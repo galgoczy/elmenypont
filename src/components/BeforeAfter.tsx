@@ -12,9 +12,10 @@ interface BeforeAfterProps {
 }
 
 /**
- * Before / after slider — the "Lehetsz bárki" core motif. Drag the divider to
- * reveal the AI transform. Eredeti → AI ✦. Ported from the design system's
- * BeforeAfter component.
+ * Before / after slider — the "Lehetsz bárki" core motif. On mouse devices the
+ * divider simply follows the pointer (dragging invited ugly text selection in
+ * some browsers) and stays put on leave; on touch it's drag-to-reveal.
+ * Eredeti → AI ✦. Ported from the design system's BeforeAfter component.
  */
 export function BeforeAfter({
   before,
@@ -28,6 +29,7 @@ export function BeforeAfter({
   const [pos, setPos] = useState(start)
   const ref = useRef<HTMLDivElement | null>(null)
   const dragging = useRef(false)
+  const hovering = useRef(false)
   const demoRaf = useRef(0)
 
   const move = (clientX: number) => {
@@ -60,7 +62,7 @@ export function BeforeAfter({
         const t0 = performance.now()
         const DUR = 2600
         const step = (now: number) => {
-          if (dragging.current) return
+          if (dragging.current || hovering.current) return
           const t = Math.min(1, (now - t0) / DUR)
           let a = KEYS[0]
           let b = KEYS[KEYS.length - 1]
@@ -90,18 +92,13 @@ export function BeforeAfter({
     const up = () => {
       dragging.current = false
     }
-    const mv = (e: MouseEvent | TouchEvent) => {
+    const mv = (e: TouchEvent) => {
       if (!dragging.current) return
-      const x = 'touches' in e ? e.touches[0].clientX : e.clientX
-      move(x)
+      move(e.touches[0].clientX)
     }
-    window.addEventListener('mousemove', mv)
-    window.addEventListener('mouseup', up)
     window.addEventListener('touchmove', mv)
     window.addEventListener('touchend', up)
     return () => {
-      window.removeEventListener('mousemove', mv)
-      window.removeEventListener('mouseup', up)
       window.removeEventListener('touchmove', mv)
       window.removeEventListener('touchend', up)
     }
@@ -124,9 +121,18 @@ export function BeforeAfter({
   return (
     <div
       ref={ref}
-      onMouseDown={(e) => {
-        dragging.current = true
+      onPointerMove={(e) => {
+        // mouse only: hovering drives the divider directly — no button held,
+        // so browsers never start a text/image selection. Touch keeps the
+        // drag path below (a hover-follow makes no sense there), and the
+        // divider simply stays where the pointer left it.
+        if (e.pointerType !== 'mouse') return
+        hovering.current = true
+        cancelAnimationFrame(demoRaf.current)
         move(e.clientX)
+      }}
+      onPointerLeave={() => {
+        hovering.current = false
       }}
       onTouchStart={(e) => {
         dragging.current = true
