@@ -631,8 +631,8 @@ export function Hero({ heroP: p }: HeroProps) {
               marginTop: 28,
             }}
           >
-            Valós idejű AI-képgenerálás a rendezvényeden. A vendég fotóját az AI pár másodperc alatt
-            egyedi, megosztható, brandingelt alkotássá varázsolja.
+            AI fotóautomata rendezvényre: a vendég fotóját az AI pár másodperc alatt egyedi,
+            megosztható, brandingelt alkotássá varázsolja.
           </p>
           <div
             style={{

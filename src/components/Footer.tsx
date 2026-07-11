@@ -28,11 +28,33 @@ export function Footer() {
               style={{ height: 34, width: 'auto', display: 'block', marginBottom: 20 }}
             />
             <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,.6)' }}>
-              Interaktív rendezvényélmények — AI Selfiemata, Videomata, greenbox és interaktív falak,
-              kulcsrakészen.
+              Interaktív rendezvényélmények —{' '}
+              <a href="https://ai.elmeny.hu" style={{ color: 'rgba(255,255,255,.82)' }}>
+                AI Selfiemata
+              </a>
+              , Videomata, greenbox és interaktív falak, kulcsrakészen.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 'clamp(34px,5vw,80px)', flexWrap: 'wrap' }}>
+            <div>
+              <p style={{ fontSize: 13, letterSpacing: '.12em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 14 }}>
+                Szolgáltatások
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9, fontSize: 15 }}>
+                <a href="https://ai.elmeny.hu" style={{ color: 'rgba(255,255,255,.82)' }}>
+                  AI fotóautomata bérlés rendezvényre
+                </a>
+                <a href="#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
+                  AI Videomata
+                </a>
+                <a href="#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
+                  Greenbox stúdió-automata
+                </a>
+                <a href="#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
+                  Smart Wall és Mosaic Wall
+                </a>
+              </div>
+            </div>
             <div>
               <p style={{ fontSize: 13, letterSpacing: '.12em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 14 }}>
                 Elérhetőség
@@ -56,10 +78,20 @@ export function Footer() {
                 Kövess
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9, fontSize: 15 }}>
-                <a href="#" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a
+                  href="https://www.facebook.com/Elmenypont/"
+                  target="_blank"
+                  rel="noopener"
+                  style={{ color: 'rgba(255,255,255,.82)' }}
+                >
                   Facebook
                 </a>
-                <a href="#" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a
+                  href="https://www.instagram.com/elmeny.hu/"
+                  target="_blank"
+                  rel="noopener"
+                  style={{ color: 'rgba(255,255,255,.82)' }}
+                >
                   Instagram
                 </a>
               </div>

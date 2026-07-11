@@ -148,7 +148,7 @@ export function Services() {
               onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246,241,233,.08)')}
               onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             >
-              Részletek <span>→</span>{' '}
+              AI fotóautomata bérlés <span>→</span>{' '}
               <span style={{ opacity: 0.55, fontWeight: 400 }}>ai.elmeny.hu</span>
             </a>
           </div>
