@@ -66,10 +66,15 @@
 
 html {
   scroll-behavior: smooth;
-  /* one snap point lives at the hero's "copy revealed" position with
-     snap-stop: always — momentum scrolls come to rest there so the
-     headline entrance always gets seen; a fresh gesture continues on.
-     Proximity mode leaves the rest of the page unaffected. */
+}
+
+/* one snap point lives at the hero's "copy revealed" position with
+   snap-stop: always — momentum scrolls come to rest there so the
+   headline entrance always gets seen; a fresh gesture continues on.
+   The class is only present while the viewport is inside the hero
+   (toggled from useScene): a page-wide snap-type dampens iOS momentum
+   scrolling everywhere, so the rest of the page must stay snap-free. */
+html.ep-snap {
   scroll-snap-type: y proximity;
 }
 

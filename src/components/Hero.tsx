@@ -420,7 +420,6 @@ export function Hero({ heroP: p }: HeroProps) {
   const finalScale = 0.82 + 0.5 * spinE
   const tiltX = 5 - 4 * spinE
   const ty = 40 + 150 * spinE
-  const kioskOp = 1 - 0.85 * reveal
 
   const mix = reveal
   const dark = [23, 21, 13]
@@ -491,13 +490,15 @@ export function Hero({ heroP: p }: HeroProps) {
             maskImage: `linear-gradient(180deg, #000 ${(100 - reveal * 30).toFixed(1)}%, transparent ${(104 - reveal * 30).toFixed(1)}%)`,
           }}
         >
+          {/* NO opacity here: opacity < 1 is a grouping property that forces
+              transform-style back to flat and collapses the box to 2D — the
+              fade is done by the scrim layer below instead */}
           <div
             style={{
               position: 'relative',
               transform: `translateY(${ty.toFixed(1)}px) rotateX(calc(${tiltX.toFixed(2)}deg + var(--mys, 0) * 5deg)) rotateY(calc(${rotY.toFixed(2)}deg + var(--mxs, 0) * -10deg)) scale(${finalScale.toFixed(3)})`,
               transformStyle: 'preserve-3d',
-              willChange: 'transform, opacity',
-              opacity: kioskOp.toFixed(3),
+              willChange: 'transform',
             }}
           >
             <Kiosk3D turn={spinE} photo1On={photo1On} photoOn={photoOn} screenFlash={flash} />
@@ -517,6 +518,19 @@ export function Hero({ heroP: p }: HeroProps) {
             />
           </div>
         </div>
+
+        {/* fade scrim: dissolves the kiosk into the (solid) background while
+            the copy takes over — replaces the opacity that used to sit on
+            the 3D wrapper and flattened it */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: heroBg,
+            opacity: (reveal * 0.85).toFixed(3),
+            pointerEvents: 'none',
+          }}
+        />
 
         {/* camera flash */}
         <div

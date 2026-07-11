@@ -38,6 +38,10 @@ export function useScene(): SceneState {
       const max = doc.scrollHeight - window.innerHeight
       doc.style.setProperty('--scrollp', (max > 0 ? window.scrollY / max : 0).toFixed(4))
 
+      // the hero's snap point only exists while the viewport is inside the
+      // hero — a page-wide scroll-snap-type kills iOS momentum scrolling
+      doc.classList.toggle('ep-snap', heroP < 0.98)
+
       setState({
         y: window.scrollY,
         heroP,
