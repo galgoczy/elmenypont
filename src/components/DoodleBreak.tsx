@@ -4,7 +4,7 @@ const ROW1 = 'AI SELFIEMATA ✦ GREENBOX ✦ SMART WALL ✦ MOSAIC WALL ✦ '
 const ROW2 = 'EGY TÉRBEN ✹ EGY CSAPATTÓL ✹ KULCSRAKÉSZEN ✹ '
 
 /** extra scroll (px) the finished panel stays pinned before releasing */
-const HOLD_PX = 80
+const HOLD_PX = 120
 
 const rowStyle: CSSProperties = {
   fontFamily: 'Syne',
