@@ -159,7 +159,15 @@ export function BeforeAfter({
         src={after}
         alt={afterAlt || afterLabel}
         draggable={false}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          // faces sit in the upper third of these shots — keep that in frame
+          objectPosition: '50% 25%',
+        }}
       />
       <div style={{ position: 'absolute', inset: 0, width: `${pos}%`, overflow: 'hidden' }}>
         <img
@@ -173,6 +181,7 @@ export function BeforeAfter({
             maxWidth: 'none',
             height: '100%',
             objectFit: 'cover',
+            objectPosition: '50% 25%',
           }}
         />
       </div>
