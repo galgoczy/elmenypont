@@ -6,7 +6,7 @@
   "description": "Élménypont Hub — elmeny.hu 2026 redesign (direction A)",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && vite build --ssr src/ssg-entry.tsx --outDir dist-ssr --emptyOutDir && node scripts/prerender.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
