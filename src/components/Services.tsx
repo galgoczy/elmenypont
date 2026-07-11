@@ -158,6 +158,8 @@ export function Services() {
               after="/assets/photos/style-astronaut.png"
               beforeLabel="Eredeti"
               afterLabel="AI ✦"
+              beforeAlt="Eredeti vendégfotó az AI Selfiemata fotóautomatából"
+              afterAlt="Az AI Selfiemata által generált asztronauta-változat ugyanarról a vendégről"
               style={{ width: '100%' }}
             />
           </div>

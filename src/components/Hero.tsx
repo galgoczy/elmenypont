@@ -180,8 +180,7 @@ function Kiosk3D({
                 stays on screen through the whole turn */}
             <img
               src="/assets/photos/team-original.jpg"
-              alt=""
-              aria-hidden="true"
+              alt="Csoportkép az AI Selfiemata fotóautomatával egy rendezvényen"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -204,8 +203,7 @@ function Kiosk3D({
             {/* the AI-transformed version — swaps in with the second flash */}
             <img
               src="/assets/photos/team-heroes.jpg"
-              alt=""
-              aria-hidden="true"
+              alt="Ugyanaz a csoport az AI Selfiemata által generált szuperhős-képen"
               style={{
                 position: 'absolute',
                 inset: 0,

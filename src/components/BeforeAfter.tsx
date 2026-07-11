@@ -5,6 +5,9 @@ interface BeforeAfterProps {
   after: string
   beforeLabel?: string
   afterLabel?: string
+  /** descriptive img alts — the short chip labels are poor alt text */
+  beforeAlt?: string
+  afterAlt?: string
   /** initial split % */
   start?: number
   radius?: string
@@ -22,6 +25,8 @@ export function BeforeAfter({
   after,
   beforeLabel = 'Eredeti',
   afterLabel = 'AI ✦',
+  beforeAlt,
+  afterAlt,
   start = 50,
   radius = '22px',
   style,
@@ -152,14 +157,14 @@ export function BeforeAfter({
     >
       <img
         src={after}
-        alt={afterLabel}
+        alt={afterAlt || afterLabel}
         draggable={false}
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
       />
       <div style={{ position: 'absolute', inset: 0, width: `${pos}%`, overflow: 'hidden' }}>
         <img
           src={before}
-          alt={beforeLabel}
+          alt={beforeAlt || beforeLabel}
           draggable={false}
           style={{
             position: 'absolute',

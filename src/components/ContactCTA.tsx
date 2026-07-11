@@ -118,19 +118,22 @@ export function ContactCTA() {
           }}
           style={{ padding: 'clamp(36px,4vw,56px)', display: 'flex', flexDirection: 'column', gap: 16 }}
         >
+          {/* placeholders carry the visual design; name + aria-label make the
+              fields identifiable to assistive tech and agents (a placeholder
+              alone disappears on input and is not a label) */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <input required placeholder="Név" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-            <input required type="email" placeholder="E-mail" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input required name="name" autoComplete="name" aria-label="Név" placeholder="Név" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input required type="email" name="email" autoComplete="email" aria-label="E-mail" placeholder="E-mail" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <input placeholder="Telefon (opc.)" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-            <input placeholder="Esemény típusa" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input type="tel" name="phone" autoComplete="tel" aria-label="Telefon (opcionális)" placeholder="Telefon (opc.)" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input name="eventType" aria-label="Esemény típusa" placeholder="Esemény típusa" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <input placeholder="Időpont" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-            <input placeholder="Vendégszám" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input name="date" aria-label="Időpont" placeholder="Időpont" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input name="guests" aria-label="Vendégszám" placeholder="Vendégszám" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
-          <textarea placeholder="Üzenet" rows={3} style={{ ...inputStyle, resize: 'vertical' }} onFocus={onFocus} onBlur={onBlur} />
+          <textarea name="message" aria-label="Üzenet" placeholder="Üzenet" rows={3} style={{ ...inputStyle, resize: 'vertical' }} onFocus={onFocus} onBlur={onBlur} />
           <Magnetic strength={6} style={{ marginTop: 6, display: 'block' }}>
             <button
               type="submit"
