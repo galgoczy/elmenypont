@@ -530,15 +530,20 @@ export function Hero({ heroP: p }: HeroProps) {
           }}
         />
 
-        {/* hero copy */}
+        {/* hero copy — the box is inset 84px top+bottom with safe centering:
+            visually identical to true centering, but when the headline grows
+            tall on wide windows it can never climb up under the nav bar */}
         <div
           style={{
             position: 'absolute',
-            inset: 0,
+            top: 84,
+            bottom: 84,
+            left: 0,
+            right: 0,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'safe center',
             textAlign: 'center',
             padding: '0 24px',
             opacity: copyOp,
@@ -675,18 +680,12 @@ export function Hero({ heroP: p }: HeroProps) {
                 fontSize: 17,
                 color: '#46433A',
                 padding: '17px 8px',
+                // text and arrow nudge downward together
+                animation: 'ep-nudge 1.8s ease-in-out infinite',
               }}
             >
               Ismerd meg!
-              <span
-                aria-hidden="true"
-                style={{
-                  display: 'inline-block',
-                  fontSize: 18,
-                  lineHeight: 1,
-                  animation: 'ep-nudge 1.8s ease-in-out infinite',
-                }}
-              >
+              <span aria-hidden="true" style={{ fontSize: 18, lineHeight: 1 }}>
                 ↓
               </span>
             </a>
