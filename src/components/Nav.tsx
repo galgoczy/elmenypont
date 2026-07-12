@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { cl } from '../hooks/useScene'
 import { Magnetic } from './Magnetic'
 
@@ -11,8 +11,17 @@ interface NavProps {
   base?: string
 }
 
+/** the services menu items — absolute hrefs (subpages/AI) stay as-is, the
+ *  '#' anchor is prefixed with `base` so subpages point back home */
+const SERVICE_ITEMS = [
+  { href: 'https://ai.elmeny.hu', label: 'AI Selfiemata', desc: 'Valós idejű AI-képgenerálás' },
+  { href: '/greenbox', label: 'Greenbox Selfiemata', desc: 'Zöld hátteres stúdió-automata' },
+  { href: '/smart-wall', label: 'Smart Wall', desc: 'Interaktív, érinthető fal' },
+  { href: '/mosaic-wall', label: 'Mosaic Wall', desc: 'Közös mozaikkép a vendégfotókból' },
+  { href: null, label: 'AI Videomata', desc: 'Hamarosan' },
+]
+
 const LINKS = [
-  { href: '#szolgaltatasok', label: 'Szolgáltatások' },
   { href: '#elmeny', label: 'Az élmény' },
   { href: '#rolunk', label: 'Rólunk' },
   { href: '#kapcsolat', label: 'Kapcsolat' },
@@ -24,6 +33,18 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
   // hero's reveal phase).
   const mix = cl(heroP, 0.711, 0.826)
   const navDark = !scrolled && mix < 0.5
+  // services dropdown: hover on desktop, tap-toggle on touch
+  const [svcOpen, setSvcOpen] = useState(false)
+  const svcRef = useRef<HTMLDivElement | null>(null)
+  // close on tap/click outside (touch has no mouseleave)
+  useEffect(() => {
+    if (!svcOpen) return
+    const onDown = (e: PointerEvent) => {
+      if (svcRef.current && !svcRef.current.contains(e.target as Node)) setSvcOpen(false)
+    }
+    document.addEventListener('pointerdown', onDown)
+    return () => document.removeEventListener('pointerdown', onDown)
+  }, [svcOpen])
 
   const navStyle: CSSProperties = {
     position: 'fixed',
@@ -101,6 +122,119 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
         />
       </a>
       <div style={{ display: 'flex', alignItems: 'center', gap: 34 }}>
+        {/* Szolgáltatások — hover/tap dropdown of the individual services */}
+        <div
+          className="ep-nav-svc"
+          ref={svcRef}
+          onMouseEnter={() => setSvcOpen(true)}
+          onMouseLeave={() => setSvcOpen(false)}
+          style={{ position: 'relative' }}
+        >
+          <a
+            href={base ? `${base}#szolgaltatasok` : '#szolgaltatasok'}
+            style={{ ...navLinkStyle, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+            onClick={(e) => {
+              // touch devices (no real hover) just toggle the menu — the
+              // individual services are the point there; on desktop the hover
+              // already opened it, so a click navigates to the section
+              const touch =
+                typeof window !== 'undefined' &&
+                window.matchMedia &&
+                window.matchMedia('(hover: none)').matches
+              if (touch) {
+                // header tap always opens; closing is via outside-tap or
+                // picking an item (a toggle here races the outside-close)
+                e.preventDefault()
+                setSvcOpen(true)
+              } else {
+                setSvcOpen(false)
+              }
+            }}
+            aria-expanded={svcOpen}
+          >
+            Szolgáltatások
+            <span
+              aria-hidden="true"
+              style={{
+                fontSize: 10,
+                transform: svcOpen ? 'rotate(180deg)' : 'none',
+                transition: 'transform .25s',
+              }}
+            >
+              ▾
+            </span>
+          </a>
+          <div
+            role="menu"
+            style={{
+              position: 'absolute',
+              top: '100%',
+              left: '50%',
+              transform: `translateX(-50%) translateY(${svcOpen ? '10px' : '2px'})`,
+              minWidth: 268,
+              padding: 8,
+              background: 'rgba(247,242,234,.96)',
+              backdropFilter: 'blur(16px) saturate(1.4)',
+              WebkitBackdropFilter: 'blur(16px) saturate(1.4)',
+              border: '1px solid rgba(0,0,0,.08)',
+              borderRadius: 16,
+              boxShadow: '0 24px 50px -20px rgba(23,21,13,.32)',
+              opacity: svcOpen ? 1 : 0,
+              visibility: svcOpen ? 'visible' : 'hidden',
+              pointerEvents: svcOpen ? 'auto' : 'none',
+              transition: 'opacity .22s, transform .22s, visibility .22s',
+              zIndex: 5,
+            }}
+          >
+            {SERVICE_ITEMS.map((s) => {
+              const inactive = !s.href
+              const href = s.href && s.href.startsWith('#') ? `${base}${s.href}` : s.href || undefined
+              return (
+                <a
+                  key={s.label}
+                  href={href}
+                  role="menuitem"
+                  aria-disabled={inactive || undefined}
+                  onClick={(e) => {
+                    if (inactive) e.preventDefault()
+                    else setSvcOpen(false)
+                  }}
+                  className={inactive ? undefined : 'ep-svc-item'}
+                  style={{
+                    display: 'block',
+                    padding: '10px 14px',
+                    borderRadius: 10,
+                    color: inactive ? '#A8A398' : '#17150D',
+                    cursor: inactive ? 'default' : 'pointer',
+                  }}
+                >
+                  <span style={{ fontSize: 15, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {s.label}
+                    {inactive && (
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          letterSpacing: '.06em',
+                          textTransform: 'uppercase',
+                          color: '#A8A398',
+                          border: '1px solid rgba(0,0,0,.14)',
+                          borderRadius: 100,
+                          padding: '2px 7px',
+                        }}
+                      >
+                        Hamarosan
+                      </span>
+                    )}
+                  </span>
+                  {!inactive && (
+                    <span style={{ fontSize: 13, color: '#7A766B', marginTop: 1, display: 'block' }}>{s.desc}</span>
+                  )}
+                </a>
+              )
+            })}
+          </div>
+        </div>
         {LINKS.map((l) => (
           <a
             key={l.href}

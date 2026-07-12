@@ -3,24 +3,25 @@ import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
 import { Squiggle } from './Squiggle'
 
-// real AI Selfiemata output samples — ordered so no two similar styles or
-// subjects sit next to each other (checked across the loop seam too);
-// portrait sources are framed to their upper third so faces stay in view
-const STRIP: { w: number; src: string; alt: string; pos?: string }[] = [
-  { w: 280, src: '/assets/photos/ai/hero-pixar.jpg', alt: 'AI Selfiemata minta: vendégfotó Pixar-stílusú animációs karakterként', pos: '50% 22%' },
-  { w: 260, src: '/assets/photos/ai/man-space.jpg', alt: 'AI Selfiemata minta: vendég űrhajósként' },
-  { w: 300, src: '/assets/photos/ai/woman-baroque.jpg', alt: 'AI Selfiemata minta: vendég barokk festményportrén' },
-  { w: 270, src: '/assets/photos/ai/man-f1.jpg', alt: 'AI Selfiemata minta: vendég Forma-1-es versenyzőként' },
-  { w: 280, src: '/assets/photos/ai/festmeny.jpg', alt: 'AI Selfiemata minta: vendégfotó klasszikus festményként', pos: '50% 22%' },
-  { w: 290, src: '/assets/photos/ai/man-viking.jpg', alt: 'AI Selfiemata minta: vendég viking harcosként', pos: '50% 22%' },
-  { w: 280, src: '/assets/photos/ai/karikatura.jpg', alt: 'AI Selfiemata minta: vendégfotó rajzolt karikatúraként', pos: '50% 22%' },
-  { w: 300, src: '/assets/photos/ai/woman-pirate.jpg', alt: 'AI Selfiemata minta: vendég kalózkapitányként' },
+// real AI Selfiemata output samples — mixed portrait/landscape crops, each
+// tilted a few degrees for a scattered-polaroid feel; ordered so no two
+// similar styles/subjects sit adjacent (loop seam included). Portraits are
+// framed to their upper third so faces stay in view.
+const STRIP: { w: number; h: number; src: string; alt: string; pos?: string; rot: number }[] = [
+  { w: 200, h: 260, src: '/assets/photos/ai/hero-pixar.jpg', alt: 'AI Selfiemata minta: vendégfotó Pixar-stílusú animációs karakterként', pos: '50% 20%', rot: -2.5 },
+  { w: 300, h: 185, src: '/assets/photos/ai/man-space.jpg', alt: 'AI Selfiemata minta: vendég űrhajósként', rot: 1.8 },
+  { w: 195, h: 255, src: '/assets/photos/ai/woman-baroque.jpg', alt: 'AI Selfiemata minta: vendég barokk festményportrén', pos: '50% 22%', rot: 2.4 },
+  { w: 300, h: 190, src: '/assets/photos/ai/man-f1.jpg', alt: 'AI Selfiemata minta: vendég Forma-1-es versenyzőként', rot: -1.6 },
+  { w: 205, h: 265, src: '/assets/photos/ai/festmeny.jpg', alt: 'AI Selfiemata minta: vendégfotó klasszikus festményként', pos: '50% 20%', rot: 2 },
+  { w: 290, h: 180, src: '/assets/photos/ai/man-viking.jpg', alt: 'AI Selfiemata minta: vendég viking harcosként', pos: '50% 24%', rot: -2.2 },
+  { w: 200, h: 260, src: '/assets/photos/ai/karikatura.jpg', alt: 'AI Selfiemata minta: vendégfotó rajzolt karikatúraként', pos: '50% 20%', rot: 1.4 },
+  { w: 210, h: 265, src: '/assets/photos/ai/woman-pirate.jpg', alt: 'AI Selfiemata minta: vendég kalózkapitányként', pos: '50% 22%', rot: -1.8 },
 ]
 
 function StripRow({ hidden }: { hidden?: boolean }) {
   // trailing padding instead of a track gap keeps the -50% loop seamless
   return (
-    <div style={{ display: 'flex', gap: 16, paddingRight: 16 }} aria-hidden={hidden || undefined}>
+    <div style={{ display: 'flex', gap: 26, paddingRight: 26, alignItems: 'center' }} aria-hidden={hidden || undefined}>
       {STRIP.map((s, i) => (
         <ImageSlot
           key={i}
@@ -30,7 +31,14 @@ function StripRow({ hidden }: { hidden?: boolean }) {
           src={s.src}
           alt={hidden ? '' : s.alt}
           position={s.pos}
-          style={{ width: s.w, height: 190, display: 'block', flex: 'none' }}
+          style={{
+            width: s.w,
+            height: s.h,
+            display: 'block',
+            flex: 'none',
+            transform: `rotate(${s.rot}deg)`,
+            boxShadow: '0 18px 40px -20px rgba(23,21,13,.35)',
+          }}
         />
       ))}
     </div>
@@ -112,11 +120,13 @@ export function WhatWeDo() {
         </Reveal>
       </div>
 
-      {/* auto-scrolling photo reference strip (client-fillable) */}
+      {/* auto-scrolling photo reference strip — vertical padding so the
+          tilted cards don't clip at the top/bottom edges */}
       <Reveal
         delay={160}
         style={{
-          marginTop: 'clamp(44px,6vw,72px)',
+          marginTop: 'clamp(36px,5vw,60px)',
+          padding: '22px 0',
           position: 'relative',
           overflow: 'hidden',
           WebkitMask: 'linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)',

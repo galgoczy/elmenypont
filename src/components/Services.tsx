@@ -36,7 +36,10 @@ export function Services() {
       style={{
         position: 'relative',
         background: '#F6F1E9',
-        padding: '0 clamp(24px,6vw,90px) clamp(70px,9vw,120px)',
+        // a touch of top padding + scroll-margin so the "Amit a rendezvényedre
+        // hozunk" heading lands just below the fixed nav when linked to
+        padding: 'clamp(24px,4vw,56px) clamp(24px,6vw,90px) clamp(70px,9vw,120px)',
+        scrollMarginTop: '72px',
       }}
     >
       <Doodle n={6} color="rgba(0,0,0,.05)" size={78} right="2%" top="8%" anim="float" duration={9} rotate="9deg" />

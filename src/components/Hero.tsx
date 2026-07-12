@@ -355,6 +355,39 @@ function Kiosk3D({
  * stage dissolves to cream while the headline + stat chips rise in.
  */
 export function Hero({ heroP: p }: HeroProps) {
+  // Click-to-play: some visitors tap instead of scrolling. A tween drives
+  // the window scroll through the hero's phases (spin → flash → photo →
+  // copy rise) up to the snap point, so the whole entrance plays on tap.
+  // Any manual scroll/tap aborts it so it never fights the user.
+  const playRaf = useRef(0)
+  const playHero = () => {
+    cancelAnimationFrame(playRaf.current)
+    const startY = window.scrollY
+    const targetY = 1.28 * window.innerHeight // the reveal snap marker (top:128vh)
+    if (targetY - startY < 8) return
+    const t0 = performance.now()
+    const DUR = 3000
+    const abort = () => {
+      cancelAnimationFrame(playRaf.current)
+      window.removeEventListener('wheel', abort)
+      window.removeEventListener('touchstart', abort)
+      window.removeEventListener('keydown', abort)
+    }
+    // user-initiated scroll cancels; our own scrollTo below doesn't fire wheel
+    window.addEventListener('wheel', abort, { passive: true })
+    window.addEventListener('touchstart', abort, { passive: true })
+    window.addEventListener('keydown', abort)
+    const step = (now: number) => {
+      const k = Math.min(1, (now - t0) / DUR)
+      const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2 // ease-in-out cubic
+      window.scrollTo(0, startY + (targetY - startY) * e)
+      if (k < 1) playRaf.current = requestAnimationFrame(step)
+      else abort()
+    }
+    playRaf.current = requestAnimationFrame(step)
+  }
+  useEffect(() => () => cancelAnimationFrame(playRaf.current), [])
+
   // --- choreography -------------------------------------------------
   // full figure facing us → ONE full turn while drifting a bit closer →
   // flash + sample photo → the copy rises in front while the kiosk just
@@ -733,8 +766,11 @@ export function Hero({ heroP: p }: HeroProps) {
           </div>
         </div>
 
-        {/* scroll hint */}
-        <div
+        {/* scroll hint — also a play button: tap to run the whole entrance */}
+        <button
+          type="button"
+          onClick={playHero}
+          aria-label="Animáció lejátszása"
           style={{
             position: 'absolute',
             bottom: 34,
@@ -746,10 +782,16 @@ export function Hero({ heroP: p }: HeroProps) {
             gap: 8,
             opacity: hintOp,
             color: hintColor,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'inherit',
+            padding: '4px 12px',
+            pointerEvents: Number(hintOp) > 0.05 ? 'auto' : 'none',
           }}
         >
           <span style={{ fontSize: 12, letterSpacing: '.16em', textTransform: 'uppercase' }}>
-            Görgess
+            Görgess vagy koppints
           </span>
           <span
             style={{
@@ -759,7 +801,7 @@ export function Hero({ heroP: p }: HeroProps) {
               animation: 'ep-bob 1.8s ease-in-out infinite',
             }}
           />
-        </div>
+        </button>
       </div>
     </section>
   )

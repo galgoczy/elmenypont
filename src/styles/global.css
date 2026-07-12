@@ -422,6 +422,29 @@ a {
   }
 }
 
+/* services dropdown item hover */
+.ep-svc-item {
+  transition: background 0.18s;
+}
+.ep-svc-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+/* the services menu stays available on mobile (unlike the plain nav links)
+   — it's the primary way to reach the individual services from the header;
+   right-align the panel so it never spills off the small screen */
+@media (max-width: 820px) {
+  /* pin to the viewport edge (the container is left-aligned, so an absolute
+     right:0 would push the panel off-screen). Fixed keeps it under the fixed
+     nav; !important beats the inline centering. */
+  .ep-nav-svc [role='menu'] {
+    position: fixed !important;
+    top: 56px !important;
+    left: auto !important;
+    right: 12px !important;
+    transform: translateY(6px) !important;
+  }
+}
+
 /* Service subpage hero: copy + product media side by side on desktop,
    stacked (media below) on mobile. */
 .ep-svc-hero {
