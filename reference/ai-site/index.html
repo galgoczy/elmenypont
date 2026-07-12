@@ -1651,8 +1651,16 @@ if(window.location.hash) history.replaceState(null, '', window.location.pathname
   <div class="cta-badge">AI Selfiemata</div>
   <h2 class="section-h2 white reveal">Legyen a rendezvényed<br>a legemlékezetesebb <span class="span-blue">élmény.</span></h2>
   <p class="reveal">Kérj ingyenes bemutatót – megmutatjuk élőben.</p>
-  <div class="cta-btns reveal">
-    <a id="ctaBemutatoBtn" href="#" class="btn-cta">Kérek AI bemutatót →</a>
+  <div class="cta-btns reveal" style="flex-direction:column; align-items:center; gap:14px;">
+    <form id="demoForm" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; align-items:center;">
+      <input
+        type="email" name="demoEmail" required
+        placeholder="E-mail címed — ide küldjük a demót"
+        aria-label="E-mail cím a demóhoz"
+        style="padding:14px 20px; border-radius:999px; border:1.5px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#fff; min-width:280px; font-family:'DM Sans',sans-serif; font-size:15px; outline:none;">
+      <button type="submit" id="demoSubmitBtn" class="btn-cta" style="border:none; cursor:pointer;">Kérek AI bemutatót →</button>
+    </form>
+    <div id="demoStatus" style="display:none; font-size:14px;"></div>
     <a href="#ajanlat" class="btn-cta-out">Ajánlatot kérek!</a>
   </div>
 </section>
@@ -2225,9 +2233,6 @@ document.querySelectorAll('.stat-card,.ctag,.spill,.brief-row').forEach(el=>{
   var simaHref = 'mailto:' + em
     + '?subject=' + encodeURIComponent('Erdeklodes az AI Selfiemata oldalrol')
     + '&body='    + encodeURIComponent('Kedves Elmenypont csapat!');
-  var ctaHref = 'mailto:' + em
-    + '?subject=' + encodeURIComponent('AI bemutatot kerek')
-    + '&body='    + encodeURIComponent('Kedves Elmenypont csapat!\nKerem kuldjetek reszemre online demot az AI Selfiemata mukodeserol!');
 
   function setLink(id, href, szoveg) {
     var el = document.getElementById(id);
@@ -2236,26 +2241,43 @@ document.querySelectorAll('.stat-card,.ctag,.spill,.brief-row').forEach(el=>{
     if (szoveg) el.textContent = szoveg;
   }
 
-  var TG_TOKEN = '8793777056:AAG5IJwXOFh66wQ-nBjbKwJZSw2lviO3ICM';
-  var TG_CHAT  = '5275561903';
-
-  function sendTelegram(text) {
-    fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT, text: text, parse_mode: 'HTML' })
-    }).catch(function(e) { console.warn('Telegram hiba:', e); });
-  }
+  // Telegram értesítés kizárólag szerveroldalról megy (send_demo.php /
+  // send_mail.php + config.php) — bot token soha nem kerülhet a böngészőbe!
 
   function init() {
     setLink('contactEmailLink', simaHref, em);
     setLink('footerEmailLink',  simaHref, em);
 
-    var cta = document.getElementById('ctaBemutatoBtn');
-    if (cta) {
-      cta.href = ctaHref;
-      cta.addEventListener('click', function() {
-        sendTelegram('Bemutato keres! Valaki rakattintott a Kerek AI bemutatot gombra.');
+    // Demo-kérés: e-mail bekérés → send_demo.php küldi a Telegram jelzést
+    // és az arculatos levelet a demó linkjével + jelszavával
+    var demoForm = document.getElementById('demoForm');
+    if (demoForm) {
+      demoForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn    = document.getElementById('demoSubmitBtn');
+        var status = document.getElementById('demoStatus');
+        var email  = demoForm.querySelector('[name="demoEmail"]').value.trim();
+        if (!email) return;
+        btn.disabled = true;
+        btn.textContent = 'Küldés...';
+        fetch('https://ai.elmeny.hu/send_demo.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        }).then(function(r) { return r.json(); }).then(function(result) {
+          if (!result.ok) throw new Error(result.error || 'hiba');
+          status.style.display = 'block';
+          status.style.color = '#4ade80';
+          status.textContent = '✅ Elküldtük! Nézd meg a postafiókod — ott a demó linkje és jelszava.';
+          demoForm.reset();
+        }).catch(function() {
+          status.style.display = 'block';
+          status.style.color = '#f87171';
+          status.textContent = '❌ Nem sikerült elküldeni. Írj nekünk: hello@elmeny.hu';
+        }).finally(function() {
+          btn.disabled = false;
+          btn.textContent = 'Kérek AI bemutatót →';
+        });
       });
     }
 

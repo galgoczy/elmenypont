@@ -323,14 +323,14 @@ const STATIONS = [
   },
   {
     key: 'greenbox',
-    href: 'https://greenbox.elmeny.hu',
+    href: '/greenbox',
     label: 'Greenbox stúdió',
     color: '#48D880',
     text: 'Zöld hátteres stúdió-automata profi világítással: a vendégek bármilyen helyszín vagy céges arculat elé varázsolhatók.',
   },
   {
     key: 'smartwall',
-    href: 'https://smart-wall.hu',
+    href: '/smart-wall',
     label: 'Smart Wall',
     color: '#E94A35',
     text: 'Interaktív, érinthető vetített fal — termékbemutató, infografika és játék egyetlen látványos felületen.',

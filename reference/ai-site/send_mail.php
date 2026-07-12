@@ -17,14 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// ── Konfiguráció ──
-$SMTP_HOST  = 'smtp.office365.com';
-$SMTP_PORT  = 587;
-$SMTP_USER  = 'info1@elmeny.hu';
-$SMTP_PASS  = 'Epass015';
-$FROM_NAME  = 'Élménypont';
-$FROM_ADDR  = 'info1@elmeny.hu';
-$ADMIN_ADDR = 'galgoczy@elmeny.hu';
+// ── Konfiguráció (jelszavak: config.php, csak a szerveren kitöltve) ──
+require __DIR__ . '/config.php';
+$SMTP_HOST  = SMTP_HOST;
+$SMTP_PORT  = SMTP_PORT;
+$SMTP_USER  = SMTP_USER;
+$SMTP_PASS  = SMTP_PASS;
+$FROM_NAME  = FROM_NAME;
+$FROM_ADDR  = FROM_ADDR;
+$ADMIN_ADDR = ADMIN_ADDR;
 
 // ── Adatok beolvasása ──
 $raw  = file_get_contents('php://input');
@@ -72,6 +73,17 @@ function createMailer($host, $port, $user, $pass) {
 }
 
 $errors = [];
+
+// ── 0. Telegram értesítés (szerveroldalról — a token nem kerül a böngészőbe) ──
+send_telegram(
+    "📩 <b>Új ajánlatkérés – AI Selfiemata</b>\n"
+    . 'Név: '     . ($nev     ?: '–') . "\n"
+    . 'Email: '   . $email            . "\n"
+    . 'Telefon: ' . ($telefon ?: '–') . "\n"
+    . 'Dátum: '   . ($datum   ?: '–') . "\n"
+    . 'Típus: '   . ($tipus   ?: '–') . "\n"
+    . 'Létszám: ' . ($letszam ?: '–')
+);
 
 // ── 1. Összefoglaló Gergőnek (nincs Reply-To) ──
 try {

@@ -7,6 +7,16 @@ const EMAIL = 'hello@elmeny.hu'
 const PHONE_LABEL = '+36 20 468 0489'
 const PHONE_HREF = 'tel:+36204680489'
 
+/** multi-select service chips — the last one signals "several of these" */
+const SERVICES = [
+  'AI Selfiemata',
+  'Greenbox Selfiemata',
+  'Smart Wall',
+  'Mosaic Wall',
+  'Selfiebox',
+  'Többfélére kérek ajánlatot!',
+]
+
 const inputStyle: CSSProperties = {
   width: '100%',
   background: '#F6F1E9',
@@ -29,6 +39,41 @@ const onBlur = (e: ReactFocusEvent<HTMLElement>) => {
 
 export function ContactCTA() {
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+  const [picked, setPicked] = useState<string[]>([])
+
+  const toggleService = (s: string) =>
+    setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))
+
+  const submit = async (form: HTMLFormElement) => {
+    setSending(true)
+    setError('')
+    const f = new FormData(form)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: f.get('name'),
+          email: f.get('email'),
+          phone: f.get('phone'),
+          services: picked,
+          eventType: f.get('eventType'),
+          date: f.get('date'),
+          guests: f.get('guests'),
+          message: f.get('message'),
+        }),
+      })
+      const json = await res.json().catch(() => ({ ok: false }))
+      if (!res.ok || !json.ok) throw new Error(json.error || 'Küldési hiba')
+      setSent(true)
+    } catch {
+      setError(`Nem sikerült elküldeni — írj nekünk közvetlenül: ${EMAIL}`)
+    } finally {
+      setSending(false)
+    }
+  }
 
   return (
     <section
@@ -114,10 +159,43 @@ export function ContactCTA() {
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            setSent(true)
+            if (!sending && !sent) void submit(e.currentTarget)
           }}
           style={{ padding: 'clamp(36px,4vw,56px)', display: 'flex', flexDirection: 'column', gap: 16 }}
         >
+          {/* which service(s) — multi-select chips */}
+          <div>
+            <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 10 }}>
+              Mi érdekel?
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {SERVICES.map((s) => {
+                const on = picked.includes(s)
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => toggleService(s)}
+                    style={{
+                      fontFamily: 'inherit',
+                      fontSize: 14,
+                      fontWeight: 600,
+                      padding: '9px 16px',
+                      borderRadius: 100,
+                      cursor: 'pointer',
+                      border: `1.5px solid ${on ? '#17150D' : 'rgba(0,0,0,.16)'}`,
+                      background: on ? '#17150D' : 'transparent',
+                      color: on ? '#F6F1E9' : '#46433A',
+                      transition: 'background .2s, color .2s, border-color .2s',
+                    }}
+                  >
+                    {s}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
           {/* placeholders carry the visual design; name + aria-label make the
               fields identifiable to assistive tech and agents (a placeholder
               alone disappears on input and is not a label) */}
@@ -153,9 +231,14 @@ export function ContactCTA() {
               onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 30px -14px rgba(23,21,13,.5)')}
               onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
             >
-              {sent ? 'Köszönjük! Hamarosan jelentkezünk ✓' : 'Ajánlatot kérek →'}
+              {sent ? 'Köszönjük! Hamarosan jelentkezünk ✓' : sending ? 'Küldés…' : 'Ajánlatot kérek →'}
             </button>
           </Magnetic>
+          {error && (
+            <p role="alert" style={{ fontSize: 14, color: '#C6402E', textAlign: 'center' }}>
+              {error}
+            </p>
+          )}
         </form>
       </Reveal>
     </section>

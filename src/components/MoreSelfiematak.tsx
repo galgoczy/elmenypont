@@ -6,7 +6,8 @@ import { TiltCard } from './TiltCard'
 const CARDS = [
   {
     href: '/greenbox',
-    slot: 'Greenbox háttércsere minta',
+    src: '/assets/photos/greenbox-before-after.jpg',
+    alt: 'Greenbox háttércsere: csapat a zöld háttér előtt és ugyanők a tengerparton',
     title: 'Greenbox Selfiemata',
     body: 'Bármilyen háttér zöld vászon előtt: egzotikus helyszín vagy a céges arculat.',
     link: 'Greenbox fotózás bérlés →',
@@ -15,7 +16,8 @@ const CARDS = [
   {
     // no standalone page — the CTA leads to the quote form instead
     href: '#kapcsolat',
-    slot: 'Selfiebox fotósarok minta',
+    src: '/assets/photos/team-original.jpg',
+    alt: 'Klasszikus fotósarokban készült csoportkép egy rendezvényen',
     title: 'Selfiebox',
     body: 'Klasszikus fotósarok azonnali nyomtatással — egyszerű és mindig működik.',
     link: 'Kérj ajánlatot →',
@@ -63,7 +65,7 @@ export function MoreSelfiematak() {
                     height: '100%',
                   }}
                 >
-                  <ImageSlot shape="rect" fit="cover" placeholder={c.slot} style={{ width: '100%', height: 230, display: 'block' }} />
+                  <ImageSlot shape="rect" fit="cover" src={c.src} alt={c.alt} style={{ width: '100%', height: 230, display: 'block' }} />
                   <div style={{ padding: 28 }}>
                     <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 25, letterSpacing: '-.01em' }}>
                       {c.title}

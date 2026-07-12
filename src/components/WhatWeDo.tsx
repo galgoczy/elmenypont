@@ -3,17 +3,18 @@ import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
 import { Squiggle } from './Squiggle'
 
-// real AI Selfiemata output samples — deliberately varied styles and
-// subjects; widths keep the prototype's strip rhythm (~190px tall)
-const STRIP: { w: number; src: string; alt: string }[] = [
-  { w: 300, src: '/assets/photos/ai/hero-pixar.jpg', alt: 'AI Selfiemata minta: vendégfotó Pixar-stílusú animációs karakterként' },
-  { w: 260, src: '/assets/photos/ai/man-lego.jpg', alt: 'AI Selfiemata minta: vendég LEGO-figuraként' },
-  { w: 300, src: '/assets/photos/ai/woman-pirate.jpg', alt: 'AI Selfiemata minta: vendég kalózkapitányként' },
-  { w: 250, src: '/assets/photos/ai/man-space.jpg', alt: 'AI Selfiemata minta: vendég űrhajósként' },
+// real AI Selfiemata output samples — ordered so no two similar styles or
+// subjects sit next to each other (checked across the loop seam too);
+// portrait sources are framed to their upper third so faces stay in view
+const STRIP: { w: number; src: string; alt: string; pos?: string }[] = [
+  { w: 280, src: '/assets/photos/ai/hero-pixar.jpg', alt: 'AI Selfiemata minta: vendégfotó Pixar-stílusú animációs karakterként', pos: '50% 22%' },
+  { w: 260, src: '/assets/photos/ai/man-space.jpg', alt: 'AI Selfiemata minta: vendég űrhajósként' },
   { w: 300, src: '/assets/photos/ai/woman-baroque.jpg', alt: 'AI Selfiemata minta: vendég barokk festményportrén' },
   { w: 270, src: '/assets/photos/ai/man-f1.jpg', alt: 'AI Selfiemata minta: vendég Forma-1-es versenyzőként' },
-  { w: 280, src: '/assets/photos/ai/woman-viking.jpg', alt: 'AI Selfiemata minta: vendég viking harcosként' },
-  { w: 280, src: '/assets/photos/ai/karikatura.jpg', alt: 'AI Selfiemata minta: vendégfotó rajzolt karikatúraként' },
+  { w: 280, src: '/assets/photos/ai/festmeny.jpg', alt: 'AI Selfiemata minta: vendégfotó klasszikus festményként', pos: '50% 22%' },
+  { w: 290, src: '/assets/photos/ai/man-viking.jpg', alt: 'AI Selfiemata minta: vendég viking harcosként', pos: '50% 22%' },
+  { w: 280, src: '/assets/photos/ai/karikatura.jpg', alt: 'AI Selfiemata minta: vendégfotó rajzolt karikatúraként', pos: '50% 22%' },
+  { w: 300, src: '/assets/photos/ai/woman-pirate.jpg', alt: 'AI Selfiemata minta: vendég kalózkapitányként' },
 ]
 
 function StripRow({ hidden }: { hidden?: boolean }) {
@@ -28,6 +29,7 @@ function StripRow({ hidden }: { hidden?: boolean }) {
           fit="cover"
           src={s.src}
           alt={hidden ? '' : s.alt}
+          position={s.pos}
           style={{ width: s.w, height: 190, display: 'block', flex: 'none' }}
         />
       ))}
