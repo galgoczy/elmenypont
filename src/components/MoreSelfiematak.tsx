@@ -28,11 +28,14 @@ const CARDS = [
 export function MoreSelfiematak() {
   return (
     <section
+      id="selfiebox"
       className="ep-deco"
       style={{
         position: 'relative',
         background: '#F6F1E9',
         padding: '0 clamp(24px,6vw,90px) clamp(40px,5vw,70px)',
+        // linked from the nav's services dropdown — land below the fixed nav
+        scrollMarginTop: '96px',
       }}
     >
       <Doodle n={1} color="rgba(0,0,0,.05)" size={88} left="1%" top="30%" anim="sway" duration={12} rotate="-7deg" />

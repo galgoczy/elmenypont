@@ -380,7 +380,10 @@ export function Hero({ heroP: p }: HeroProps) {
     const step = (now: number) => {
       const k = Math.min(1, (now - t0) / DUR)
       const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2 // ease-in-out cubic
-      window.scrollTo(0, startY + (targetY - startY) * e)
+      // behavior MUST be instant: the page has CSS scroll-behavior:smooth,
+      // so a plain scrollTo would restart a smooth animation every frame
+      // and the tween would never actually move
+      window.scrollTo({ top: startY + (targetY - startY) * e, behavior: 'instant' as ScrollBehavior })
       if (k < 1) playRaf.current = requestAnimationFrame(step)
       else abort()
     }

@@ -18,6 +18,7 @@ const SERVICE_ITEMS = [
   { href: '/greenbox', label: 'Greenbox Selfiemata', desc: 'Zöld hátteres stúdió-automata' },
   { href: '/smart-wall', label: 'Smart Wall', desc: 'Interaktív, érinthető fal' },
   { href: '/mosaic-wall', label: 'Mosaic Wall', desc: 'Közös mozaikkép a vendégfotókból' },
+  { href: '#selfiebox', label: 'Selfiebox', desc: 'Klasszikus fotósarok azonnali nyomtatással' },
   { href: null, label: 'AI Videomata', desc: 'Hamarosan' },
 ]
 
@@ -170,15 +171,11 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
               position: 'absolute',
               top: '100%',
               left: '50%',
-              transform: `translateX(-50%) translateY(${svcOpen ? '10px' : '2px'})`,
-              minWidth: 268,
-              padding: 8,
-              background: 'rgba(247,242,234,.96)',
-              backdropFilter: 'blur(16px) saturate(1.4)',
-              WebkitBackdropFilter: 'blur(16px) saturate(1.4)',
-              border: '1px solid rgba(0,0,0,.08)',
-              borderRadius: 16,
-              boxShadow: '0 24px 50px -20px rgba(23,21,13,.32)',
+              transform: `translateX(-50%) translateY(${svcOpen ? '0' : '-6px'})`,
+              // the visual gap below the trigger lives INSIDE the panel as
+              // transparent padding: crossing it keeps the pointer within
+              // the wrapper, so mouseleave doesn't close the menu mid-way
+              paddingTop: 10,
               opacity: svcOpen ? 1 : 0,
               visibility: svcOpen ? 'visible' : 'hidden',
               pointerEvents: svcOpen ? 'auto' : 'none',
@@ -186,6 +183,18 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
               zIndex: 5,
             }}
           >
+            <div
+              style={{
+                minWidth: 268,
+                padding: 8,
+                background: 'rgba(247,242,234,.96)',
+                backdropFilter: 'blur(16px) saturate(1.4)',
+                WebkitBackdropFilter: 'blur(16px) saturate(1.4)',
+                border: '1px solid rgba(0,0,0,.08)',
+                borderRadius: 16,
+                boxShadow: '0 24px 50px -20px rgba(23,21,13,.32)',
+              }}
+            >
             {SERVICE_ITEMS.map((s) => {
               const inactive = !s.href
               const href = s.href && s.href.startsWith('#') ? `${base}${s.href}` : s.href || undefined
@@ -233,6 +242,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
                 </a>
               )
             })}
+            </div>
           </div>
         </div>
         {LINKS.map((l) => (
