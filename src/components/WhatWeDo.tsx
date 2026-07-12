@@ -3,21 +3,32 @@ import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
 import { Squiggle } from './Squiggle'
 
-// widths mirror the prototype's varied strip rhythm; ~1/3 height (190px)
-const STRIP = [300, 260, 300, 250, 300, 270]
+// real AI Selfiemata output samples — deliberately varied styles and
+// subjects; widths keep the prototype's strip rhythm (~190px tall)
+const STRIP: { w: number; src: string; alt: string }[] = [
+  { w: 300, src: '/assets/photos/ai/hero-pixar.jpg', alt: 'AI Selfiemata minta: vendégfotó Pixar-stílusú animációs karakterként' },
+  { w: 260, src: '/assets/photos/ai/man-lego.jpg', alt: 'AI Selfiemata minta: vendég LEGO-figuraként' },
+  { w: 300, src: '/assets/photos/ai/woman-pirate.jpg', alt: 'AI Selfiemata minta: vendég kalózkapitányként' },
+  { w: 250, src: '/assets/photos/ai/man-space.jpg', alt: 'AI Selfiemata minta: vendég űrhajósként' },
+  { w: 300, src: '/assets/photos/ai/woman-baroque.jpg', alt: 'AI Selfiemata minta: vendég barokk festményportrén' },
+  { w: 270, src: '/assets/photos/ai/man-f1.jpg', alt: 'AI Selfiemata minta: vendég Forma-1-es versenyzőként' },
+  { w: 280, src: '/assets/photos/ai/woman-viking.jpg', alt: 'AI Selfiemata minta: vendég viking harcosként' },
+  { w: 280, src: '/assets/photos/ai/karikatura.jpg', alt: 'AI Selfiemata minta: vendégfotó rajzolt karikatúraként' },
+]
 
 function StripRow({ hidden }: { hidden?: boolean }) {
   // trailing padding instead of a track gap keeps the -50% loop seamless
   return (
     <div style={{ display: 'flex', gap: 16, paddingRight: 16 }} aria-hidden={hidden || undefined}>
-      {STRIP.map((w, i) => (
+      {STRIP.map((s, i) => (
         <ImageSlot
           key={i}
           shape="rounded"
           radius={16}
           fit="cover"
-          placeholder="Rendezvény fotó"
-          style={{ width: w, height: 190, display: 'block', flex: 'none' }}
+          src={s.src}
+          alt={hidden ? '' : s.alt}
+          style={{ width: s.w, height: 190, display: 'block', flex: 'none' }}
         />
       ))}
     </div>

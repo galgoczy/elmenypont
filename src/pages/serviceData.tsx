@@ -24,7 +24,7 @@ export const GREENBOX: ServiceData = {
   crumb: 'Greenbox Selfiemata',
   title: (
     <>
-      Bármilyen háttér, <Boxed bg="#48D880">egy gombnyomásra.</Boxed>
+      Bármilyen háttér, egy <Boxed bg="#48D880">gombnyomásra.</Boxed>
     </>
   ),
   accent: '#48D880',
@@ -88,16 +88,20 @@ export const GREENBOX: ServiceData = {
     },
   ],
   useCases: ['Céges rendezvény', 'Esküvő', 'Születésnap', 'Csapatépítő', 'Brandaktiváció'],
+  heroImage: {
+    src: '/assets/photos/greenbox-before-after.jpg',
+    alt: 'Greenbox előtte-utána: baráti társaság a zöld háttér előtt, majd ugyanők egy napsütötte tengerparton',
+  },
   images: [
+    {
+      src: '/assets/photos/greenbox-studio-setup.jpg',
+      alt: 'A greenbox stúdió felépítése a helyszínen: zöld háttér, stúdióvilágítás és a fotóautomata',
+      rotate: -1.1,
+    },
     {
       src: '/assets/photos/greenbox-gatsby.jpg',
       alt: 'Gatsby-jelmezes csapat fotózkodik a greenbox zöld háttere előtt egy rendezvényen',
-      rotate: -1.2,
-    },
-    {
-      src: '/assets/photos/greenbox-studio.jpg',
-      alt: 'Greenbox stúdió-automata működés közben: vendégek a zöld háttér és a stúdióvilágítás előtt',
-      rotate: 1.1,
+      rotate: 1,
     },
   ],
   price: {
@@ -198,7 +202,7 @@ export const SMART_WALL: ServiceData = {
   },
   images: [
     {
-      src: '/assets/photos/smartwall-nespresso.jpg',
+      src: '/assets/photos/smartwall-event.jpg',
       alt: 'Vendégek a Nespresso rendezvényén az interaktív Smart Wall kávétérképét nézik',
       rotate: -1.1,
     },
@@ -248,7 +252,7 @@ export const MOSAIC_WALL: ServiceData = {
   crumb: 'Mosaic Wall',
   title: (
     <>
-      Mindenki hozzátesz a <Boxed bg="#E94A35">nagy egészhez.</Boxed>
+      Mindenki hozzátesz a nagy <Boxed bg="#E94A35">egészhez.</Boxed>
     </>
   ),
   accent: '#E94A35',
@@ -301,16 +305,15 @@ export const MOSAIC_WALL: ServiceData = {
     },
   ],
   useCases: ['Nagylétszámú céges esemény', 'Konferencia', 'Fesztivál', 'Jubileum', 'Brandaktiváció'],
+  heroImage: {
+    src: '/assets/photos/mosaic-wall-real.jpg',
+    alt: 'Kész Mosaic Wall egy rendezvényen: vendégek ragasztják fel az utolsó fotómatricákat a nagy közös képre',
+  },
   images: [
     {
       src: '/assets/photos/mosaic-grid.jpg',
       alt: 'Rendezvényfotókból összeálló mozaikrács — sok kicsi képből egy nagy kompozíció',
       rotate: -1,
-    },
-    {
-      src: '/assets/photos/mosaic-hero.jpg',
-      alt: 'Ünneplő tömeg konfettiesőben egy nagyszabású rendezvényen',
-      rotate: 1.1,
     },
   ],
   price: {

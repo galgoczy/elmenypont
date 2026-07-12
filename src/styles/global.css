@@ -422,6 +422,20 @@ a {
   }
 }
 
+/* Service subpage hero: copy + product media side by side on desktop,
+   stacked (media below) on mobile. */
+.ep-svc-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .ep-svc-hero {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+}
+
 /* "Miért mi" intro column: sticky beside the cards on desktop only —
    on mobile the stacked cards must push it away naturally instead of
    scrolling underneath it. */

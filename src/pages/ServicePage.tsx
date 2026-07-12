@@ -21,8 +21,10 @@ export interface ServiceData {
   featuresTitle: string
   features: { color: string; title: string; body: string }[]
   useCases?: string[]
-  /** silent looping product video shown under the header copy */
+  /** silent looping product video — plays as the hero's media card */
   video?: { src: string; poster: string; label: string }
+  /** hero media card when there is no video */
+  heroImage?: { src: string; alt: string }
   /** real product photos — sticker-tilted band under "Hogyan működik" */
   images?: { src: string; alt: string; rotate?: number }[]
   price: {
@@ -63,16 +65,19 @@ export function ServicePage({ data }: { data: ServiceData }) {
       <CursorFX />
       <Nav scrolled={scrolled} base="/" />
       <main>
-        {/* header */}
+        {/* header — copy left, product media right on desktop; the top
+            padding sits a quarter-line tighter than the sections' rhythm
+            so the H1 rides higher in the viewport */}
         <header
           style={{
             position: 'relative',
-            padding: 'clamp(150px,18vw,210px) clamp(24px,6vw,90px) clamp(40px,5vw,70px)',
+            padding: 'clamp(140px,16.5vw,188px) clamp(24px,6vw,90px) clamp(40px,5vw,70px)',
           }}
         >
-          <Doodle n={2} color="rgba(0,0,0,.05)" size={110} right="6%" top="24%" anim="float" duration={9} rotate="8deg" />
+          <Doodle n={2} color="rgba(0,0,0,.05)" size={110} right="6%" top="14%" anim="float" duration={9} rotate="8deg" />
           <Doodle n={6} color="rgba(0,0,0,.04)" size={80} left="4%" bottom="4%" anim="float2" duration={11} rotate="-6deg" />
-          <div style={wrap}>
+          <div className="ep-svc-hero" style={wrap}>
+            <div>
             <Reveal
               as="p"
               style={{
@@ -91,8 +96,10 @@ export function ServicePage({ data }: { data: ServiceData }) {
               style={{
                 fontFamily: 'Syne',
                 fontWeight: 500,
-                fontSize: 'clamp(38px,6vw,84px)',
-                lineHeight: 1.02,
+                // sized for the split hero column — at 84px the boxed accent
+                // words broke into chunky two-line blocks
+                fontSize: 'clamp(36px,4.6vw,64px)',
+                lineHeight: 1.04,
                 letterSpacing: '-.03em',
                 color: '#17150D',
                 maxWidth: '18ch',
@@ -136,24 +143,42 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 Minden szolgáltatás
               </a>
             </Reveal>
-            {data.video && (
-              <Reveal variant="mask" radius={24} delay={220} style={{ marginTop: 'clamp(36px,5vw,60px)' }}>
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  poster={data.video.poster}
-                  aria-label={data.video.label}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    borderRadius: 24,
-                    boxShadow: '0 34px 70px -28px rgba(23,21,13,.45)',
-                  }}
-                >
-                  <source src={data.video.src} type="video/mp4" />
-                </video>
+            </div>
+            {(data.video || data.heroImage) && (
+              <Reveal variant="mask" radius={24} delay={200}>
+                {/* gently tilted media card — the video plays as a "living
+                    photo" beside the copy */}
+                {data.video ? (
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    poster={data.video.poster}
+                    aria-label={data.video.label}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      borderRadius: 24,
+                      boxShadow: '0 34px 70px -28px rgba(23,21,13,.45)',
+                      transform: 'rotate(1.4deg)',
+                    }}
+                  >
+                    <source src={data.video.src} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img
+                    src={data.heroImage!.src}
+                    alt={data.heroImage!.alt}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      borderRadius: 24,
+                      boxShadow: '0 34px 70px -28px rgba(23,21,13,.45)',
+                      transform: 'rotate(1.4deg)',
+                    }}
+                  />
+                )}
               </Reveal>
             )}
           </div>

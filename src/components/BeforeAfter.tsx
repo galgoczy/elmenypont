@@ -166,7 +166,7 @@ export function BeforeAfter({
           height: '100%',
           objectFit: 'cover',
           // faces sit in the upper third of these shots — keep that in frame
-          objectPosition: '50% 25%',
+          objectPosition: '50% 15%',
         }}
       />
       <div style={{ position: 'absolute', inset: 0, width: `${pos}%`, overflow: 'hidden' }}>
@@ -181,7 +181,7 @@ export function BeforeAfter({
             maxWidth: 'none',
             height: '100%',
             objectFit: 'cover',
-            objectPosition: '50% 25%',
+            objectPosition: '50% 15%',
           }}
         />
       </div>
