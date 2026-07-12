@@ -21,6 +21,10 @@ export interface ServiceData {
   featuresTitle: string
   features: { color: string; title: string; body: string }[]
   useCases?: string[]
+  /** silent looping product video shown under the header copy */
+  video?: { src: string; poster: string; label: string }
+  /** real product photos — sticker-tilted band under "Hogyan működik" */
+  images?: { src: string; alt: string; rotate?: number }[]
   price: {
     headline: string
     blurb?: ReactNode
@@ -126,10 +130,32 @@ export function ServicePage({ data }: { data: ServiceData }) {
                   Kérj ajánlatot →
                 </a>
               </Magnetic>
-              <a href="/#elmeny" style={{ fontWeight: 600, fontSize: 16, color: '#46433A' }}>
-                ← Minden szolgáltatás
+              {/* no arrow here: the CTA's "→" right next to a "←" read as two
+                  arrows pointing at each other */}
+              <a href="/#elmeny" style={{ fontWeight: 600, fontSize: 16, color: '#46433A', textDecoration: 'underline', textUnderlineOffset: 4 }}>
+                Minden szolgáltatás
               </a>
             </Reveal>
+            {data.video && (
+              <Reveal variant="mask" radius={24} delay={220} style={{ marginTop: 'clamp(36px,5vw,60px)' }}>
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  poster={data.video.poster}
+                  aria-label={data.video.label}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    borderRadius: 24,
+                    boxShadow: '0 34px 70px -28px rgba(23,21,13,.45)',
+                  }}
+                >
+                  <source src={data.video.src} type="video/mp4" />
+                </video>
+              </Reveal>
+            )}
           </div>
         </header>
 
@@ -170,6 +196,40 @@ export function ServicePage({ data }: { data: ServiceData }) {
             </div>
           </div>
         </section>
+
+        {/* real product photos */}
+        {data.images && (
+          <section style={{ position: 'relative', padding: 'clamp(30px,4vw,56px) clamp(24px,6vw,90px)' }}>
+            <div
+              style={{
+                ...wrap,
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,340px),1fr))',
+                gap: 'clamp(16px,2.5vw,28px)',
+                alignItems: 'center',
+              }}
+            >
+              {/* rotation lives on the inner img — Reveal animates the outer
+                  element's transform and would wipe it */}
+              {data.images.map((im, i) => (
+                <Reveal key={im.src} pop delay={i * 90}>
+                  <img
+                    src={im.src}
+                    alt={im.alt}
+                    loading="lazy"
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      borderRadius: 20,
+                      boxShadow: '0 26px 55px -22px rgba(23,21,13,.4)',
+                      transform: `rotate(${im.rotate ?? 0}deg)`,
+                    }}
+                  />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* features */}
         <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>

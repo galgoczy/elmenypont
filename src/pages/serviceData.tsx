@@ -88,6 +88,18 @@ export const GREENBOX: ServiceData = {
     },
   ],
   useCases: ['Céges rendezvény', 'Esküvő', 'Születésnap', 'Csapatépítő', 'Brandaktiváció'],
+  images: [
+    {
+      src: '/assets/photos/greenbox-gatsby.jpg',
+      alt: 'Gatsby-jelmezes csapat fotózkodik a greenbox zöld háttere előtt egy rendezvényen',
+      rotate: -1.2,
+    },
+    {
+      src: '/assets/photos/greenbox-studio.jpg',
+      alt: 'Greenbox stúdió-automata működés közben: vendégek a zöld háttér és a stúdióvilágítás előtt',
+      rotate: 1.1,
+    },
+  ],
   price: {
     headline: 'Árak',
     blurb: 'A legkisebb egység: 4 órás kitelepülés Budapesten, online megosztással.',
@@ -117,7 +129,7 @@ export const SMART_WALL: ServiceData = {
   crumb: 'Smart Wall',
   title: (
     <>
-      A fal, ami <Boxed bg="#4888F8">visszaér.</Boxed>
+      A fal, ami <Boxed bg="#4888F8">életre kel.</Boxed>
     </>
   ),
   accent: '#4888F8',
@@ -178,6 +190,23 @@ export const SMART_WALL: ServiceData = {
     'Dolgozói esemény',
     'Ügyfélparty',
     'Fesztivál',
+  ],
+  video: {
+    src: '/assets/video/smartwall-loop.mp4',
+    poster: '/assets/photos/smartwall-nespresso.jpg',
+    label: 'A Smart Wall működés közben: vendégek egy interaktív Nespresso kávétérképet érintenek',
+  },
+  images: [
+    {
+      src: '/assets/photos/smartwall-nespresso.jpg',
+      alt: 'Vendégek a Nespresso rendezvényén az interaktív Smart Wall kávétérképét nézik',
+      rotate: -1.1,
+    },
+    {
+      src: '/assets/photos/smartwall-touch.jpg',
+      alt: 'Egy vendég megérinti a Smart Wall vetített felületét, és elindul az animáció',
+      rotate: 1.2,
+    },
   ],
   price: {
     headline: 'Árak — az AI-fordulat',
@@ -272,6 +301,18 @@ export const MOSAIC_WALL: ServiceData = {
     },
   ],
   useCases: ['Nagylétszámú céges esemény', 'Konferencia', 'Fesztivál', 'Jubileum', 'Brandaktiváció'],
+  images: [
+    {
+      src: '/assets/photos/mosaic-grid.jpg',
+      alt: 'Rendezvényfotókból összeálló mozaikrács — sok kicsi képből egy nagy kompozíció',
+      rotate: -1,
+    },
+    {
+      src: '/assets/photos/mosaic-hero.jpg',
+      alt: 'Ünneplő tömeg konfettiesőben egy nagyszabású rendezvényen',
+      rotate: 1.1,
+    },
+  ],
   price: {
     headline: 'Árak',
     blurb: 'Nagylétszámú eseményekre ajánljuk — a fal több méretben elérhető.',
