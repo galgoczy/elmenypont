@@ -367,8 +367,15 @@ export function Hero({ heroP: p }: HeroProps) {
     if (targetY - startY < 8) return
     const t0 = performance.now()
     const DUR = 3000
+    // suspend the page's CSS smooth scrolling for the tween: per-frame
+    // scrollTo must land instantly, and Safari chokes on the newer
+    // behavior:'instant' option — overriding the CSS works everywhere
+    const docStyle = document.documentElement.style
+    const prevBehavior = docStyle.scrollBehavior
+    docStyle.scrollBehavior = 'auto'
     const abort = () => {
       cancelAnimationFrame(playRaf.current)
+      docStyle.scrollBehavior = prevBehavior
       window.removeEventListener('wheel', abort)
       window.removeEventListener('touchstart', abort)
       window.removeEventListener('keydown', abort)
@@ -380,10 +387,7 @@ export function Hero({ heroP: p }: HeroProps) {
     const step = (now: number) => {
       const k = Math.min(1, (now - t0) / DUR)
       const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2 // ease-in-out cubic
-      // behavior MUST be instant: the page has CSS scroll-behavior:smooth,
-      // so a plain scrollTo would restart a smooth animation every frame
-      // and the tween would never actually move
-      window.scrollTo({ top: startY + (targetY - startY) * e, behavior: 'instant' as ScrollBehavior })
+      window.scrollTo(0, startY + (targetY - startY) * e)
       if (k < 1) playRaf.current = requestAnimationFrame(step)
       else abort()
     }

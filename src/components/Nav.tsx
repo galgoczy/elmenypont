@@ -100,7 +100,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
           pointerEvents: 'none',
         }}
       />
-      <a href={base ? base : '#top'} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
+      <a href={base ? base : '#top'} className="ep-nav-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
         <img
           src="/assets/logo/elmenypont-logo-coral.png"
           alt="Élménypont"
@@ -122,7 +122,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
           }}
         />
       </a>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 34 }}>
+      <div className="ep-nav-right" style={{ display: 'flex', alignItems: 'center' }}>
         {/* Szolgáltatások — hover/tap dropdown of the individual services */}
         <div
           className="ep-nav-svc"
@@ -256,7 +256,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
           </a>
         ))}
         <Magnetic strength={5}>
-          <a href="#kapcsolat" style={{ ...navCtaStyle, display: 'inline-block' }}>
+          <a href="#kapcsolat" className="ep-nav-cta" style={{ ...navCtaStyle, display: 'inline-block', whiteSpace: 'nowrap' }}>
             Ajánlatot kérek
           </a>
         </Magnetic>

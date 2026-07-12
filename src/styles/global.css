@@ -422,6 +422,28 @@ a {
   }
 }
 
+/* header right group: generous spacing on desktop, compact on mobile —
+   the CTA pill shrinks so "Ajánlatot kérek" stays on one line and the
+   Szolgáltatások trigger gets clear air from the logo */
+.ep-nav-right {
+  gap: 34px;
+}
+@media (max-width: 820px) {
+  .ep-nav-right {
+    gap: 12px;
+  }
+  .ep-nav-cta {
+    font-size: 13px !important;
+    padding: 9px 14px !important;
+  }
+  .ep-nav-logo img {
+    height: 24px !important;
+  }
+  .ep-nav-svc > a {
+    font-size: 14px !important;
+  }
+}
+
 /* services dropdown item hover */
 .ep-svc-item {
   transition: background 0.18s;
