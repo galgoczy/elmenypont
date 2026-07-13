@@ -12,6 +12,7 @@ import { DoodleBreak } from './components/DoodleBreak'
 import { IsoScene } from './components/IsoScene'
 import { WhyUs } from './components/WhyUs'
 import { Partners } from './components/Partners'
+import { Faq } from './components/Faq'
 import { ContactCTA } from './components/ContactCTA'
 import { Footer } from './components/Footer'
 
@@ -36,6 +37,7 @@ export default function App() {
         <IsoScene />
         <WhyUs />
         <Partners />
+        <Faq />
         <ContactCTA preselect={["AI Selfiemata"]} />
         <Footer />
       </main>

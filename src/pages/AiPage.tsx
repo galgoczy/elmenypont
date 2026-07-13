@@ -7,6 +7,7 @@ import { Doodle } from '../components/Doodle'
 import { Magnetic } from '../components/Magnetic'
 import { BeforeAfter } from '../components/BeforeAfter'
 import { RocketTrail, ScrollTrail } from '../components/RocketTrail'
+import { Faq } from '../components/Faq'
 import { ContactCTA } from '../components/ContactCTA'
 import { track } from '../components/CookieBar'
 import { Footer } from '../components/Footer'
@@ -259,9 +260,22 @@ export function AiPage() {
                     Kérj ajánlatot →
                   </a>
                 </Magnetic>
-                <a href="/#elmeny" style={{ fontWeight: 600, fontSize: 16, color: '#46433A', textDecoration: 'underline', textUnderlineOffset: 4 }}>
-                  Minden szolgáltatás
-                </a>
+                <Magnetic strength={6}>
+                  <a
+                    href="#bemutato"
+                    style={{
+                      display: 'inline-block',
+                      background: '#4888F8',
+                      color: '#fff',
+                      fontWeight: 600,
+                      fontSize: 17,
+                      padding: '15px 28px',
+                      borderRadius: 100,
+                    }}
+                  >
+                    Bemutatót kérek →
+                  </a>
+                </Magnetic>
               </Reveal>
             </div>
             <div>
@@ -478,7 +492,9 @@ export function AiPage() {
             {/* demo request: leave an email, the demo link + password arrives */}
             <Reveal variant="pop" delay={100} style={{ marginTop: 'clamp(36px,5vw,56px)' }}>
               <div
+                id="bemutato"
                 style={{
+                  scrollMarginTop: '90px',
                   background: '#FBF8F3',
                   border: '1px solid rgba(0,0,0,.12)',
                   borderRadius: 20,
@@ -640,6 +656,7 @@ export function AiPage() {
           </div>
         </section>
 
+        <Faq schema={false} />
         <ContactCTA preselect={["AI Selfiemata"]} />
         <Footer />
       </main>
