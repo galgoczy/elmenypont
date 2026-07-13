@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 
 const DOODLE = (n: number) => `/assets/doodle-${n}.png`
 
-type Anim = 'float' | 'float2' | 'sway'
+type Anim = 'float' | 'float2' | 'sway' | 'wiggle'
 
 interface DoodleProps {
   /** doodle-N.png index (1..6) */

@@ -62,6 +62,14 @@ const ROUTES = [
       'A vendégek fotóiból közösen összeálló nagy mozaikkép: fotózz, nyomtass, ragassz. 200 darabos mozaik 450 000 Ft-tól. Nagylétszámú rendezvényekre.',
     ogImage: 'https://elmenypont.vercel.app/assets/photos/mosaic-wall-real.jpg',
   },
+  {
+    path: '/selfiebox',
+    out: 'dist/selfiebox/index.html',
+    title: 'Selfiebox — szelfigép és fotóbox bérlés rendezvényre | Élménypont',
+    description:
+      'Szelfigép, fotóbox és fotókabin bérlés rendezvényre azonnali nyomtatással. Egyszerű, gyors, minden korosztálynak. 80 000 Ft-tól, Budapesten.',
+    ogImage: 'https://elmenypont.vercel.app/assets/photos/team-original.jpg',
+  },
 ]
 
 const template = readFileSync(resolve(root, 'dist/index.html'), 'utf8')

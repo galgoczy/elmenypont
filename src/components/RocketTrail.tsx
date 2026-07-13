@@ -74,7 +74,7 @@ export function RocketTrail({ trail, color = '#4ade80', landAttr = 'data-rocketh
       const tRaw = (vh * 0.8 - r.top) / (r.height * 0.9 || 1)
       const t = clamp01(tRaw)
       const first = tS < 0
-      const k = reduce || first ? 1 : 1 - Math.exp(-6.5 * dt)
+      const k = reduce || first ? 1 : 1 - Math.exp(-5.2 * dt)
       const prev = first ? t : tS
       tS = prev + (t - prev) * k
 
@@ -102,8 +102,9 @@ export function RocketTrail({ trail, color = '#4ade80', landAttr = 'data-rocketh
 
       let d = ang - rotS
       d = ((d + 540) % 360) - 180
-      rotS += d * (reduce || first ? 1 : 1 - Math.exp(-9 * dt))
-      const bank = Math.max(-16, Math.min(16, d)) * 0.5
+      // gentler than the home rocket: softer heading catch-up and less bank
+      rotS += d * (reduce || first ? 1 : 1 - Math.exp(-6 * dt))
+      const bank = Math.max(-10, Math.min(10, d)) * 0.3
       const speed = Math.abs(tS - prev) / Math.max(dt, 1e-4)
 
       rocket.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${(rotS + bank).toFixed(2)}deg)`

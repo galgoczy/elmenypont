@@ -683,7 +683,7 @@ export function Hero({ heroP: p }: HeroProps) {
           >
             <Magnetic strength={8}>
               <a
-                href="#kapcsolat"
+                href="/ai-fotoautomata"
                 style={{
                   background: '#17150D',
                   color: '#F6F1E9',

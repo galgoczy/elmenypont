@@ -14,13 +14,12 @@ const CARDS = [
     delay: 0,
   },
   {
-    // no standalone page — the CTA leads to the quote form instead
-    href: '#kapcsolat',
+    href: '/selfiebox',
     src: '/assets/photos/team-original.jpg',
-    alt: 'Klasszikus fotósarokban készült csoportkép egy rendezvényen',
+    alt: 'Klasszikus fotóboxban készült csoportkép egy rendezvényen',
     title: 'Selfiebox',
-    body: 'Klasszikus fotósarok azonnali nyomtatással — egyszerű és mindig működik.',
-    link: 'Kérj ajánlatot →',
+    body: 'Klasszikus fotóbox azonnali nyomtatással — egyszerű és mindig működik.',
+    link: 'Fotóbox bérlés →',
     delay: 120,
   },
 ]

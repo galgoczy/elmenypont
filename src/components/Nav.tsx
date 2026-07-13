@@ -18,7 +18,7 @@ const SERVICE_ITEMS = [
   { href: '/greenbox', label: 'Greenbox Selfiemata', desc: 'Zöld hátteres stúdió-automata' },
   { href: '/smart-wall', label: 'Smart Wall', desc: 'Interaktív, érinthető fal' },
   { href: '/mosaic-wall', label: 'Mosaic Wall', desc: 'Közös mozaikkép a vendégfotókból' },
-  { href: '#selfiebox', label: 'Selfiebox', desc: 'Klasszikus fotósarok azonnali nyomtatással' },
+  { href: '/selfiebox', label: 'Selfiebox', desc: 'Klasszikus fotóbox azonnali nyomtatással' },
   { href: null, label: 'AI Videomata', desc: 'Hamarosan' },
 ] as { href: string | null; label: string; desc: string; ai?: boolean }[]
 

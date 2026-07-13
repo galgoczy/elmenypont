@@ -12,8 +12,9 @@ import { ContactCTA } from '../components/ContactCTA'
 import { track } from '../components/CookieBar'
 import { Footer } from '../components/Footer'
 
-/** serpentine through the why-items (01 top-left, 02 mid-right, 03 low-left) */
-const WHY_TRAIL = 'M85 4 C 45 2, 12 6, 8 16 C 5 26, 20 34, 34 42 C 46 48, 46 52, 42 58 C 36 68, 22 72, 20 84 C 19 92, 34 96, 48 100'
+/** serpentine that STARTS at the 01 point (top-left), curves down to 02
+ *  (mid-right), then to 03 (lower-left), then descends to land */
+const WHY_TRAIL = 'M10 14 C 18 26, 44 32, 44 46 C 44 60, 20 66, 22 80 C 23 90, 34 97, 42 104'
 /** dotted connector through the how-steps (01 → 02 → 03 → 04) */
 const HOW_TRAIL = 'M6 8 C 12 18, 32 24, 42 34 C 50 41, 42 48, 32 53 C 22 58, 16 60, 18 68 C 20 78, 38 82, 52 88'
 
@@ -65,10 +66,10 @@ const STYLE_CARDS = [
 ]
 
 const STEPS = [
-  { title: 'Stílus', body: 'A vendég választ a rendezvényre tervezett AI stílusok közül.' },
-  { title: 'Fotó', body: 'Az érintőképernyős automatával lefényképezi magát – ebben személyzet is segít neki.' },
-  { title: 'AI varázsol', body: 'A felhőalapú AI 9–15 másodperc alatt újrarajzolja a képet.' },
-  { title: 'Megosztás', body: 'QR-kóddal, emailen vagy nyomtatva átveszi – akár azonnal megosztja, brandingelt kerettel.' },
+  { title: 'Stílus', body: 'A vendég választ a rendezvényre tervezett AI stílusok közül.', doodle: 5, dur: 3.2 },
+  { title: 'Fotó', body: 'Az érintőképernyős automatával lefényképezi magát – ebben személyzet is segít neki.', doodle: 2, dur: 3.8 },
+  { title: 'AI varázsol', body: 'A felhőalapú AI 9–15 másodperc alatt újrarajzolja a képet.', doodle: 6, dur: 3.4 },
+  { title: 'Megosztás', body: 'QR-kóddal, emailen vagy nyomtatva átveszi – akár azonnal megosztja, brandingelt kerettel.', doodle: 3, dur: 4 },
 ]
 
 const CUSTOM = [
@@ -476,7 +477,18 @@ export function AiPage() {
                     variant={i % 2 ? 'right' : 'left'}
                     delay={i * 100}
                     className={`ep-scatter-item ep-si-${i + 1}`}
+                    style={{ position: 'relative' }}
                   >
+                    {/* playful doodle wiggling next to each step */}
+                    <Doodle
+                      n={s.doodle}
+                      color="rgba(72,136,248,.32)"
+                      size={48}
+                      anim="wiggle"
+                      duration={s.dur}
+                      parallax={12}
+                      style={{ top: -14, right: -8 }}
+                    />
                     <span className="ep-scatter-num" style={{ color: '#4888F8' }} aria-hidden="true">
                       0{i + 1}
                     </span>

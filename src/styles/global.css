@@ -158,6 +158,13 @@ a {
   33% { transform: translate(10px, -12px) rotate(calc(var(--r, 0deg) + 5deg)); }
   66% { transform: translate(-8px, -6px) rotate(calc(var(--r, 0deg) - 4deg)); }
 }
+/* playful wiggle — quick rock back and forth with a little bounce */
+@keyframes ep-wiggle {
+  0%, 100% { transform: translateY(0) rotate(calc(var(--r, 0deg) - 8deg)); }
+  25% { transform: translateY(-5px) rotate(calc(var(--r, 0deg) + 9deg)); }
+  50% { transform: translateY(1px) rotate(calc(var(--r, 0deg) - 6deg)); }
+  75% { transform: translateY(-3px) rotate(calc(var(--r, 0deg) + 7deg)); }
+}
 @keyframes ep-rocket-idle {
   0%, 100% { transform: translate(0, 0) rotate(-2deg); }
   50% { transform: translate(0, -4px) rotate(2deg); }

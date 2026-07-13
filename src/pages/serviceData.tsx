@@ -337,3 +337,85 @@ export const MOSAIC_WALL: ServiceData = {
     href: '/smart-wall',
   },
 }
+
+export const SELFIEBOX: ServiceData = {
+  slug: 'selfiebox',
+  docTitle: 'Selfiebox — szelfigép és fotóbox bérlés rendezvényre | Élménypont',
+  crumb: 'Selfiebox',
+  title: (
+    <>
+      A klasszikus fotóbox — ami <Boxed bg="#E9A13B">mindig működik.</Boxed>
+    </>
+  ),
+  accent: '#E9A13B',
+  lead: (
+    <>
+      Szelfigép és fotóautomata bérlés rendezvényre azonnali nyomtatással: egy gombnyomás, profi
+      fény, és pár másodperc múlva ott a kész kép a vendég kezében. Egyszerű, gyors, minden
+      korosztálynak — és mindig működik.
+    </>
+  ),
+  steps: [
+    {
+      title: 'Pózolj',
+      body: 'A vendég beáll a fotóbox elé, az érintőképernyőn látja magát, és kiválasztja a brandingelt keretet.',
+    },
+    {
+      title: 'Egy gombnyomás',
+      body: 'Az automata visszaszámol és elkészíti a képet — profi világítással, éles, jól exponált fotóval.',
+    },
+    {
+      title: 'Azonnali nyomtatás',
+      body: 'A kész kép pár másodperc alatt nyomtatva a kézben, és igény szerint e-mailben vagy QR-kóddal is megosztható.',
+    },
+  ],
+  featuresTitle: 'Miért szeretik a vendégek?',
+  features: [
+    {
+      color: '#E9A13B',
+      title: 'Egyszerű és gyors',
+      body: 'Nincs tanulási görbe: odaáll, mosolyog, gombot nyom — kész. Sorban állás nélkül pörög.',
+    },
+    {
+      color: '#E94A35',
+      title: 'Kézzelfogható emlék',
+      body: 'A vendég azonnal nyomtatott képet visz haza — a klasszikus, amit mindenki imád.',
+    },
+    {
+      color: '#4888F8',
+      title: 'Minden korosztálynak',
+      body: 'A nagyszülőtől a gyerekekig mindenki azonnal érti és használja.',
+    },
+    {
+      color: '#9B6BF2',
+      title: 'Brandingelhető keret',
+      body: 'A nyomat kerete és a képernyő is a rendezvény arculatára szabható.',
+    },
+  ],
+  useCases: ['Esküvő', 'Céges buli', 'Születésnap', 'Ballagás', 'Családi nap'],
+  heroImage: {
+    src: '/assets/photos/team-original.jpg',
+    alt: 'Klasszikus fotóboxban készült csoportkép egy rendezvényen',
+  },
+  price: {
+    headline: 'Árak',
+    blurb: 'A legkisebb egység: 4 órás kitelepülés Budapesten.',
+    rows: [
+      { label: 'Selfiebox — 4 óra, Budapest', value: '80 000 Ft-tól' },
+      { label: 'Nyomatcsomagok (10×15 cm papírkép)', value: '20 000 Ft-tól' },
+    ],
+    factors: ['időtartam', 'helyszín (Budapesten kívül kiszállás)', 'vendégszám és nyomatcsomag'],
+  },
+  provide: [
+    'Fotóbox automata profi világítással és nyomtatóval',
+    'Rendezvényre szabott, brandingelhető keret',
+    '1 fő kezelő / animátor a helyszínen',
+    'Helyszíni nyomtatás a választott nyomatcsomaggal',
+    'Online megosztás e-mailben vagy QR-kóddal',
+  ],
+  crossLink: {
+    text: 'Dobd fel mesterséges intelligenciával?',
+    label: 'AI Selfiemata →',
+    href: '/ai-fotoautomata',
+  },
+}

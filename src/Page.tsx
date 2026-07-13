@@ -3,7 +3,7 @@ import { ServicePage } from './pages/ServicePage'
 import { AiPage } from './pages/AiPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { CookieBar } from './components/CookieBar'
-import { GREENBOX, SMART_WALL, MOSAIC_WALL } from './pages/serviceData'
+import { GREENBOX, SMART_WALL, MOSAIC_WALL, SELFIEBOX } from './pages/serviceData'
 
 /**
  * Pathname-based page switch — no client-side router. Internal links between
@@ -29,6 +29,9 @@ export function Page({ path }: { path: string }) {
       break
     case '/mosaic-wall':
       page = <ServicePage data={MOSAIC_WALL} />
+      break
+    case '/selfiebox':
+      page = <ServicePage data={SELFIEBOX} />
       break
   }
   return (
