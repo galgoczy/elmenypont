@@ -84,7 +84,7 @@ export function ContactCTA() {
       style={{
         position: 'relative',
         background: '#F6F1E9',
-        padding: 'clamp(40px,6vw,90px) clamp(24px,6vw,90px) clamp(80px,10vw,130px)',
+        padding: 'clamp(28px,4vw,56px) clamp(24px,6vw,90px) clamp(70px,9vw,110px)',
       }}
     >
       <Doodle n={2} color="rgba(0,0,0,.05)" size={84} left="4%" top="18%" anim="float2" duration={9} rotate="-9deg" />

@@ -14,13 +14,13 @@ interface NavProps {
 /** the services menu items — absolute hrefs (subpages/AI) stay as-is, the
  *  '#' anchor is prefixed with `base` so subpages point back home */
 const SERVICE_ITEMS = [
-  { href: '/ai-fotoautomata', label: 'AI Selfiemata', desc: 'Valós idejű AI-képgenerálás' },
+  { href: '/ai-fotoautomata', label: 'AI Selfiemata', desc: 'Valós idejű AI-képgenerálás', ai: true },
   { href: '/greenbox', label: 'Greenbox Selfiemata', desc: 'Zöld hátteres stúdió-automata' },
   { href: '/smart-wall', label: 'Smart Wall', desc: 'Interaktív, érinthető fal' },
   { href: '/mosaic-wall', label: 'Mosaic Wall', desc: 'Közös mozaikkép a vendégfotókból' },
   { href: '#selfiebox', label: 'Selfiebox', desc: 'Klasszikus fotósarok azonnali nyomtatással' },
   { href: null, label: 'AI Videomata', desc: 'Hamarosan' },
-]
+] as { href: string | null; label: string; desc: string; ai?: boolean }[]
 
 const LINKS = [
   { href: '#elmeny', label: 'Az élmény' },
@@ -219,6 +219,23 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
                 >
                   <span style={{ fontSize: 15, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
                     {s.label}
+                    {s.ai && (
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 700,
+                          letterSpacing: '.05em',
+                          color: '#fff',
+                          background: 'linear-gradient(120deg,#9B6BF2,#4888F8)',
+                          borderRadius: 100,
+                          padding: '2px 7px',
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        AI ✦
+                      </span>
+                    )}
                     {inactive && (
                       <span
                         style={{

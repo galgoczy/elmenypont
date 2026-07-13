@@ -773,38 +773,6 @@ export function Hero({ heroP: p }: HeroProps) {
           </div>
         </div>
 
-        {/* static value proposition — readable the moment the page loads,
-            before any scrolling (audit: the first screen must say what the
-            site offers); fades with the scroll hint */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 'clamp(86px, 12vh, 118px)',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 'min(92vw, 640px)',
-            textAlign: 'center',
-            opacity: hintOp,
-            pointerEvents: 'none',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'Syne',
-              fontWeight: 600,
-              fontSize: 'clamp(17px,2.2vw,23px)',
-              letterSpacing: '-.01em',
-              lineHeight: 1.35,
-              color: 'rgba(246,241,233,.92)',
-            }}
-          >
-            AI fotóautomata és interaktív élmények rendezvényre
-          </p>
-          <p style={{ fontSize: 'clamp(13px,1.4vw,15px)', color: 'rgba(246,241,233,.6)', marginTop: 6 }}>
-            A vendég fotójából pár másodperc alatt egyedi, megosztható alkotás készül.
-          </p>
-        </div>
-
         {/* scroll hint — also a play button: tap to run the whole entrance */}
         <button
           type="button"

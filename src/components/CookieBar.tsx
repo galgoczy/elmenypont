@@ -46,41 +46,41 @@ export function CookieBar() {
       aria-label="Süti-beállítások"
       style={{
         position: 'fixed',
-        left: 12,
         right: 12,
         bottom: 12,
+        left: 12,
         zIndex: 80,
-        maxWidth: 680,
-        margin: '0 auto',
-        background: 'rgba(23,21,13,.96)',
+        maxWidth: 460,
+        marginLeft: 'auto',
+        background: 'rgba(23,21,13,.94)',
         color: '#F6F1E9',
-        borderRadius: 16,
-        padding: '16px 20px',
+        borderRadius: 12,
+        padding: '10px 14px',
         display: 'flex',
         alignItems: 'center',
-        gap: 16,
+        gap: 12,
         flexWrap: 'wrap',
-        boxShadow: '0 24px 50px -18px rgba(23,21,13,.5)',
+        boxShadow: '0 18px 40px -16px rgba(23,21,13,.45)',
       }}
     >
-      <p style={{ fontSize: 14, lineHeight: 1.5, flex: '1 1 320px', margin: 0 }}>
-        A látogatottság méréséhez sütiket használunk (Google Analytics). Részletek az{' '}
+      <p style={{ fontSize: 12.5, lineHeight: 1.45, flex: '1 1 210px', margin: 0, color: 'rgba(246,241,233,.85)' }}>
+        Méréshez sütiket használunk —{' '}
         <a href="/adatkezeles" style={{ color: '#F2937F', textDecoration: 'underline' }}>
-          adatkezelési tájékoztatóban
+          részletek
         </a>
         .
       </p>
-      <div style={{ display: 'flex', gap: 10 }}>
+      <div style={{ display: 'flex', gap: 8 }}>
         <button
           type="button"
           onClick={() => decide(false)}
           style={{
             fontFamily: 'inherit',
-            fontSize: 14,
+            fontSize: 12.5,
             fontWeight: 600,
-            padding: '10px 16px',
+            padding: '7px 12px',
             borderRadius: 100,
-            border: '1.5px solid rgba(246,241,233,.35)',
+            border: '1.5px solid rgba(246,241,233,.3)',
             background: 'transparent',
             color: '#F6F1E9',
             cursor: 'pointer',
@@ -93,9 +93,9 @@ export function CookieBar() {
           onClick={() => decide(true)}
           style={{
             fontFamily: 'inherit',
-            fontSize: 14,
+            fontSize: 12.5,
             fontWeight: 600,
-            padding: '10px 18px',
+            padding: '7px 14px',
             borderRadius: 100,
             border: 'none',
             background: '#F6F1E9',

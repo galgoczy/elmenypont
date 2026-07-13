@@ -481,6 +481,190 @@ a {
   }
 }
 
+/* ── AI page: style-card track + scattered numbered lists, ported from the
+   original ai.elmeny.hu landing ── */
+.ep-strack {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding: 16px 4px 24px;
+  margin-top: 50px;
+  scrollbar-width: none;
+  cursor: grab;
+}
+.ep-strack:active {
+  cursor: grabbing;
+}
+.ep-strack::-webkit-scrollbar {
+  display: none;
+}
+.ep-scard {
+  flex-shrink: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+.ep-scard:nth-child(odd) {
+  width: 210px;
+  height: 300px;
+  transform: rotate(-1.2deg);
+}
+.ep-scard:nth-child(even) {
+  width: 225px;
+  height: 330px;
+  transform: rotate(1deg);
+  margin-top: 18px;
+}
+.ep-scard:nth-child(3n) {
+  width: 195px;
+  height: 280px;
+  transform: rotate(-0.5deg);
+  margin-top: 8px;
+}
+.ep-scard:hover {
+  transform: rotate(0deg) translateY(-10px) scale(1.03) !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18);
+  z-index: 2;
+}
+.ep-scard-bg {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  transition: transform 0.4s;
+}
+.ep-scard:hover .ep-scard-bg {
+  transform: scale(1.08);
+}
+.ep-scard-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.1) 60%);
+  pointer-events: none;
+}
+.ep-scard-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  transform: translateY(4px);
+  transition: transform 0.3s;
+}
+.ep-scard:hover .ep-scard-info {
+  transform: translateY(0);
+}
+.ep-scard-info h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 3px;
+}
+.ep-scard-info p {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+.ep-scard-more {
+  flex-shrink: 0;
+  width: 150px;
+  border-radius: 22px;
+  border: 2px dashed rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #7a766b;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 20px;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: default;
+  text-align: center;
+}
+.ep-scard-more:hover {
+  border-color: rgba(0, 0, 0, 0.25);
+  transform: scale(1.03);
+}
+.ep-scard-more .ep-plus {
+  font-size: 24px;
+  opacity: 0.35;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.ep-scard-more:hover .ep-plus {
+  transform: rotate(90deg);
+  opacity: 0.65;
+}
+
+/* scattered numbered items (Miért AI / Hogyan) */
+.ep-scatter {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.ep-scatter-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 20px 0;
+  max-width: 520px;
+  transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.ep-scatter-item:hover {
+  transform: translateY(-4px) scale(1.025);
+}
+.ep-scatter-num {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 600;
+  line-height: 0.8;
+  flex-shrink: 0;
+  letter-spacing: -0.05em;
+  user-select: none;
+}
+.ep-scatter-item h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.ep-scatter-item p {
+  font-size: 15px;
+  line-height: 1.55;
+}
+/* freeform offsets — collapse on mobile */
+.ep-si-1 {
+  margin-left: 0;
+}
+.ep-si-2 {
+  margin-left: 36%;
+  margin-top: -24px;
+}
+.ep-si-3 {
+  margin-left: 16%;
+  margin-top: 16px;
+}
+.ep-si-4 {
+  margin-left: 48%;
+  margin-top: -28px;
+}
+@media (max-width: 760px) {
+  .ep-si-1,
+  .ep-si-2,
+  .ep-si-3,
+  .ep-si-4 {
+    margin-left: 0;
+    margin-top: 0;
+  }
+}
+
 /* "Miért mi" intro column: sticky beside the cards on desktop only —
    on mobile the stacked cards must push it away naturally instead of
    scrolling underneath it. */

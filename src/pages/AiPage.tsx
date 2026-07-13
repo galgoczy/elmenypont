@@ -19,8 +19,8 @@ const h2Style: CSSProperties = {
   color: '#17150D',
 }
 
-/** the ai.elmeny.hu hero's style switcher, rebuilt on the main site: the
- *  "after" side of the slider swaps to the picked AI style */
+/** the ai.elmeny.hu hero's style switcher: the "after" side of the portrait
+ *  slider swaps to the picked AI style */
 const STYLES = [
   { key: 'uhajos', label: 'Űrhajós', src: '/assets/photos/ai/hero-uhajos-full.jpg' },
   { key: 'festmeny', label: 'Festmény', src: '/assets/photos/ai/hero-festmeny-full.jpg' },
@@ -29,40 +29,38 @@ const STYLES = [
   { key: 'pixar', label: 'Pixar', src: '/assets/photos/ai/hero-pixar-full.jpg' },
 ]
 
+/** ported 1:1 from the original landing's dark "Miért most? Miért AI?" */
 const WHY = [
   {
-    color: '#9B6BF2',
-    title: 'A vendégek AI-élményt várnak',
+    title: 'A vendégek AI élményt várnak',
     body: 'Az okostelefon már nem elég. Az emberek valami olyat akarnak, amit otthon nem tudnak könnyen megcsinálni.',
   },
   {
-    color: '#E94A35',
-    title: 'Organikus virális tartalom',
-    body: 'Egy egyedi AI-kép háromszor nagyobb valószínűséggel kerül ki a social médiára, mint egy hagyományos fotó.',
+    title: 'Organikus viral tartalom',
+    body: 'Egy egyedi AI kép 3× nagyobb valószínűséggel kerül ki social médiára, mint egy hagyományos fotó.',
   },
   {
-    color: '#48D880',
-    title: 'Brandaktiváció új szinten',
-    body: 'Az AI-kimenet brandingelhető — minden megosztott kép a te logóddal, a te rendezvényed nevével megy ki.',
+    title: 'Brand aktiváció új szinten',
+    body: 'Az AI kimenet brandingelhető – minden megosztott kép a te logóddal, a te rendezvényed nevével megy ki.',
   },
 ]
 
+/** the original image-backed style cards */
 const STYLE_CARDS = [
-  { name: 'Masterpiece', desc: 'Van Gogh, Klimt, Pop Art' },
-  { name: 'Epic Scene', desc: 'F1, viking, űrhajós' },
-  { name: 'Karikatúra', desc: 'Vicces rajzolt torzítás' },
-  { name: 'Pixar Mode', desc: '3D animációs karakter' },
-  { name: 'Anime', desc: 'Japán animációs portré' },
-  { name: 'Cyberpunk', desc: 'Neon city, 2076' },
-  { name: 'Kocka', desc: 'Építőkocka-figura stílus' },
-  { name: 'Egyedi', desc: 'Kérésre, a rendezvényedre tervezve' },
+  { img: 'masterpiece', name: 'Masterpiece', desc: 'Van Gogh, Klimt, Pop Art' },
+  { img: 'epicscene', name: 'Epic Scene', desc: 'F1, viking, űrhajós' },
+  { img: 'karikatura', name: 'Karikatúra', desc: 'Vicces AI torzítás' },
+  { img: 'pixar', name: 'Pixar Mode', desc: '3D animációs karakter' },
+  { img: 'anime', name: 'Anime', desc: 'Japán animációs portré' },
+  { img: 'cyberpunk', name: 'Cyberpunk', desc: 'Neon city, 2076' },
+  { img: 'kocka', name: 'Kocka', desc: 'Építőkocka-figura stílus' },
 ]
 
 const STEPS = [
-  { title: 'Stílus', body: 'A vendég választ a rendezvényre tervezett AI-stílusok közül.' },
-  { title: 'Fotó', body: 'Az érintőképernyős automatával lefényképezi magát — ebben személyzet is segít.' },
+  { title: 'Stílus', body: 'A vendég választ a rendezvényre tervezett AI stílusok közül.' },
+  { title: 'Fotó', body: 'Az érintőképernyős automatával lefényképezi magát – ebben személyzet is segít neki.' },
   { title: 'AI varázsol', body: 'A felhőalapú AI 9–15 másodperc alatt újrarajzolja a képet.' },
-  { title: 'Megosztás', body: 'QR-kóddal, e-mailben vagy nyomtatva viszi — akár azonnal megosztja, brandingelt kerettel.' },
+  { title: 'Megosztás', body: 'QR-kóddal, emailen vagy nyomtatva átveszi – akár azonnal megosztja, brandingelt kerettel.' },
 ]
 
 const CUSTOM = [
@@ -73,9 +71,10 @@ const CUSTOM = [
 ]
 
 /**
- * AI Selfiemata a fő domainen — az ai.elmeny.hu landing logikája és szövegei
- * a főoldal dizájnnyelvén: stílusváltós előtte-utána hero, Miért AI,
- * stíluskártyák, 4 lépés, személyre szabás, árak.
+ * AI Selfiemata a fő domainen — a zászlóshajó oldala, szándékosan
+ * látványosabb a többi aloldalnál: az eredeti ai.elmeny.hu sötét
+ * „Miért AI" szekciója és képes stíluskártya-sávja portolva, álló
+ * (portré) előtte-utána heróval és merészebb beúszásokkal.
  */
 export function AiPage() {
   const { scrolled } = useScene()
@@ -86,14 +85,15 @@ export function AiPage() {
       <CursorFX />
       <Nav scrolled={scrolled} base="/" />
       <main>
-        {/* hero: copy + style-switching before/after */}
+        {/* hero: copy + portrait style-switching before/after */}
         <header
           style={{
             position: 'relative',
             padding: 'clamp(140px,16.5vw,188px) clamp(24px,6vw,90px) clamp(40px,5vw,70px)',
           }}
         >
-          <Doodle n={2} color="rgba(0,0,0,.05)" size={110} right="5%" top="12%" anim="float" duration={9} rotate="8deg" />
+          <Doodle n={2} color="rgba(0,0,0,.05)" size={110} right="4%" top="10%" anim="float" duration={9} rotate="8deg" />
+          <Doodle n={5} color="rgba(0,0,0,.04)" size={84} left="3%" bottom="6%" anim="float2" duration={11} rotate="-6deg" />
           <div className="ep-svc-hero" style={wrap}>
             <div>
               <Reveal
@@ -111,6 +111,7 @@ export function AiPage() {
               </Reveal>
               <Reveal
                 as="h1"
+                variant="pop"
                 style={{
                   fontFamily: 'Syne',
                   fontWeight: 500,
@@ -147,8 +148,7 @@ export function AiPage() {
                 }}
               >
                 Valós idejű AI-képgenerálás rendezvényeken: a készült fotót az AI átvarázsolja —
-                egyedi, megosztható, brandingelt emlék, pár másodperc alatt. Nem filter, nem
-                sablon: minden kép egyedi alkotás.
+                egyedi, megosztható, brandingelt emlék, pár másodperc alatt.
               </Reveal>
               <Reveal delay={150} style={{ display: 'flex', gap: 22, marginTop: 26, flexWrap: 'wrap' }}>
                 {[
@@ -185,7 +185,7 @@ export function AiPage() {
               </Reveal>
             </div>
             <div>
-              <Reveal variant="mask" radius={24}>
+              <Reveal variant="mask" radius={24} style={{ maxWidth: 440, margin: '0 auto' }}>
                 <BeforeAfter
                   before="/assets/photos/ai/hero-before-full.jpg"
                   after={style.src}
@@ -193,11 +193,11 @@ export function AiPage() {
                   afterLabel={`AI ✦ ${style.label}`}
                   beforeAlt="Eredeti vendégfotó az AI Selfiemata automatából"
                   afterAlt={`Az AI Selfiemata által generált ${style.label.toLowerCase()} stílusú változat ugyanarról a vendégről`}
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', aspectRatio: '3 / 4' }}
                 />
               </Reveal>
               {/* style pills — swap the slider's AI side */}
-              <Reveal delay={120} style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14, justifyContent: 'center' }}>
+              <Reveal delay={140} style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14, justifyContent: 'center' }}>
                 {STYLES.map((s) => {
                   const on = s.key === style.key
                   return (
@@ -228,23 +228,52 @@ export function AiPage() {
           </div>
         </header>
 
-        {/* Miért most? Miért AI? */}
-        <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>
+        {/* Miért most? Miért AI? — the original dark section, 1:1 */}
+        <section style={{ position: 'relative', background: '#1C1917', padding: 'clamp(70px,9vw,100px) clamp(24px,6vw,90px)' }}>
           <div style={wrap}>
-            <Reveal as="h2" style={h2Style}>
+            <Reveal
+              as="p"
+              style={{
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: '.14em',
+                textTransform: 'uppercase',
+                color: '#4ade80',
+                marginBottom: 24,
+              }}
+            >
               Miért most? Miért AI?
             </Reveal>
-            <Reveal as="p" delay={60} style={{ fontSize: 17, lineHeight: 1.6, color: '#46433A', maxWidth: '58ch', marginTop: 14 }}>
-              A rendezvényipar legnagyobb trendje 2026-ban az AI-élmény — és a magyar piacon
-              szinte egyedül kínálunk teljes képi újragenerálást, nem csak arccserét.
+            <Reveal
+              as="h2"
+              variant="pop"
+              style={{
+                fontFamily: 'Syne',
+                fontWeight: 600,
+                fontSize: 'clamp(32px,4.5vw,56px)',
+                color: '#fff',
+                lineHeight: 1.08,
+                letterSpacing: '-.03em',
+                maxWidth: 700,
+              }}
+            >
+              A rendezvényipar <span style={{ color: '#4ade80' }}>legnagyobb trendje</span> 2026-ban
+              az AI élmény.
             </Reveal>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 16, marginTop: 30 }}>
-              {WHY.map((f, i) => (
-                <Reveal key={f.title} delay={i * 60} style={{ border: '1px solid rgba(0,0,0,.12)', borderRadius: 18, padding: '24px 26px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                  <span aria-hidden="true" style={{ flex: 'none', width: 12, height: 12, borderRadius: '50%', background: f.color, marginTop: 7 }} />
+            <div className="ep-scatter">
+              {WHY.map((w, i) => (
+                <Reveal
+                  key={w.title}
+                  variant={i % 2 ? 'right' : 'left'}
+                  delay={i * 120}
+                  className={`ep-scatter-item ep-si-${i + 1}`}
+                >
+                  <span className="ep-scatter-num" style={{ color: '#4ade80' }} aria-hidden="true">
+                    0{i + 1}
+                  </span>
                   <div>
-                    <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 18, color: '#17150D' }}>{f.title}</h3>
-                    <p style={{ fontSize: 15, lineHeight: 1.55, color: '#46433A', marginTop: 6 }}>{f.body}</p>
+                    <h3 style={{ color: '#fff' }}>{w.title}</h3>
+                    <p style={{ color: 'rgba(255,255,255,.62)' }}>{w.body}</p>
                   </div>
                 </Reveal>
               ))}
@@ -252,36 +281,104 @@ export function AiPage() {
           </div>
         </section>
 
-        {/* AI stílusok */}
-        <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>
-          <Doodle n={3} color="rgba(0,0,0,.045)" size={76} right="4%" top="8%" anim="float2" duration={9.5} rotate="4deg" />
-          <div style={wrap}>
-            <Reveal as="h2" style={h2Style}>
-              AI-stílusok — minden kép egyedi alkotás
+        {/* AI stílusok — the original image card track */}
+        <section style={{ position: 'relative', padding: 'clamp(70px,9vw,100px) 0 clamp(40px,5vw,60px)', overflow: 'hidden' }}>
+          <div style={{ ...wrap, padding: '0 clamp(24px,6vw,90px)', maxWidth: 1180 + 180 }}>
+            <Reveal
+              as="p"
+              style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: '#FF6B35' }}
+            >
+              AI stílusok
             </Reveal>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(210px,1fr))', gap: 14, marginTop: 30 }}>
-              {STYLE_CARDS.map((s, i) => (
-                <Reveal key={s.name} delay={i * 40} style={{ border: '1px solid rgba(0,0,0,.12)', borderRadius: 16, padding: '18px 20px', background: '#FBF8F3' }}>
-                  <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 17, color: '#17150D' }}>{s.name}</h3>
-                  <p style={{ fontSize: 14, color: '#46433A', marginTop: 5 }}>{s.desc}</p>
-                </Reveal>
-              ))}
-            </div>
+            <Reveal
+              as="h2"
+              variant="pop"
+              delay={60}
+              style={{ ...h2Style, fontSize: 'clamp(30px,4vw,52px)', marginTop: 14 }}
+            >
+              Nem filter. Nem sablon.
+              <br />
+              Minden kép <span style={{ color: '#FF6B35' }}>egyedi alkotás.</span>
+            </Reveal>
+            <Reveal delay={120}>
+              <div className="ep-strack">
+                {STYLE_CARDS.map((c) => (
+                  <div key={c.img} className="ep-scard">
+                    <div
+                      className="ep-scard-bg"
+                      role="img"
+                      aria-label={`AI Selfiemata ${c.name} stílusminta: ${c.desc}`}
+                      style={{ backgroundImage: `url(/assets/photos/ai/style-${c.img}.jpg)` }}
+                    />
+                    <div className="ep-scard-info">
+                      <h3>{c.name}</h3>
+                      <p>{c.desc}</p>
+                    </div>
+                  </div>
+                ))}
+                <div className="ep-scard-more">
+                  <span className="ep-plus" aria-hidden="true">
+                    +
+                  </span>
+                  <span>
+                    Egyedi
+                    <br />
+                    kérésre
+                  </span>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal delay={160} style={{ textAlign: 'center', marginTop: 18 }}>
+              <Magnetic strength={6}>
+                <a
+                  href="#kapcsolat"
+                  style={{
+                    display: 'inline-block',
+                    background: '#17150D',
+                    color: '#F6F1E9',
+                    fontWeight: 600,
+                    fontSize: 16,
+                    padding: '14px 28px',
+                    borderRadius: 100,
+                  }}
+                >
+                  Ajánlatot kérek →
+                </a>
+              </Magnetic>
+            </Reveal>
           </div>
         </section>
 
-        {/* Hogyan működik */}
-        <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>
+        {/* Hogyan működik — scattered numbers, light */}
+        <section style={{ position: 'relative', padding: 'clamp(50px,7vw,80px) clamp(24px,6vw,90px)' }}>
+          <Doodle n={4} color="rgba(0,0,0,.045)" size={72} right="6%" top="10%" anim="sway" duration={10} rotate="6deg" />
           <div style={wrap}>
-            <Reveal as="h2" style={h2Style}>
-              Hogyan működik? 4 lépés, pár másodperc.
+            <Reveal
+              as="p"
+              style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: '#4888F8' }}
+            >
+              Hogyan működik?
             </Reveal>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))', gap: 18, marginTop: 34 }}>
+            <Reveal as="h2" variant="pop" delay={60} style={{ ...h2Style, fontSize: 'clamp(30px,4vw,52px)', marginTop: 14 }}>
+              4 lépés.
+              <br />
+              10 másodperc.
+            </Reveal>
+            <div className="ep-scatter">
               {STEPS.map((s, i) => (
-                <Reveal key={s.title} delay={i * 70} style={{ border: '1px solid rgba(0,0,0,.12)', borderRadius: 18, padding: '24px 24px 26px', background: '#FBF8F3' }}>
-                  <div style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 38, color: '#9B6BF2', lineHeight: 1 }}>{i + 1}</div>
-                  <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 19, marginTop: 12, color: '#17150D' }}>{s.title}</h3>
-                  <p style={{ fontSize: 15, lineHeight: 1.55, color: '#46433A', marginTop: 8 }}>{s.body}</p>
+                <Reveal
+                  key={s.title}
+                  variant={i % 2 ? 'right' : 'left'}
+                  delay={i * 100}
+                  className={`ep-scatter-item ep-si-${i + 1}`}
+                >
+                  <span className="ep-scatter-num" style={{ color: '#4888F8' }} aria-hidden="true">
+                    0{i + 1}
+                  </span>
+                  <div>
+                    <h3 style={{ color: '#17150D' }}>{s.title}</h3>
+                    <p style={{ color: '#46433A' }}>{s.body}</p>
+                  </div>
                 </Reveal>
               ))}
             </div>
@@ -292,12 +389,12 @@ export function AiPage() {
         <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>
           <div style={{ ...wrap, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>
             <div>
-              <Reveal as="h2" style={h2Style}>
+              <Reveal as="h2" variant="pop" style={h2Style}>
                 Nem sablon. Teljesen rád szabjuk.
               </Reveal>
               <div style={{ display: 'grid', gap: '12px 0', marginTop: 26 }}>
                 {CUSTOM.map((c, i) => (
-                  <Reveal key={c.title} delay={i * 50} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <Reveal key={c.title} variant="left" delay={i * 70} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                     <span aria-hidden="true" style={{ color: '#9B6BF2', fontWeight: 700, fontSize: 18, lineHeight: 1.4 }}>✓</span>
                     <span style={{ fontSize: 16, lineHeight: 1.55, color: '#46433A' }}>
                       <strong style={{ color: '#17150D' }}>{c.title}:</strong> {c.body}
@@ -306,7 +403,7 @@ export function AiPage() {
                 ))}
               </div>
             </div>
-            <Reveal delay={120} style={{ background: '#FBF8F3', border: '1px solid rgba(0,0,0,.12)', borderRadius: 18, padding: '26px 28px' }}>
+            <Reveal variant="pop" delay={150} style={{ background: '#FBF8F3', border: '1px solid rgba(0,0,0,.12)', borderRadius: 18, padding: '26px 28px' }}>
               <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: '#7A766B' }}>
                 Példa brief
               </p>
@@ -323,7 +420,7 @@ export function AiPage() {
         {/* Árak */}
         <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>
           <div style={wrap}>
-            <Reveal style={{ background: '#17150D', borderRadius: 28, padding: 'clamp(32px,4.5vw,58px)', color: '#F6F1E9' }}>
+            <Reveal variant="mask" radius={28} style={{ background: '#17150D', borderRadius: 28, padding: 'clamp(32px,4.5vw,58px)', color: '#F6F1E9' }}>
               <h2 style={{ ...h2Style, color: '#F6F1E9' }}>Árak</h2>
               <p style={{ fontSize: 16.5, lineHeight: 1.6, color: 'rgba(246,241,233,.78)', maxWidth: '62ch', marginTop: 16 }}>
                 A legkisebb egység: 4 órás kitelepülés Budapesten, online megosztással.
@@ -350,8 +447,8 @@ export function AiPage() {
           </div>
         </section>
 
-        {/* SEO-záró bekezdés az ai.elmeny.hu-ról */}
-        <section style={{ position: 'relative', padding: 'clamp(30px,4vw,56px) clamp(24px,6vw,90px) clamp(80px,9vw,120px)' }}>
+        {/* SEO-záró bekezdés — tight bottom: the quote form follows right after */}
+        <section style={{ position: 'relative', padding: 'clamp(24px,3vw,40px) clamp(24px,6vw,90px) clamp(20px,2.5vw,36px)' }}>
           <div style={wrap}>
             <Reveal as="h2" style={{ ...h2Style, fontSize: 'clamp(22px,2.6vw,32px)' }}>
               Új generációs szelfigép — mesterséges intelligenciával
