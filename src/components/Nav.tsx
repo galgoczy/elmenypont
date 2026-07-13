@@ -14,7 +14,7 @@ interface NavProps {
 /** the services menu items — absolute hrefs (subpages/AI) stay as-is, the
  *  '#' anchor is prefixed with `base` so subpages point back home */
 const SERVICE_ITEMS = [
-  { href: 'https://ai.elmeny.hu', label: 'AI Selfiemata', desc: 'Valós idejű AI-képgenerálás' },
+  { href: '/ai-fotoautomata', label: 'AI Selfiemata', desc: 'Valós idejű AI-képgenerálás' },
   { href: '/greenbox', label: 'Greenbox Selfiemata', desc: 'Zöld hátteres stúdió-automata' },
   { href: '/smart-wall', label: 'Smart Wall', desc: 'Interaktív, érinthető fal' },
   { href: '/mosaic-wall', label: 'Mosaic Wall', desc: 'Közös mozaikkép a vendégfotókból' },

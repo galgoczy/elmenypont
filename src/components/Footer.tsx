@@ -29,7 +29,7 @@ export function Footer() {
             />
             <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,.6)' }}>
               Interaktív rendezvényélmények —{' '}
-              <a href="https://ai.elmeny.hu" style={{ color: 'rgba(255,255,255,.82)' }}>
+              <a href="/ai-fotoautomata" style={{ color: 'rgba(255,255,255,.82)' }}>
                 AI Selfiemata
               </a>
               , Videomata, greenbox és interaktív falak, kulcsrakészen.
@@ -41,7 +41,7 @@ export function Footer() {
                 Szolgáltatások
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9, fontSize: 15 }}>
-                <a href="https://ai.elmeny.hu" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a href="/ai-fotoautomata" style={{ color: 'rgba(255,255,255,.82)' }}>
                   AI fotóautomata bérlés rendezvényre
                 </a>
                 <a href="/greenbox" style={{ color: 'rgba(255,255,255,.82)' }}>
@@ -101,8 +101,11 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <p style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', marginTop: 28 }}>
-          © 2026 Élménypont. Minden jog fenntartva.
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', marginTop: 28, display: 'flex', gap: 18, flexWrap: 'wrap' }}>
+          <span>© 2026 Élménypont. Minden jog fenntartva.</span>
+          <a href="/adatkezeles" style={{ color: 'rgba(255,255,255,.55)' }}>
+            Adatkezelési tájékoztató
+          </a>
         </p>
       </div>
     </footer>

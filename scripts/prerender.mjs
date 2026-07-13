@@ -15,6 +15,9 @@ const { render } = await import(resolve(root, 'dist-ssr/ssg-entry.js'))
 
 const ORIGIN = 'https://elmeny.hu'
 
+// NOTE: descriptions land inside content="…" — never use a double quote in
+// them (a bare " truncates the attribute; that bug once cut the greenbox
+// description at `24"`)
 const ROUTES = [
   {
     path: '/',
@@ -22,11 +25,26 @@ const ROUTES = [
     // '/' keeps the template's own head untouched
   },
   {
+    path: '/ai-fotoautomata',
+    out: 'dist/ai-fotoautomata/index.html',
+    title: 'AI fotóautomata bérlés rendezvényre — AI Selfiemata | Élménypont',
+    description:
+      'Valós idejű AI-képgenerálás rendezvényre: a vendég fotójából 9–15 másodperc alatt egyedi, brandingelt alkotás készül. Nem arccsere — teljes képi újragenerálás. 105 000 Ft-tól.',
+    ogImage: 'https://elmenypont.vercel.app/assets/photos/ai/hero-uhajos-full.jpg',
+  },
+  {
+    path: '/adatkezeles',
+    out: 'dist/adatkezeles/index.html',
+    title: 'Adatkezelési tájékoztató | Élménypont',
+    description: 'Az elmeny.hu ajánlatkérő űrlapján megadott személyes adatok kezelésének feltételei.',
+  },
+  {
     path: '/greenbox',
     out: 'dist/greenbox/index.html',
     title: 'Greenbox fotózás bérlés rendezvényre | Élménypont — Greenbox Selfiemata',
     description:
-      'Zöld hátteres stúdió-automata rendezvényre: 24"-os érintőképernyő, élő előnézet, kész fotó 15 másodperc alatt nyomtatva vagy online. 80 000 Ft-tól, Budapesten.',
+      'Zöld hátteres stúdió-automata rendezvényre: 24 hüvelykes érintőképernyő, élő előnézet, kész fotó 15 másodperc alatt nyomtatva vagy online. 80 000 Ft-tól, Budapesten.',
+    ogImage: 'https://elmenypont.vercel.app/assets/photos/greenbox-before-after.jpg',
   },
   {
     path: '/smart-wall',
@@ -34,6 +52,7 @@ const ROUTES = [
     title: 'Smart Wall — interaktív fal bérlés rendezvényre | Élménypont',
     description:
       'Érintésre életre kelő vetített fal konferenciára, kiállításra, termékbemutatóra. AI-alapú tartalomgyártással már 450 000 Ft-tól — a rendezvényed arculatában.',
+    ogImage: 'https://elmenypont.vercel.app/assets/photos/smartwall-event.jpg',
   },
   {
     path: '/mosaic-wall',
@@ -41,6 +60,7 @@ const ROUTES = [
     title: 'Mosaic Wall — mozaikfal rendezvényre | Élménypont',
     description:
       'A vendégek fotóiból közösen összeálló nagy mozaikkép: fotózz, nyomtass, ragassz. 200 darabos mozaik 450 000 Ft-tól. Nagylétszámú rendezvényekre.',
+    ogImage: 'https://elmenypont.vercel.app/assets/photos/mosaic-wall-real.jpg',
   },
 ]
 
@@ -53,7 +73,7 @@ if (!template.includes(MOUNT)) {
 /** swap the template's per-page head fields for a subroute */
 function patchHead(html, route) {
   const url = `${ORIGIN}${route.path}`
-  return html
+  let out = html
     .replace(/<title>[^<]*<\/title>/, `<title>${route.title}</title>`)
     .replace(
       /(<meta\s+name="description"\s+content=")[^"]*(")/,
@@ -66,6 +86,10 @@ function patchHead(html, route) {
       /(<meta property="og:description" content=")[^"]*(")/,
       `$1${route.description}$2`,
     )
+  if (route.ogImage) {
+    out = out.replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${route.ogImage}$2`)
+  }
+  return out
 }
 
 for (const route of ROUTES) {

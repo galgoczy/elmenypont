@@ -2,6 +2,7 @@ import { useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { Magnetic } from './Magnetic'
+import { track } from './CookieBar'
 
 const EMAIL = 'hello@elmeny.hu'
 const PHONE_LABEL = '+36 20 468 0489'
@@ -67,6 +68,7 @@ export function ContactCTA() {
       })
       const json = await res.json().catch(() => ({ ok: false }))
       if (!res.ok || !json.ok) throw new Error(json.error || 'Küldési hiba')
+      track('generate_lead', { services: picked.join(',') || 'none' })
       setSent(true)
     } catch {
       setError(`Nem sikerült elküldeni — írj nekünk közvetlenül: ${EMAIL}`)
@@ -146,10 +148,15 @@ export function ContactCTA() {
               style={{ display: 'inline-flex', alignItems: 'center', gap: 11, fontWeight: 600, fontSize: 17, color: '#fff' }}
               onMouseEnter={(e) => (e.currentTarget.style.opacity = '.8')}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+              onClick={() => track('contact_click', { method: 'phone' })}
             >
               {PHONE_LABEL}
             </a>
-            <a href={`mailto:${EMAIL}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 11, fontSize: 16, color: 'rgba(255,255,255,.78)' }}>
+            <a
+              href={`mailto:${EMAIL}`}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 11, fontSize: 16, color: 'rgba(255,255,255,.78)' }}
+              onClick={() => track('contact_click', { method: 'email' })}
+            >
               {EMAIL}
             </a>
           </div>
@@ -157,6 +164,8 @@ export function ContactCTA() {
 
         {/* form */}
         <form
+          method="post"
+          action="/api/contact"
           onSubmit={(e) => {
             e.preventDefault()
             if (!sending && !sent) void submit(e.currentTarget)
@@ -212,6 +221,16 @@ export function ContactCTA() {
             <input name="guests" aria-label="Vendégszám" placeholder="Vendégszám" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
           <textarea name="message" aria-label="Üzenet" placeholder="Üzenet" rows={3} style={{ ...inputStyle, resize: 'vertical' }} onFocus={onFocus} onBlur={onBlur} />
+          <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13.5, lineHeight: 1.5, color: '#7A766B', cursor: 'pointer' }}>
+            <input type="checkbox" name="gdpr" required style={{ marginTop: 3, width: 16, height: 16, accentColor: '#17150D' }} />
+            <span>
+              Elolvastam és elfogadom az{' '}
+              <a href="/adatkezeles" target="_blank" rel="noopener" style={{ color: '#E94A35', textDecoration: 'underline' }}>
+                adatkezelési tájékoztatót
+              </a>
+              , és hozzájárulok adataim ajánlatadás céljából történő kezeléséhez.
+            </span>
+          </label>
           <Magnetic strength={6} style={{ marginTop: 6, display: 'block' }}>
             <button
               type="submit"

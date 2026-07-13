@@ -134,7 +134,7 @@ export function Services() {
               ))}
             </div>
             <a
-              href="https://ai.elmeny.hu"
+              href="/ai-fotoautomata"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -152,7 +152,7 @@ export function Services() {
               onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
             >
               AI fotóautomata bérlés <span>→</span>{' '}
-              <span style={{ opacity: 0.55, fontWeight: 400 }}>ai.elmeny.hu</span>
+              <span style={{ opacity: 0.55, fontWeight: 400 }}>105 000 Ft-tól</span>
             </a>
           </div>
           <div style={{ position: 'relative' }}>

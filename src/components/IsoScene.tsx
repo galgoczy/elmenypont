@@ -316,7 +316,7 @@ function Plant({ x, y, w, h, shadow, station, children }: PlantProps) {
 const STATIONS = [
   {
     key: 'selfiemata',
-    href: 'https://ai.elmeny.hu',
+    href: '/ai-fotoautomata',
     label: 'AI Selfiemata',
     color: '#4888F8',
     text: 'A vendég fotójából pár másodperc alatt egyedi, brandingelt AI-kép készül — nyomtatva vagy azonnal megosztva.',

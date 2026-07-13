@@ -1,5 +1,8 @@
 import App from './App'
 import { ServicePage } from './pages/ServicePage'
+import { AiPage } from './pages/AiPage'
+import { PrivacyPage } from './pages/PrivacyPage'
+import { CookieBar } from './components/CookieBar'
 import { GREENBOX, SMART_WALL, MOSAIC_WALL } from './pages/serviceData'
 
 /**
@@ -10,14 +13,28 @@ import { GREENBOX, SMART_WALL, MOSAIC_WALL } from './pages/serviceData'
  */
 export function Page({ path }: { path: string }) {
   const p = path.replace(/\/+$/, '') || '/'
+  let page = <App />
   switch (p) {
+    case '/ai-fotoautomata':
+      page = <AiPage />
+      break
+    case '/adatkezeles':
+      page = <PrivacyPage />
+      break
     case '/greenbox':
-      return <ServicePage data={GREENBOX} />
+      page = <ServicePage data={GREENBOX} />
+      break
     case '/smart-wall':
-      return <ServicePage data={SMART_WALL} />
+      page = <ServicePage data={SMART_WALL} />
+      break
     case '/mosaic-wall':
-      return <ServicePage data={MOSAIC_WALL} />
-    default:
-      return <App />
+      page = <ServicePage data={MOSAIC_WALL} />
+      break
   }
+  return (
+    <>
+      {page}
+      <CookieBar />
+    </>
+  )
 }

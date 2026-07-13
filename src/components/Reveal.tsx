@@ -61,50 +61,53 @@ export function Reveal({
       window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduce) return
 
+    // tuned down after the site audit: shorter travel + duration and an
+    // eager trigger, so fast scrolling never leaves sections blank while
+    // the entrances play catch-up
     const r = typeof radius === 'number' ? `${radius}px` : radius
-    let dur = '1s'
+    let dur = '.6s'
     let ease = 'cubic-bezier(.16,1,.3,1)'
     const props: string[] = ['opacity', 'transform']
 
     switch (v) {
       case 'up':
         el.style.opacity = '0'
-        el.style.transform = 'translateY(34px)'
-        dur = '.9s'
+        el.style.transform = 'translateY(22px)'
+        dur = '.55s'
         break
       case 'pop':
         el.style.opacity = '0'
-        el.style.transform = 'translateY(90px) scale(.9) rotate(-1.5deg)'
-        dur = '1.05s'
+        el.style.transform = 'translateY(48px) scale(.94) rotate(-1deg)'
+        dur = '.7s'
         ease = 'cubic-bezier(.2,.8,.2,1.05)'
         break
       case 'mask':
         el.style.opacity = '0.001'
-        el.style.transform = 'translateY(24px) scale(.985)'
+        el.style.transform = 'translateY(16px) scale(.99)'
         el.style.clipPath = `inset(6% 4% 55% 4% round ${r})`
-        dur = '1.15s'
+        dur = '.8s'
         props.push('clip-path')
         break
       case 'left':
         el.style.opacity = '0'
-        el.style.transform = 'translateX(-44px)'
+        el.style.transform = 'translateX(-30px)'
         break
       case 'right':
         el.style.opacity = '0'
-        el.style.transform = 'translateX(44px)'
+        el.style.transform = 'translateX(30px)'
         break
       case 'blur':
       default:
         el.style.opacity = '0'
-        el.style.transform = 'translateY(26px) scale(.995)'
-        el.style.filter = 'blur(9px)'
+        el.style.transform = 'translateY(18px) scale(.997)'
+        el.style.filter = 'blur(6px)'
         props.push('filter')
         break
     }
 
     el.style.transition = props.map((p) => `${p} ${dur} ${ease}`).join(', ')
     el.style.willChange = props.join(', ')
-    el.style.transitionDelay = `${delay}ms`
+    el.style.transitionDelay = `${Math.min(delay, 200)}ms`
 
     const io = new IntersectionObserver(
       (ents) => {
@@ -118,12 +121,12 @@ export function Reveal({
             // release will-change once the entrance settles
             window.setTimeout(() => {
               target.style.willChange = 'auto'
-            }, 1400 + delay)
+            }, 1000 + delay)
             io.unobserve(target)
           }
         })
       },
-      { threshold: 0.14, rootMargin: '0px 0px -8% 0px' },
+      { threshold: 0.05, rootMargin: '0px 0px 0px 0px' },
     )
     io.observe(el)
     return () => io.disconnect()

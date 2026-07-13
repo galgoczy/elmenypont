@@ -54,7 +54,7 @@
             "itemOffered": {
               "@type": "Service",
               "name": "AI fotóautomata bérlés rendezvényre — AI Selfiemata",
-              "url": "https://ai.elmeny.hu/",
+              "url": "https://elmeny.hu/ai-fotoautomata",
               "description": "Valós idejű AI-képgenerálás: a vendég fotója 9–15 másodperc alatt egyedi, megosztható, brandingelt alkotássá válik. Opcionális helyszíni nyomtatással."
             }
           },
@@ -91,6 +91,26 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // GA4 csak süti-hozzájárulás után töltődik (ep-consent, lásd CookieBar)
+      window.epGaId = 'G-Y56ESHY9JX'
+      window.epLoadGa = function () {
+        if (window.gtag) return
+        var s = document.createElement('script')
+        s.async = true
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.epGaId
+        document.head.appendChild(s)
+        window.dataLayer = window.dataLayer || []
+        window.gtag = function () {
+          window.dataLayer.push(arguments)
+        }
+        window.gtag('js', new Date())
+        window.gtag('config', window.epGaId, { anonymize_ip: true })
+      }
+      try {
+        if (localStorage.getItem('ep-consent') === 'yes') window.epLoadGa()
+      } catch (e) {}
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

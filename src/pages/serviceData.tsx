@@ -122,8 +122,8 @@ export const GREENBOX: ServiceData = {
   ],
   crossLink: {
     text: 'A mesterséges intelligenciás képgenerálás érdekel?',
-    label: 'AI Selfiemata — ai.elmeny.hu →',
-    href: 'https://ai.elmeny.hu',
+    label: 'AI Selfiemata →',
+    href: '/ai-fotoautomata',
   },
 }
 
