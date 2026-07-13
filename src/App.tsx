@@ -36,7 +36,7 @@ export default function App() {
         <IsoScene />
         <WhyUs />
         <Partners />
-        <ContactCTA />
+        <ContactCTA preselect={["AI Selfiemata"]} />
         <Footer />
       </main>
     </div>

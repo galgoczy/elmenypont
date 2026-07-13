@@ -40,7 +40,7 @@ const STEPS = [
 ]
 
 /** Hand-drawn rocket, nose pointing right (+x), so rotate() follows the path angle. */
-function RocketArt() {
+export function RocketArt() {
   return (
     <svg
       viewBox="0 0 64 64"

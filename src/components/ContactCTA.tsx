@@ -38,11 +38,12 @@ const onBlur = (e: ReactFocusEvent<HTMLElement>) => {
   e.currentTarget.style.borderColor = 'rgba(0,0,0,.08)'
 }
 
-export function ContactCTA() {
+export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
-  const [picked, setPicked] = useState<string[]>([])
+  // the page passes its own service so it starts ticked — more can be added
+  const [picked, setPicked] = useState<string[]>(preselect)
 
   const toggleService = (s: string) =>
     setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))

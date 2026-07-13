@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useScene } from '../hooks/useScene'
 import { CursorFX } from '../components/CursorFX'
 import { Nav } from '../components/Nav'
@@ -6,8 +6,15 @@ import { Reveal } from '../components/Reveal'
 import { Doodle } from '../components/Doodle'
 import { Magnetic } from '../components/Magnetic'
 import { BeforeAfter } from '../components/BeforeAfter'
+import { RocketTrail, ScrollTrail } from '../components/RocketTrail'
 import { ContactCTA } from '../components/ContactCTA'
+import { track } from '../components/CookieBar'
 import { Footer } from '../components/Footer'
+
+/** serpentine through the why-items (01 top-left, 02 mid-right, 03 low-left) */
+const WHY_TRAIL = 'M85 4 C 45 2, 12 6, 8 16 C 5 26, 20 34, 34 42 C 46 48, 46 52, 42 58 C 36 68, 22 72, 20 84 C 19 92, 34 96, 48 100'
+/** dotted connector through the how-steps (01 → 02 → 03 → 04) */
+const HOW_TRAIL = 'M6 8 C 12 18, 32 24, 42 34 C 50 41, 42 48, 32 53 C 22 58, 16 60, 18 68 C 20 78, 38 82, 52 88'
 
 const wrap: CSSProperties = { maxWidth: 1180, margin: '0 auto' }
 
@@ -80,6 +87,76 @@ export function AiPage() {
   const { scrolled } = useScene()
   const [style, setStyle] = useState(STYLES[0])
 
+  // demo request mini-form state
+  const [demoState, setDemoState] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
+  const demoSubmit = async (form: HTMLFormElement) => {
+    setDemoState('sending')
+    try {
+      const email = new FormData(form).get('demoEmail')
+      const res = await fetch('/api/demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const json = await res.json().catch(() => ({ ok: false }))
+      if (!res.ok || !json.ok) throw new Error()
+      track('demo_request')
+      setDemoState('ok')
+      form.reset()
+    } catch {
+      setDemoState('err')
+    }
+  }
+
+  // the style track drifts sideways on its own; any hover/touch pauses it,
+  // and at the ends it gently turns back (ping-pong)
+  const trackRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+    const reduce =
+      window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) return
+    let raf = 0
+    let dir = 1
+    let paused = false
+    let last = performance.now()
+    // float accumulator: scrollLeft floors fractional writes, so per-frame
+    // sub-pixel increments would round away to nothing
+    let pos = el.scrollLeft
+    const pause = () => {
+      paused = true
+    }
+    const resume = () => {
+      paused = false
+      pos = el.scrollLeft // pick up wherever the user left the track
+    }
+    el.addEventListener('pointerenter', pause)
+    el.addEventListener('pointerleave', resume)
+    el.addEventListener('touchstart', pause, { passive: true })
+    el.addEventListener('touchend', resume)
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick)
+      const dt = Math.min(50, now - last)
+      last = now
+      if (paused) return
+      const max = el.scrollWidth - el.clientWidth
+      if (max <= 2) return
+      pos = Math.min(max, Math.max(0, pos + dir * 0.022 * dt))
+      el.scrollLeft = pos
+      if (pos >= max - 1) dir = -1
+      else if (pos <= 1) dir = 1
+    }
+    raf = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(raf)
+      el.removeEventListener('pointerenter', pause)
+      el.removeEventListener('pointerleave', resume)
+      el.removeEventListener('touchstart', pause)
+      el.removeEventListener('touchend', resume)
+    }
+  }, [])
+
   return (
     <div style={{ position: 'relative', width: '100%', overflowX: 'clip', background: '#F6F1E9' }}>
       <CursorFX />
@@ -94,7 +171,10 @@ export function AiPage() {
         >
           <Doodle n={2} color="rgba(0,0,0,.05)" size={110} right="4%" top="10%" anim="float" duration={9} rotate="8deg" />
           <Doodle n={5} color="rgba(0,0,0,.04)" size={84} left="3%" bottom="6%" anim="float2" duration={11} rotate="-6deg" />
-          <div className="ep-svc-hero" style={wrap}>
+          {/* alignItems start: the portrait slider is much taller than the
+              other subpages' media, so centering pushed the copy down —
+              top-aligning puts the H1 exactly where the siblings have it */}
+          <div className="ep-svc-hero" style={{ ...wrap, alignItems: 'start' }}>
             <div>
               <Reveal
                 as="p"
@@ -228,8 +308,12 @@ export function AiPage() {
           </div>
         </header>
 
-        {/* Miért most? Miért AI? — the original dark section, 1:1 */}
-        <section style={{ position: 'relative', background: '#1C1917', padding: 'clamp(70px,9vw,100px) clamp(24px,6vw,90px)' }}>
+        {/* Miért most? Miért AI? — the original dark section, 1:1, with the
+            home page's rocket flying point to point and landing at the end */}
+        <section
+          data-rockethome
+          style={{ position: 'relative', background: '#1C1917', padding: 'clamp(70px,9vw,100px) clamp(24px,6vw,90px) clamp(100px,13vw,150px)', overflow: 'hidden' }}
+        >
           <div style={wrap}>
             <Reveal
               as="p"
@@ -260,23 +344,26 @@ export function AiPage() {
               A rendezvényipar <span style={{ color: '#4ade80' }}>legnagyobb trendje</span> 2026-ban
               az AI élmény.
             </Reveal>
-            <div className="ep-scatter">
-              {WHY.map((w, i) => (
-                <Reveal
-                  key={w.title}
-                  variant={i % 2 ? 'right' : 'left'}
-                  delay={i * 120}
-                  className={`ep-scatter-item ep-si-${i + 1}`}
-                >
-                  <span className="ep-scatter-num" style={{ color: '#4ade80' }} aria-hidden="true">
-                    0{i + 1}
-                  </span>
-                  <div>
-                    <h3 style={{ color: '#fff' }}>{w.title}</h3>
-                    <p style={{ color: 'rgba(255,255,255,.62)' }}>{w.body}</p>
-                  </div>
-                </Reveal>
-              ))}
+            <div style={{ position: 'relative' }}>
+              <RocketTrail trail={WHY_TRAIL} color="#4ade80" />
+              <div className="ep-scatter" style={{ position: 'relative', zIndex: 1 }}>
+                {WHY.map((w, i) => (
+                  <Reveal
+                    key={w.title}
+                    variant={i % 2 ? 'right' : 'left'}
+                    delay={i * 120}
+                    className={`ep-scatter-item ep-si-${i + 1}`}
+                  >
+                    <span className="ep-scatter-num" style={{ color: '#4ade80' }} aria-hidden="true">
+                      0{i + 1}
+                    </span>
+                    <div>
+                      <h3 style={{ color: '#fff' }}>{w.title}</h3>
+                      <p style={{ color: 'rgba(255,255,255,.62)' }}>{w.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -301,7 +388,7 @@ export function AiPage() {
               Minden kép <span style={{ color: '#FF6B35' }}>egyedi alkotás.</span>
             </Reveal>
             <Reveal delay={120}>
-              <div className="ep-strack">
+              <div className="ep-strack" ref={trackRef}>
                 {STYLE_CARDS.map((c) => (
                   <div key={c.img} className="ep-scard">
                     <div
@@ -364,24 +451,113 @@ export function AiPage() {
               <br />
               10 másodperc.
             </Reveal>
-            <div className="ep-scatter">
-              {STEPS.map((s, i) => (
-                <Reveal
-                  key={s.title}
-                  variant={i % 2 ? 'right' : 'left'}
-                  delay={i * 100}
-                  className={`ep-scatter-item ep-si-${i + 1}`}
-                >
-                  <span className="ep-scatter-num" style={{ color: '#4888F8' }} aria-hidden="true">
-                    0{i + 1}
-                  </span>
-                  <div>
-                    <h3 style={{ color: '#17150D' }}>{s.title}</h3>
-                    <p style={{ color: '#46433A' }}>{s.body}</p>
-                  </div>
-                </Reveal>
-              ))}
+            <div style={{ position: 'relative' }}>
+              {/* the original landing's dotted connector: draws itself from
+                  point to point as the scroll reaches them */}
+              <ScrollTrail trail={HOW_TRAIL} color="#4888F8" />
+              <div className="ep-scatter" style={{ position: 'relative', zIndex: 1 }}>
+                {STEPS.map((s, i) => (
+                  <Reveal
+                    key={s.title}
+                    variant={i % 2 ? 'right' : 'left'}
+                    delay={i * 100}
+                    className={`ep-scatter-item ep-si-${i + 1}`}
+                  >
+                    <span className="ep-scatter-num" style={{ color: '#4888F8' }} aria-hidden="true">
+                      0{i + 1}
+                    </span>
+                    <div>
+                      <h3 style={{ color: '#17150D' }}>{s.title}</h3>
+                      <p style={{ color: '#46433A' }}>{s.body}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
+
+            {/* demo request: leave an email, the demo link + password arrives */}
+            <Reveal variant="pop" delay={100} style={{ marginTop: 'clamp(36px,5vw,56px)' }}>
+              <div
+                style={{
+                  background: '#FBF8F3',
+                  border: '1px solid rgba(0,0,0,.12)',
+                  borderRadius: 20,
+                  padding: 'clamp(24px,3vw,36px)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 'clamp(16px,3vw,32px)',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <div style={{ flex: '1 1 320px' }}>
+                  <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 22, color: '#17150D' }}>
+                    Kérek bemutatót!
+                  </h3>
+                  <p style={{ fontSize: 15.5, lineHeight: 1.55, color: '#46433A', marginTop: 8 }}>
+                    Add meg az e-mail-címed, és azonnal küldjük az élő demó linkjét és jelszavát —
+                    kipróbálhatod, mielőtt ajánlatot kérsz.
+                  </p>
+                </div>
+                {demoState === 'ok' ? (
+                  <p style={{ fontSize: 15.5, fontWeight: 600, color: '#2FB268' }}>
+                    ✅ Elküldtük! Nézd meg a postafiókod.
+                  </p>
+                ) : (
+                  <form
+                    method="post"
+                    action="/api/demo"
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      if (demoState !== 'sending') void demoSubmit(e.currentTarget)
+                    }}
+                    style={{ display: 'flex', gap: 10, flexWrap: 'wrap', flex: '1 1 340px', justifyContent: 'flex-end' }}
+                  >
+                    <input
+                      type="email"
+                      name="demoEmail"
+                      required
+                      placeholder="E-mail címed"
+                      aria-label="E-mail cím a demóhoz"
+                      style={{
+                        flex: '1 1 200px',
+                        maxWidth: 300,
+                        background: '#F6F1E9',
+                        border: '1.5px solid rgba(0,0,0,.12)',
+                        borderRadius: 100,
+                        padding: '13px 20px',
+                        fontSize: 15.5,
+                        fontFamily: 'inherit',
+                        color: '#17150D',
+                        outline: 'none',
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      disabled={demoState === 'sending'}
+                      style={{
+                        fontFamily: 'inherit',
+                        fontSize: 15.5,
+                        fontWeight: 600,
+                        padding: '13px 24px',
+                        borderRadius: 100,
+                        border: 'none',
+                        background: '#4888F8',
+                        color: '#fff',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {demoState === 'sending' ? 'Küldés…' : 'Kérek bemutatót →'}
+                    </button>
+                    {demoState === 'err' && (
+                      <p role="alert" style={{ width: '100%', textAlign: 'right', fontSize: 13.5, color: '#C6402E' }}>
+                        Nem sikerült — írj nekünk: hello@elmeny.hu
+                      </p>
+                    )}
+                  </form>
+                )}
+              </div>
+            </Reveal>
           </div>
         </section>
 
@@ -441,7 +617,7 @@ export function AiPage() {
               </div>
               <p style={{ fontSize: 14, color: 'rgba(246,241,233,.55)', marginTop: 18 }}>
                 Az árak nettó árak. Mitől függ a pontos ár: időtartam · helyszín (Budapesten kívül kiszállás) · vendégszám és
-                nyomatcsomag · az AI-képvilág egyediségének mélysége.
+                nyomatcsomag.
               </p>
             </Reveal>
           </div>
@@ -464,7 +640,7 @@ export function AiPage() {
           </div>
         </section>
 
-        <ContactCTA />
+        <ContactCTA preselect={["AI Selfiemata"]} />
         <Footer />
       </main>
     </div>
