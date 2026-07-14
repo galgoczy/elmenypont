@@ -47,6 +47,7 @@ export default async function handler(req, res) {
       await sendMail({
         to: admin,
         toName: 'Galgóczy Gergely',
+        replyTo: 'hello@elmeny.hu',
         subject: `AI demo kérés – ${email}`,
         text: `Demo linket kért az elmeny.hu-n:\nEmail: ${email}\n${new Date().toISOString().slice(0, 16).replace('T', ' ')}\n`,
       })
