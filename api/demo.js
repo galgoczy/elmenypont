@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import { sendMail, mailMode } from '../lib/mailer.js'
 
 const DEMO_URL = 'https://aidemo.elmeny.hu'
 const DEMO_PASS = 'aifénykép'
@@ -40,23 +40,13 @@ export default async function handler(req, res) {
     }
   }
 
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env
-  if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
+  // ── Email (admin notice + demo link to requester) — Graph or SMTP ──
+  if (mailMode()) {
     const admin = process.env.CONTACT_ADMIN_EMAIL || 'galgoczy@elmeny.hu'
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: Number(SMTP_PORT || 587),
-      secure: false,
-      requireTLS: true, // Office365 needs STARTTLS on 587
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
-      connectionTimeout: 8000,
-      greetingTimeout: 8000,
-      socketTimeout: 8000,
-    })
     try {
-      await transporter.sendMail({
-        from: { name: 'Élménypont', address: SMTP_USER },
+      await sendMail({
         to: admin,
+        toName: 'Galgóczy Gergely',
         subject: `AI demo kérés – ${email}`,
         text: `Demo linket kért az elmeny.hu-n:\nEmail: ${email}\n${new Date().toISOString().slice(0, 16).replace('T', ' ')}\n`,
       })
@@ -65,8 +55,7 @@ export default async function handler(req, res) {
       failed.push(`admin-email: ${e.message}`)
     }
     try {
-      await transporter.sendMail({
-        from: { name: 'Élménypont', address: SMTP_USER },
+      await sendMail({
         to: email,
         replyTo: 'hello@elmeny.hu',
         subject: 'Itt az AI Selfiemata demód! ✦',

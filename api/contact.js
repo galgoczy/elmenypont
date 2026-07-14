@@ -1,12 +1,10 @@
-import nodemailer from 'nodemailer'
+import { sendMail, mailMode } from '../lib/mailer.js'
 
 /**
- * Quote-request endpoint (Vercel serverless). Ported from the ai.elmeny.hu
- * PHP mailer: notifies on Telegram, mails a plain summary to the admin and
- * a branded confirmation to the requester. All credentials come from env
- * vars (Vercel → Settings → Environment Variables) — never from code:
- *   TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID,
- *   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, CONTACT_ADMIN_EMAIL
+ * Quote-request endpoint (Vercel serverless): notifies on Telegram, mails a
+ * plain summary to the admin and a branded confirmation to the requester.
+ * Mail goes via Microsoft Graph (OAuth2) if configured, else SMTP — see
+ * lib/mailer.js. All credentials come from env vars, never from code.
  * Channels degrade independently: the request succeeds if at least one
  * configured channel delivered.
  */
@@ -67,27 +65,15 @@ export default async function handler(req, res) {
     }
   }
 
-  // ── Email (admin summary + branded confirmation) ──
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env
-  if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
+  // ── Email (admin summary + branded confirmation) — Graph or SMTP ──
+  if (mailMode()) {
     const admin = process.env.CONTACT_ADMIN_EMAIL || 'galgoczy@elmeny.hu'
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: Number(SMTP_PORT || 587),
-      secure: false,
-      requireTLS: true, // Office365 needs STARTTLS on 587
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
-      // fail fast instead of hanging into Vercel's function timeout
-      connectionTimeout: 8000,
-      greetingTimeout: 8000,
-      socketTimeout: 8000,
-    })
     const esc = (s) => s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' })[c])
     const greeting = name ? `Kedves ${esc(name)}!` : 'Kedves Érdeklődő!'
     try {
-      await transporter.sendMail({
-        from: { name: 'Élménypont', address: SMTP_USER },
+      await sendMail({
         to: admin,
+        toName: 'Galgóczy Gergely',
         subject: `Új ajánlatkérés – elmeny.hu (${serviceLine})`,
         text: `Új ajánlatkérés – elmeny.hu\n${new Date().toISOString().slice(0, 16).replace('T', ' ')}\n${'-'.repeat(32)}\n${summary}\n`,
       })
@@ -96,9 +82,9 @@ export default async function handler(req, res) {
       failed.push(`admin-email: ${e.message}`)
     }
     try {
-      await transporter.sendMail({
-        from: { name: 'Élménypont', address: SMTP_USER },
-        to: name ? { name, address: email } : email,
+      await sendMail({
+        to: email,
+        toName: name || undefined,
         replyTo: 'hello@elmeny.hu',
         subject: 'Köszönjük ajánlatkérésed! — Élménypont',
         text:
