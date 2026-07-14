@@ -195,7 +195,7 @@ export function Services() {
             >
               <img
                 data-bgimg
-                src="/assets/photos/style-cyberpunk.png"
+                src="/assets/aivideomata.jpg"
                 alt="AI Videomata"
                 style={{
                   position: 'absolute',
