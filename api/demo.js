@@ -1,4 +1,5 @@
 import { sendMail, mailMode } from '../lib/mailer.js'
+import { emailShell, button, panel, p } from '../lib/emailLayout.js'
 
 const DEMO_URL = 'https://aidemo.elmeny.hu'
 const DEMO_PASS = 'aifénykép'
@@ -47,9 +48,17 @@ export default async function handler(req, res) {
       await sendMail({
         to: admin,
         toName: 'Galgóczy Gergely',
-        replyTo: 'hello@elmeny.hu',
+        replyTo: email || 'hello@elmeny.hu',
         subject: `AI demo kérés – ${email}`,
         text: `Demo linket kért az elmeny.hu-n:\nEmail: ${email}\n${new Date().toISOString().slice(0, 16).replace('T', ' ')}\n`,
+        html: emailShell({
+          preheader: `AI demo kérés: ${email}`,
+          badge: 'AI demo kérés',
+          body:
+            p('<strong>Új AI demo kérés</strong> érkezett az elmeny.hu-ról 🎬', { size: 17, color: '#17150D', top: 0 }) +
+            p(`Email: <a href="mailto:${email}" style="color:#E94A35;font-weight:bold;">${email}</a>`) +
+            button(`mailto:${encodeURIComponent(email)}`, 'Válasz az érdeklődőnek →'),
+        }),
       })
       delivered.push('admin-email')
     } catch (e) {
@@ -63,32 +72,21 @@ export default async function handler(req, res) {
         text:
           `Kedves Érdeklődő!\n\nKöszönjük az érdeklődésed! Az AI Selfiemata demója:\n${DEMO_URL}\nJelszó: ${DEMO_PASS}\n\n` +
           `Ha tetszik, kérj ajánlatot: https://elmeny.hu/ai-fotoautomata#kapcsolat\nvagy keress minket: +36 20 468 0489 | hello@elmeny.hu\n\nÉlménypont csapata · elmeny.hu`,
-        html: `
-<html><body style="margin:0;padding:24px;background:#F6F1E9;font-family:Arial,sans-serif;font-size:14px;color:#17150D;">
-<div style="max-width:600px;margin:0 auto;">
-  <div style="background:#17150D;padding:30px;border-radius:16px 16px 0 0;text-align:center;">
-    <h1 style="color:#F6F1E9;margin:0;font-size:22px;">AI Selfiemata</h1>
-    <p style="color:#F2937F;margin:8px 0 0;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">Élménypont</p>
-  </div>
-  <div style="background:#fff;padding:30px;border:1px solid #e6e0d5;border-top:none;border-radius:0 0 16px 16px;">
-    <p style="font-size:16px;">Kedves Érdeklődő!</p>
-    <p>Köszönjük az érdeklődésed! Próbáld ki élőben, hogyan varázsol az AI Selfiemata pár másodperc alatt egyedi alkotást egy fotóból:</p>
-    <div style="background:#F6F1E9;border-radius:12px;padding:22px;text-align:center;margin:24px 0;">
-      <a href="${DEMO_URL}" style="display:inline-block;background:#17150D;color:#F6F1E9;text-decoration:none;font-weight:bold;font-size:16px;padding:14px 30px;border-radius:999px;">Demó megnyitása →</a>
-      <p style="margin:16px 0 0;color:#46433A;">A demó jelszava: <strong style="font-size:16px;color:#E94A35;">${DEMO_PASS}</strong></p>
-    </div>
-    <p>Ha tetszik, amit látsz:</p>
-    <p>
-      📅 <a href="https://elmeny.hu/ai-fotoautomata#kapcsolat" style="color:#E94A35;font-weight:bold;">Kérj ajánlatot a rendezvényedre →</a><br>
-      📞 vagy keress minket: <a href="tel:+36204680489" style="color:#E94A35;">+36 20 468 0489</a> ·
-      <a href="mailto:hello@elmeny.hu" style="color:#E94A35;">hello@elmeny.hu</a>
-    </p>
-    <p style="margin-top:28px;color:#7A766B;font-size:12px;border-top:1px solid #e6e0d5;padding-top:14px;">
-      © ${new Date().getFullYear()} Élménypont · <a href="https://elmeny.hu" style="color:#7A766B;">elmeny.hu</a>
-    </p>
-  </div>
-</div>
-</body></html>`,
+        html: emailShell({
+          preheader: 'Itt a személyes AI Selfiemata demód — próbáld ki élőben!',
+          badge: 'AI Selfiemata',
+          body:
+            p('Kedves Érdeklődő!', { size: 18, color: '#17150D', top: 0 }) +
+            p(
+              'Köszönjük az érdeklődésed! Próbáld ki élőben, hogyan varázsol az AI Selfiemata pár másodperc alatt egyedi alkotást egy fotóból:'
+            ) +
+            panel(
+              button(DEMO_URL, 'Demó megnyitása →', { dark: true }) +
+                `<div style="margin-top:16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#46433A;">A demó jelszava: <strong style="font-size:17px;color:#E94A35;letter-spacing:.02em;">${DEMO_PASS}</strong></div>`
+            ) +
+            p('Ha tetszik, amit látsz, a rendezvényedre pár kattintással kérhetsz ajánlatot:', { color: '#46433A' }) +
+            button('https://elmeny.hu/ai-fotoautomata#kapcsolat', 'Ajánlatot kérek →'),
+        }),
       })
       delivered.push('demo-email')
     } catch (e) {
