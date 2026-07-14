@@ -53,7 +53,10 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: tgChat,
-          text: `📩 <b>Új ajánlatkérés – elmeny.hu</b>\n<pre>${summary.replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</pre>`,
+          text:
+            `📩 <b>Új ajánlatkérés – elmeny.hu</b>\n` +
+            `🎯 Szolgáltatás: <b>${serviceLine.replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</b>\n\n` +
+            `<pre>${summary.replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</pre>`,
           parse_mode: 'HTML',
         }),
       })
@@ -72,7 +75,12 @@ export default async function handler(req, res) {
       host: SMTP_HOST,
       port: Number(SMTP_PORT || 587),
       secure: false,
+      requireTLS: true, // Office365 needs STARTTLS on 587
       auth: { user: SMTP_USER, pass: SMTP_PASS },
+      // fail fast instead of hanging into Vercel's function timeout
+      connectionTimeout: 8000,
+      greetingTimeout: 8000,
+      socketTimeout: 8000,
     })
     const esc = (s) => s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' })[c])
     const greeting = name ? `Kedves ${esc(name)}!` : 'Kedves Érdeklődő!'
@@ -133,8 +141,10 @@ export default async function handler(req, res) {
 
   if (delivered.length === 0) {
     console.error('contact: no channel delivered', failed)
-    return res.status(500).json({ ok: false, error: 'Egy csatornán sem sikerült elküldeni' })
+    return res.status(500).json({ ok: false, error: 'Egy csatornán sem sikerült elküldeni', failed })
   }
   if (failed.length) console.warn('contact: partial delivery', { delivered, failed })
-  return res.status(200).json({ ok: true })
+  // surface which channels went through / failed so a failing SMTP is
+  // visible in the browser Network tab (error strings carry no secrets)
+  return res.status(200).json({ ok: true, delivered, failed })
 }

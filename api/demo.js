@@ -47,7 +47,11 @@ export default async function handler(req, res) {
       host: SMTP_HOST,
       port: Number(SMTP_PORT || 587),
       secure: false,
+      requireTLS: true, // Office365 needs STARTTLS on 587
       auth: { user: SMTP_USER, pass: SMTP_PASS },
+      connectionTimeout: 8000,
+      greetingTimeout: 8000,
+      socketTimeout: 8000,
     })
     try {
       await transporter.sendMail({
@@ -104,8 +108,8 @@ export default async function handler(req, res) {
 
   if (delivered.length === 0) {
     console.error('demo: no channel delivered', failed)
-    return res.status(500).json({ ok: false, error: 'Nem sikerült elküldeni' })
+    return res.status(500).json({ ok: false, error: 'Nem sikerült elküldeni', failed })
   }
   if (failed.length) console.warn('demo: partial delivery', { delivered, failed })
-  return res.status(200).json({ ok: true })
+  return res.status(200).json({ ok: true, delivered, failed })
 }
