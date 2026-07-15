@@ -15,6 +15,19 @@ export default async function handler(req, res) {
   }
 
   const b = req.body || {}
+
+  // ── invisible spam guards ──────────────────────────────────────────────
+  // A filled honeypot (real users never see the "website" field) or an
+  // implausibly fast submit (< 3s from form mount) is almost certainly a
+  // bot. Drop it silently with a 200 so the bot thinks it succeeded and
+  // doesn't retry — no CAPTCHA, zero friction for genuine visitors.
+  if (typeof b.website === 'string' && b.website.trim() !== '') {
+    return res.status(200).json({ ok: true })
+  }
+  if (typeof b.elapsedMs === 'number' && b.elapsedMs >= 0 && b.elapsedMs < 3000) {
+    return res.status(200).json({ ok: true })
+  }
+
   const email = String(b.email || '').trim()
   const name = String(b.name || '').trim()
   const phone = String(b.phone || '').trim()

@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
+import { useRef, useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { Magnetic } from './Magnetic'
@@ -44,6 +44,9 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
   const [error, setError] = useState('')
   // the page passes its own service so it starts ticked — more can be added
   const [picked, setPicked] = useState<string[]>(preselect)
+  // invisible spam guard: when the form first mounted, so the server can
+  // drop implausibly fast (bot) submissions — see api/contact.js
+  const loadedAt = useRef(Date.now())
 
   const toggleService = (s: string) =>
     setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))
@@ -65,6 +68,9 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
           date: f.get('date'),
           guests: f.get('guests'),
           message: f.get('message'),
+          // bot traps (invisible to real users)
+          website: f.get('website'),
+          elapsedMs: Date.now() - loadedAt.current,
         }),
       })
       const json = await res.json().catch(() => ({ ok: false }))
@@ -173,6 +179,11 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
           }}
           style={{ padding: 'clamp(36px,4vw,56px)', display: 'flex', flexDirection: 'column', gap: 16 }}
         >
+          {/* honeypot: off-screen decoy field. Real users never see or fill
+              it; bots that auto-fill inputs trip it and get dropped server-side */}
+          <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }}>
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" placeholder="Website" />
+          </div>
           {/* which service(s) — multi-select chips */}
           <div>
             <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 10 }}>
