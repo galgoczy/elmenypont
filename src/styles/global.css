@@ -345,6 +345,10 @@ a {
   .ep-camdoodle {
     display: none;
   }
+  /* mirror the AI Videomata photo horizontally on mobile */
+  .ep-videomata-img {
+    transform: scaleX(-1) !important;
+  }
 }
 .ep-camdoodle-body {
   display: block;

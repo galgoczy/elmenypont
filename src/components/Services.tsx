@@ -195,6 +195,7 @@ export function Services() {
             >
               <img
                 data-bgimg
+                className="ep-videomata-img"
                 src="/assets/aivideomata.jpg"
                 alt="AI Videomata"
                 style={{
