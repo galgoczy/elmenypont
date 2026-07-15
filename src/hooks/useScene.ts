@@ -40,8 +40,10 @@ export function useScene(): SceneState {
 
       // the hero's snap point only exists while the viewport is inside the
       // hero — a page-wide scroll-snap-type kills iOS momentum scrolling.
-      // Subpages have no hero at all, so they never get the class.
-      doc.classList.toggle('ep-snap', !!hero && heroP < 0.98)
+      // Release it right after the p≈0.87 snap marker (where the copy has
+      // fully risen and the scroll comes to rest) so normal momentum resumes
+      // from the hero text, not half a screen lower. Subpages have no hero.
+      doc.classList.toggle('ep-snap', !!hero && heroP < 0.88)
 
       setState({
         y: window.scrollY,

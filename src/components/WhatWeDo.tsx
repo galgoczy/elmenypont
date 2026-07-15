@@ -49,10 +49,11 @@ function StripRow({ hidden }: { hidden?: boolean }) {
 }
 
 /**
- * Drag-to-fling photo strip: idle when untouched, spun only by dragging and
- * coasting on momentum. It loops infinitely (two identical rows, offset
- * wrapped modulo one row's width) and never reacts to page scroll —
- * transform-only, with touch-action:pan-y so vertical page scroll still works.
+ * Photo strip: drifts slowly on its own, and is also draggable — a fling
+ * adds momentum that decays back to the baseline drift. It loops infinitely
+ * (two identical rows, offset wrapped modulo one row's width) and never
+ * reacts to page scroll — transform-only, with touch-action:pan-y so
+ * vertical page scroll still works. Honors prefers-reduced-motion (no drift).
  */
 function DragStrip() {
   const track = useRef<HTMLDivElement | null>(null)
@@ -61,14 +62,20 @@ function DragStrip() {
     const el = track.current
     if (!el) return
     const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now())
+    const reduce =
+      typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // gentle constant auto-scroll (px/ms, leftward); paused while dragging.
+    // Momentum from a fling rides on top and decays back to this baseline.
+    const DRIFT = reduce ? 0 : -0.03
 
     let width = el.scrollWidth / 2 // one row; the second is a duplicate
     let x = 0
-    let v = 0 // px per ms
+    let v = 0 // extra fling velocity (px/ms) on top of DRIFT; decays to 0
     let dragging = false
     let lastX = 0
     let lastT = 0
     let raf = 0
+    let prev = now()
 
     const wrap = () => {
       if (width > 0) {
@@ -85,27 +92,21 @@ function DragStrip() {
       apply()
     }
 
-    const coast = () => {
-      let prev = now()
-      const step = () => {
-        const t = now()
-        const dt = Math.min(48, t - prev)
-        prev = t
-        x += v * dt
-        // exponential friction, framerate-independent
-        v *= Math.pow(0.94, dt / 16.67)
-        apply()
-        if (Math.abs(v) > 0.015) raf = requestAnimationFrame(step)
-        else raf = 0
-      }
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(step)
+    // one always-running loop: drift + decaying momentum when not dragging
+    const tick = () => {
+      raf = requestAnimationFrame(tick)
+      const t = now()
+      const dt = Math.min(48, t - prev)
+      prev = t
+      if (dragging) return
+      v *= Math.pow(0.94, dt / 16.67) // framerate-independent friction
+      if (Math.abs(v) < 0.001) v = 0
+      x += (v + DRIFT) * dt
+      apply()
     }
 
     const onDown = (e: PointerEvent) => {
       dragging = true
-      cancelAnimationFrame(raf)
-      raf = 0
       v = 0
       lastX = e.clientX
       lastT = now()
@@ -130,7 +131,6 @@ function DragStrip() {
       el.style.cursor = 'grab'
       // drop stale velocity if the finger paused before releasing
       if (now() - lastT > 90) v = 0
-      if (Math.abs(v) > 0.02) coast()
     }
 
     el.addEventListener('pointerdown', onDown)
@@ -139,6 +139,8 @@ function DragStrip() {
     el.addEventListener('pointercancel', onUp)
     window.addEventListener('resize', measure)
     measure()
+    prev = now()
+    raf = requestAnimationFrame(tick)
 
     return () => {
       cancelAnimationFrame(raf)

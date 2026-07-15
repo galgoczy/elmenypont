@@ -40,8 +40,10 @@ export function Services() {
         position: 'relative',
         background: '#F6F1E9',
         // a touch of top padding + scroll-margin so the "Amit a rendezvényedre
-        // hozunk" heading lands just below the fixed nav when linked to
-        padding: 'clamp(24px,4vw,56px) clamp(24px,6vw,90px) clamp(70px,9vw,120px)',
+        // hozunk" heading lands just below the fixed nav when linked to.
+        // Desktop top padding trimmed (clamp max 28) to lift the heading ~one
+        // line; the mobile value (min 24) is unchanged.
+        padding: 'clamp(24px,4vw,28px) clamp(24px,6vw,90px) clamp(70px,9vw,120px)',
         scrollMarginTop: '72px',
       }}
     >
