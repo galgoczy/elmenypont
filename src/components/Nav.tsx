@@ -278,31 +278,6 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
                 </a>
               )
             })}
-            {/* language switch inside the dropdown — only shown on mobile,
-                where the top-right chip is hidden to save header space */}
-            <div className="ep-nav-lang-menu" style={{ marginTop: 6, paddingTop: 10, borderTop: '1px solid rgba(0,0,0,.08)', display: 'flex', gap: 8, padding: '10px 14px 4px' }}>
-              {(['hu', 'en'] as Lang[]).map((code) => (
-                <button
-                  key={code}
-                  type="button"
-                  onClick={() => (code === lang ? setSvcOpen(false) : switchLang(code))}
-                  aria-pressed={code === lang}
-                  style={{
-                    fontFamily: 'inherit',
-                    fontSize: 14,
-                    fontWeight: 600,
-                    padding: '7px 16px',
-                    borderRadius: 100,
-                    cursor: 'pointer',
-                    border: `1.5px solid ${code === lang ? '#17150D' : 'rgba(0,0,0,.16)'}`,
-                    background: code === lang ? '#17150D' : 'transparent',
-                    color: code === lang ? '#F6F1E9' : '#46433A',
-                  }}
-                >
-                  {code === 'hu' ? 'Magyar' : 'English'}
-                </button>
-              ))}
-            </div>
             </div>
           </div>
         </div>
@@ -318,7 +293,10 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
         ))}
         <Magnetic strength={5}>
           <a href={`${b}#kapcsolat`} className="ep-nav-cta" style={{ ...navCtaStyle, display: 'inline-block', whiteSpace: 'nowrap' }}>
-            {pick('Ajánlatot kérek', 'Get a quote')}
+            {/* full label on desktop, short on mobile to make room for the
+                language chip in the tight header row */}
+            <span className="ep-cta-full">{pick('Ajánlatot kérek', 'Get a quote')}</span>
+            <span className="ep-cta-short">{pick('Ajánlat', 'Quote')}</span>
           </a>
         </Magnetic>
         {/* language switch — a compact chip showing the language you'd switch
