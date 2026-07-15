@@ -497,17 +497,18 @@ a {
 @media (max-width: 640px) {
   .ep-ai-stats {
     flex-wrap: nowrap !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
   .ep-ai-stat {
     flex: 1 1 0;
     min-width: 0;
   }
   .ep-ai-stat-v {
-    font-size: 22px !important;
+    font-size: 23px !important;
+    white-space: nowrap;
   }
   .ep-ai-stat-l {
-    font-size: 13px !important;
+    font-size: 13.7px !important;
     line-height: 1.2;
     margin-top: 5px !important;
   }
