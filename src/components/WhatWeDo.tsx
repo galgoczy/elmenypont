@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
@@ -45,7 +46,129 @@ function StripRow({ hidden }: { hidden?: boolean }) {
   )
 }
 
-/** "Mit csinálunk" + a continuously side-scrolling photo reference strip. */
+/**
+ * Drag-to-fling photo strip: idle when untouched, spun only by dragging and
+ * coasting on momentum. It loops infinitely (two identical rows, offset
+ * wrapped modulo one row's width) and never reacts to page scroll —
+ * transform-only, with touch-action:pan-y so vertical page scroll still works.
+ */
+function DragStrip() {
+  const track = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const el = track.current
+    if (!el) return
+    const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now())
+
+    let width = el.scrollWidth / 2 // one row; the second is a duplicate
+    let x = 0
+    let v = 0 // px per ms
+    let dragging = false
+    let lastX = 0
+    let lastT = 0
+    let raf = 0
+
+    const wrap = () => {
+      if (width > 0) {
+        while (x <= -width) x += width
+        while (x > 0) x -= width
+      }
+    }
+    const apply = () => {
+      wrap()
+      el.style.transform = `translate3d(${x}px,0,0)`
+    }
+    const measure = () => {
+      width = el.scrollWidth / 2
+      apply()
+    }
+
+    const coast = () => {
+      let prev = now()
+      const step = () => {
+        const t = now()
+        const dt = Math.min(48, t - prev)
+        prev = t
+        x += v * dt
+        // exponential friction, framerate-independent
+        v *= Math.pow(0.94, dt / 16.67)
+        apply()
+        if (Math.abs(v) > 0.015) raf = requestAnimationFrame(step)
+        else raf = 0
+      }
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(step)
+    }
+
+    const onDown = (e: PointerEvent) => {
+      dragging = true
+      cancelAnimationFrame(raf)
+      raf = 0
+      v = 0
+      lastX = e.clientX
+      lastT = now()
+      el.setPointerCapture?.(e.pointerId)
+      el.style.cursor = 'grabbing'
+    }
+    const onMove = (e: PointerEvent) => {
+      if (!dragging) return
+      const t = now()
+      const dx = e.clientX - lastX
+      const dt = t - lastT
+      x += dx
+      if (dt > 0) v = 0.8 * v + 0.2 * (dx / dt) // smoothed velocity
+      lastX = e.clientX
+      lastT = t
+      apply()
+    }
+    const onUp = (e: PointerEvent) => {
+      if (!dragging) return
+      dragging = false
+      el.releasePointerCapture?.(e.pointerId)
+      el.style.cursor = 'grab'
+      // drop stale velocity if the finger paused before releasing
+      if (now() - lastT > 90) v = 0
+      if (Math.abs(v) > 0.02) coast()
+    }
+
+    el.addEventListener('pointerdown', onDown)
+    el.addEventListener('pointermove', onMove)
+    el.addEventListener('pointerup', onUp)
+    el.addEventListener('pointercancel', onUp)
+    window.addEventListener('resize', measure)
+    measure()
+
+    return () => {
+      cancelAnimationFrame(raf)
+      el.removeEventListener('pointerdown', onDown)
+      el.removeEventListener('pointermove', onMove)
+      el.removeEventListener('pointerup', onUp)
+      el.removeEventListener('pointercancel', onUp)
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
+
+  return (
+    <div
+      ref={track}
+      onDragStart={(e) => e.preventDefault()}
+      style={{
+        display: 'flex',
+        width: 'max-content',
+        cursor: 'grab',
+        touchAction: 'pan-y',
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        willChange: 'transform',
+      }}
+    >
+      <StripRow />
+      <StripRow hidden />
+    </div>
+  )
+}
+
+/** "Mit csinálunk" + a drag-to-fling photo reference strip. */
 export function WhatWeDo() {
   return (
     <section
@@ -120,7 +243,7 @@ export function WhatWeDo() {
         </Reveal>
       </div>
 
-      {/* auto-scrolling photo reference strip — vertical padding so the
+      {/* drag-to-fling photo reference strip — vertical padding so the
           tilted cards don't clip at the top/bottom edges */}
       <Reveal
         delay={160}
@@ -133,16 +256,7 @@ export function WhatWeDo() {
           mask: 'linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)',
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            width: 'max-content',
-            animation: 'ep-marquee 40s linear infinite',
-          }}
-        >
-          <StripRow />
-          <StripRow hidden />
-        </div>
+        <DragStrip />
       </Reveal>
     </section>
   )

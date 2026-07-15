@@ -46,7 +46,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: 'Bizonytalanok vagyunk még a rendezvény paramétereiben, tudtok segíteni?',
-    a: 'Hogyne — évtizedes tapasztalattal akár ötlettel, akár (bizonytalan paraméterek esetén) nagyságrendi árral szívesen segítünk.',
+    a: 'Természetesen — évtizedes tapasztalattal akár ötlettel, akár (bizonytalan paraméterek esetén) nagyságrendi árral szívesen segítünk.',
   },
 ]
 
