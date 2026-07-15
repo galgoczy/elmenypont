@@ -103,7 +103,20 @@
     <script>
       // GA4 csak süti-hozzájárulás után töltődik (ep-consent, lásd CookieBar)
       window.epGaId = 'G-Y56ESHY9JX'
+      // Eszköz-szintű kizárás a statisztikából (pl. a tulaj saját gépe):
+      // egyszer nyisd meg a ?noga=1 paraméterrel → onnantól nem töltődik GA
+      // ezen a böngészőn; ?noga=0-val visszakapcsolható.
+      try {
+        var epQ = new URLSearchParams(location.search)
+        if (epQ.has('noga')) {
+          if (epQ.get('noga') === '0') localStorage.removeItem('ep-noga')
+          else localStorage.setItem('ep-noga', '1')
+        }
+      } catch (e) {}
       window.epLoadGa = function () {
+        try {
+          if (localStorage.getItem('ep-noga') === '1') return
+        } catch (e) {}
         if (window.gtag) return
         var s = document.createElement('script')
         s.async = true

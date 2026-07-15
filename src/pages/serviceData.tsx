@@ -216,17 +216,18 @@ export const SMART_WALL: ServiceData = {
     headline: 'Árak — az AI-fordulat',
     blurb: (
       <>
-        Az egyedi interaktív tartalom fejlesztése korábban milliós tétel volt. Ma az AI-alapú
-        tartalomgyártásunkkal ugyanez napok alatt, a korábbi ár töredékéért készül el — a
-        megtakarítást pedig továbbadjuk. És minél többször veted be, annál jobban megéri.
+        Az egyedi interaktív tartalom fejlesztése a sarokpont — egyben a legösszetettebb tétel is
+        ebben a szolgáltatásban. Szerencsére a korábban hosszú, sok szakembert igénylő folyamat ma
+        az AI-alapú, de ember által végzett tartalomgyártásunkkal napok alatt, a korábbi költségek
+        töredéke mellett elkészülhet. És minél többször veted be ugyanazt a tartalmat, annál jobban megéri.
       </>
     ),
     rows: [
       {
         label: 'Első bevetés: koncepció + tartalomfejlesztés + fali nyomat + 1 nap telepítés és üzemeltetés',
-        value: '450 000 Ft-tól',
+        value: '600 000 Ft-tól',
       },
-      { label: 'További napok ugyanazon a rendezvényen (nincs újraszerelés)', value: '+75 000 Ft/nap' },
+      { label: 'További napok ugyanazon a rendezvényen (nincs újraszerelés)', value: '+80 000 Ft/nap-tól' },
       { label: 'Meglévő tartalommal újabb rendezvényen', value: '150 000 Ft/nap-tól' },
     ],
     factors: ['napok száma', 'helyszín', 'a tartalom összetettsége'],
