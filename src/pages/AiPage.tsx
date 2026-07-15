@@ -35,7 +35,6 @@ const STYLES = [
   { key: 'festmeny', label: 'Festmény', src: '/assets/photos/ai/hero-festmeny-full.jpg' },
   { key: 'karikatura', label: 'Karikatúra', src: '/assets/photos/ai/hero-karikatura-full.jpg' },
   { key: 'extrem', label: 'Extrém', src: '/assets/photos/ai/hero-extrem-full.jpg' },
-  { key: 'pixar', label: 'Pixar', src: '/assets/photos/ai/hero-pixar-full.jpg' },
 ]
 
 /** ported 1:1 from the original landing's dark "Miért most? Miért AI?" */
@@ -320,6 +319,23 @@ export function AiPage() {
                     </button>
                   )
                 })}
+                {/* non-clickable "Egyedi" pill — signals fully custom styles,
+                    dashed outline to set it apart from the selectable ones */}
+                <span
+                  aria-label="Egyedi stílus – kérésre bármilyen téma"
+                  style={{
+                    fontFamily: 'inherit',
+                    fontSize: 13.5,
+                    fontWeight: 600,
+                    padding: '8px 15px',
+                    borderRadius: 100,
+                    border: '1.5px dashed rgba(0,0,0,.4)',
+                    background: 'transparent',
+                    color: '#46433A',
+                  }}
+                >
+                  Egyedi
+                </span>
               </Reveal>
             </div>
           </div>
