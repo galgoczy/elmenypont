@@ -4,6 +4,7 @@ import { AiPage } from './pages/AiPage'
 import { PrivacyPage } from './pages/PrivacyPage'
 import { CookieBar } from './components/CookieBar'
 import { GREENBOX, SMART_WALL, MOSAIC_WALL, SELFIEBOX } from './pages/serviceData'
+import { LangProvider, splitLangPath } from './i18n'
 
 /**
  * Pathname-based page switch — no client-side router. Internal links between
@@ -12,7 +13,7 @@ import { GREENBOX, SMART_WALL, MOSAIC_WALL, SELFIEBOX } from './pages/serviceDat
  * and crawlers see complete documents.
  */
 export function Page({ path }: { path: string }) {
-  const p = path.replace(/\/+$/, '') || '/'
+  const { lang, path: p } = splitLangPath(path)
   let page = <App />
   switch (p) {
     case '/ai-fotoautomata':
@@ -35,9 +36,9 @@ export function Page({ path }: { path: string }) {
       break
   }
   return (
-    <>
+    <LangProvider lang={lang}>
       {page}
       <CookieBar />
-    </>
+    </LangProvider>
   )
 }

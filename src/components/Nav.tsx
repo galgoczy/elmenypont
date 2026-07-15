@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { cl } from '../hooks/useScene'
 import { Magnetic } from './Magnetic'
+import { useLang, splitLangPath, localizedPath, type Lang } from '../i18n'
 
 interface NavProps {
   /** hero scroll progress — omit on subpages (they have no dark hero) */
@@ -14,18 +15,18 @@ interface NavProps {
 /** the services menu items — absolute hrefs (subpages/AI) stay as-is, the
  *  '#' anchor is prefixed with `base` so subpages point back home */
 const SERVICE_ITEMS = [
-  { href: '/ai-fotoautomata', label: 'AI Selfiemata', desc: 'Valós idejű AI-képgenerálás', ai: true },
-  { href: '/greenbox', label: 'Greenbox Selfiemata', desc: 'Zöld hátteres stúdió-automata' },
-  { href: '/smart-wall', label: 'Smart Wall', desc: 'Interaktív, érinthető fal' },
-  { href: '/mosaic-wall', label: 'Mosaic Wall', desc: 'Közös mozaikkép a vendégfotókból' },
-  { href: '/selfiebox', label: 'Selfiebox', desc: 'Klasszikus fotóbox azonnali nyomtatással' },
-  { href: null, label: 'AI Videomata', desc: 'Hamarosan' },
-] as { href: string | null; label: string; desc: string; ai?: boolean }[]
+  { href: '/ai-fotoautomata', label: 'AI Selfiemata', desc: 'Valós idejű AI-képgenerálás', descEn: 'Real-time AI image generation', ai: true },
+  { href: '/greenbox', label: 'Greenbox Selfiemata', desc: 'Zöld hátteres stúdió-automata', descEn: 'Green-screen studio automat' },
+  { href: '/smart-wall', label: 'Smart Wall', desc: 'Interaktív, érinthető fal', descEn: 'Interactive, touchable wall' },
+  { href: '/mosaic-wall', label: 'Mosaic Wall', desc: 'Közös mozaikkép a vendégfotókból', descEn: 'A shared mosaic from guest photos' },
+  { href: '/selfiebox', label: 'Selfiebox', desc: 'Klasszikus fotóbox azonnali nyomtatással', descEn: 'Classic photo booth, instant prints' },
+  { href: null, label: 'AI Videomata', desc: 'Hamarosan', descEn: 'Coming soon' },
+] as { href: string | null; label: string; desc: string; descEn: string; ai?: boolean }[]
 
 const LINKS = [
-  { href: '#elmeny', label: 'Az élmény' },
-  { href: '#rolunk', label: 'Rólunk' },
-  { href: '#kapcsolat', label: 'Kapcsolat' },
+  { href: '#elmeny', label: 'Az élmény', labelEn: 'The experience' },
+  { href: '#rolunk', label: 'Rólunk', labelEn: 'About us' },
+  { href: '#kapcsolat', label: 'Kapcsolat', labelEn: 'Contact' },
 ]
 
 export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
@@ -34,6 +35,22 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
   // hero's reveal phase).
   const mix = cl(heroP, 0.711, 0.826)
   const navDark = !scrolled && mix < 0.5
+  const lang = useLang()
+  const en = lang === 'en'
+  const pick = (hu: string, enText: string) => (en ? enText : hu)
+  // localize an absolute internal href for the current language
+  const loc = (href: string) => (href.startsWith('/') ? localizedPath(href, lang) : href)
+  // anchor base: '' on the home page (same-page anchors), '/en' or '/' on subpages
+  const b = base ? (en ? '/en' : '/') : ''
+  const switchLang = (target: Lang) => {
+    try {
+      document.cookie = `ep-lang=${target};path=/;max-age=31536000;samesite=lax`
+    } catch {
+      /* ignore */
+    }
+    const { path } = splitLangPath(window.location.pathname)
+    window.location.assign(localizedPath(path, target) + window.location.hash)
+  }
   // services dropdown: hover on desktop, tap-toggle on touch
   const [svcOpen, setSvcOpen] = useState(false)
   const svcRef = useRef<HTMLDivElement | null>(null)
@@ -100,7 +117,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
           pointerEvents: 'none',
         }}
       />
-      <a href={base ? base : '#top'} className="ep-nav-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
+      <a href={b || '#top'} className="ep-nav-logo" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
         <img
           src="/assets/logo/elmenypont-logo-coral.png"
           alt="Élménypont"
@@ -132,7 +149,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
           style={{ position: 'relative' }}
         >
           <a
-            href={base ? `${base}#szolgaltatasok` : '#szolgaltatasok'}
+            href={b ? `${b}#szolgaltatasok` : '#szolgaltatasok'}
             style={{ ...navLinkStyle, display: 'inline-flex', alignItems: 'center', gap: 6 }}
             onClick={(e) => {
               // touch devices (no real hover) just toggle the menu — the
@@ -153,7 +170,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
             }}
             aria-expanded={svcOpen}
           >
-            Szolgáltatások
+            {pick('Szolgáltatások', 'Services')}
             <span
               aria-hidden="true"
               style={{
@@ -197,7 +214,7 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
             >
             {SERVICE_ITEMS.map((s) => {
               const inactive = !s.href
-              const href = s.href && s.href.startsWith('#') ? `${base}${s.href}` : s.href || undefined
+              const href = s.href && s.href.startsWith('#') ? `${b}${s.href}` : s.href ? loc(s.href) : undefined
               return (
                 <a
                   key={s.label}
@@ -249,34 +266,84 @@ export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
                           padding: '2px 7px',
                         }}
                       >
-                        Hamarosan
+                        {pick('Hamarosan', 'Coming soon')}
                       </span>
                     )}
                   </span>
                   {!inactive && (
-                    <span style={{ fontSize: 13, color: '#7A766B', marginTop: 1, display: 'block' }}>{s.desc}</span>
+                    <span style={{ fontSize: 13, color: '#7A766B', marginTop: 1, display: 'block' }}>
+                      {pick(s.desc, s.descEn)}
+                    </span>
                   )}
                 </a>
               )
             })}
+            {/* language switch inside the dropdown — only shown on mobile,
+                where the top-right chip is hidden to save header space */}
+            <div className="ep-nav-lang-menu" style={{ marginTop: 6, paddingTop: 10, borderTop: '1px solid rgba(0,0,0,.08)', display: 'flex', gap: 8, padding: '10px 14px 4px' }}>
+              {(['hu', 'en'] as Lang[]).map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => (code === lang ? setSvcOpen(false) : switchLang(code))}
+                  aria-pressed={code === lang}
+                  style={{
+                    fontFamily: 'inherit',
+                    fontSize: 14,
+                    fontWeight: 600,
+                    padding: '7px 16px',
+                    borderRadius: 100,
+                    cursor: 'pointer',
+                    border: `1.5px solid ${code === lang ? '#17150D' : 'rgba(0,0,0,.16)'}`,
+                    background: code === lang ? '#17150D' : 'transparent',
+                    color: code === lang ? '#F6F1E9' : '#46433A',
+                  }}
+                >
+                  {code === 'hu' ? 'Magyar' : 'English'}
+                </button>
+              ))}
+            </div>
             </div>
           </div>
         </div>
         {LINKS.map((l) => (
           <a
             key={l.href}
-            href={`${base}${l.href}`}
+            href={`${b}${l.href}`}
             style={navLinkStyle}
             className="ep-nav-link"
           >
-            {l.label}
+            {pick(l.label, l.labelEn)}
           </a>
         ))}
         <Magnetic strength={5}>
-          <a href="#kapcsolat" className="ep-nav-cta" style={{ ...navCtaStyle, display: 'inline-block', whiteSpace: 'nowrap' }}>
-            Ajánlatot kérek
+          <a href={`${b}#kapcsolat`} className="ep-nav-cta" style={{ ...navCtaStyle, display: 'inline-block', whiteSpace: 'nowrap' }}>
+            {pick('Ajánlatot kérek', 'Get a quote')}
           </a>
         </Magnetic>
+        {/* language switch — a compact chip showing the language you'd switch
+            to; persists the choice in a cookie and reloads the equivalent page */}
+        <button
+          type="button"
+          className="ep-nav-lang"
+          onClick={() => switchLang(en ? 'hu' : 'en')}
+          aria-label={en ? 'Váltás magyarra' : 'Switch to English'}
+          style={{
+            fontFamily: 'inherit',
+            fontSize: 12.5,
+            fontWeight: 700,
+            letterSpacing: '.04em',
+            color: linkCol,
+            background: 'none',
+            border: `1.5px solid ${navDark ? 'rgba(255,255,255,.4)' : 'rgba(0,0,0,.18)'}`,
+            borderRadius: 100,
+            padding: '5px 10px',
+            marginLeft: 2,
+            cursor: 'pointer',
+          }}
+        >
+          {en ? 'HU' : 'EN'}
+        </button>
       </div>
     </nav>
   )

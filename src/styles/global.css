@@ -433,6 +433,20 @@ a {
   }
 }
 
+/* Language switch lives as a top-right chip on desktop, and inside the
+   services dropdown on mobile (where the header row has no spare width). */
+.ep-nav-lang-menu {
+  display: none;
+}
+@media (max-width: 820px) {
+  .ep-nav-lang {
+    display: none !important;
+  }
+  .ep-nav-lang-menu {
+    display: flex;
+  }
+}
+
 /* header right group: generous spacing on desktop, compact on mobile —
    the CTA pill shrinks so "Ajánlatot kérek" stays on one line and the
    Szolgáltatások trigger gets clear air from the logo */
