@@ -329,9 +329,9 @@ export function AiPage() {
                     fontWeight: 600,
                     padding: '8px 15px',
                     borderRadius: 100,
-                    border: '1.5px dashed rgba(0,0,0,.4)',
+                    border: '1.5px dashed rgba(0,0,0,.22)',
                     background: 'transparent',
-                    color: '#46433A',
+                    color: '#9A968C',
                   }}
                 >
                   Egyedi
