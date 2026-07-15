@@ -232,22 +232,23 @@ export function AiPage() {
                 Valós idejű AI-képgenerálás rendezvényeken: a készült fotót az AI átvarázsolja —
                 egyedi, megosztható, brandingelt emlék, pár másodperc alatt.
               </Reveal>
-              <Reveal delay={150} style={{ display: 'flex', gap: 22, marginTop: 26, flexWrap: 'wrap' }}>
+              <Reveal className="ep-ai-stats" delay={150} style={{ display: 'flex', gap: 22, marginTop: 26, flexWrap: 'wrap' }}>
                 {[
                   { v: '9–15 mp', l: 'AI generálás', c: '#9B6BF2' },
                   { v: '∞ stílus', l: 'választható téma', c: '#48D880' },
                   { v: '100%', l: 'rendezvényre szabva', c: '#E94A35' },
                 ].map((s) => (
-                  <div key={s.l}>
-                    <div style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 24, color: s.c, lineHeight: 1 }}>{s.v}</div>
-                    <div style={{ fontSize: 13, color: '#7A766B', marginTop: 3 }}>{s.l}</div>
+                  <div className="ep-ai-stat" key={s.l}>
+                    <div className="ep-ai-stat-v" style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 24, color: s.c, lineHeight: 1 }}>{s.v}</div>
+                    <div className="ep-ai-stat-l" style={{ fontSize: 13, color: '#7A766B', marginTop: 3 }}>{s.l}</div>
                   </div>
                 ))}
               </Reveal>
-              <Reveal delay={200} style={{ display: 'flex', gap: 14, alignItems: 'center', marginTop: 30, flexWrap: 'wrap' }}>
+              <Reveal className="ep-ai-cta" delay={200} style={{ display: 'flex', gap: 14, alignItems: 'center', marginTop: 30, flexWrap: 'wrap' }}>
                 <Magnetic strength={7}>
                   <a
                     href="#kapcsolat"
+                    className="ep-ai-cta-btn"
                     style={{
                       display: 'inline-block',
                       background: '#17150D',
@@ -264,6 +265,7 @@ export function AiPage() {
                 <Magnetic strength={6}>
                   <a
                     href="#bemutato"
+                    className="ep-ai-cta-btn"
                     style={{
                       display: 'inline-block',
                       background: '#4888F8',
