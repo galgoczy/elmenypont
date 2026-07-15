@@ -36,6 +36,7 @@ export default async function handler(req, res) {
   const guests = String(b.guests || '').trim()
   const message = String(b.message || '').trim()
   const services = Array.isArray(b.services) ? b.services.map(String).slice(0, 10) : []
+  const en = b.lang === 'en' // requester's language — confirmation is sent in it
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ ok: false, error: 'Érvénytelen email cím' })
@@ -120,28 +121,51 @@ export default async function handler(req, res) {
       failed.push(`admin-email: ${e.message}`)
     }
 
-    // Requester confirmation
+    // Requester confirmation — in the requester's language
     try {
-      const confirmBody =
-        p(greeting, { size: 18, color: '#17150D', top: 0 }) +
-        p('Köszönjük ajánlatkérésed! Kollégánk <strong>1 munkanapon belül</strong> felveszi veled a kapcsolatot.') +
-        infoRows(detailRows) +
-        p('Ha addig is kérdésed van, keress minket bátran — vagy nézd meg, mi mindent viszünk a rendezvényedre:', {
-          color: '#46433A',
-          top: 22,
-        }) +
-        button('https://elmeny.hu', 'Szolgáltatásaink →')
+      const enGreeting = name ? `Dear ${escHtml(name)}!` : 'Dear Enquirer!'
+      const confirmRows = en
+        ? [
+            ['Service', serviceLine],
+            ['Event type', eventType || '–'],
+            ['Date', date || '–'],
+            ['Guests', guests || '–'],
+          ]
+        : detailRows
+      const confirmBody = en
+        ? p(enGreeting, { size: 18, color: '#17150D', top: 0 }) +
+          p('Thank you for your enquiry! A colleague of ours will get in touch <strong>within 1 business day</strong>.') +
+          infoRows(confirmRows) +
+          p('If you have any questions in the meantime, feel free to reach out — or take a look at everything we bring to your event:', {
+            color: '#46433A',
+            top: 22,
+          }) +
+          button('https://elmeny.hu/en', 'Our services →')
+        : p(greeting, { size: 18, color: '#17150D', top: 0 }) +
+          p('Köszönjük ajánlatkérésed! Kollégánk <strong>1 munkanapon belül</strong> felveszi veled a kapcsolatot.') +
+          infoRows(confirmRows) +
+          p('Ha addig is kérdésed van, keress minket bátran — vagy nézd meg, mi mindent viszünk a rendezvényedre:', {
+            color: '#46433A',
+            top: 22,
+          }) +
+          button('https://elmeny.hu', 'Szolgáltatásaink →')
       await sendMail({
         to: email,
         toName: name || undefined,
         replyTo: 'hello@elmeny.hu',
-        subject: 'Köszönjük ajánlatkérésed! — Élménypont',
-        text:
-          `${name ? `Kedves ${name}!` : 'Kedves Érdeklődő!'}\n\nKöszönjük ajánlatkérésed! Kollégánk 1 munkanapon belül felveszi veled a kapcsolatot.\n\n` +
-          `Amire ajánlatot kértél: ${serviceLine}\nEsemény típusa: ${eventType || '–'}\nIdőpont: ${date || '–'}\nVendégszám: ${guests || '–'}\n\n` +
-          `Ha sürgős, keress minket közvetlenül:\nhello@elmeny.hu | +36 20 468 0489\n\nÉlménypont csapata · elmeny.hu`,
+        subject: en ? 'Thanks for your enquiry! — Élménypont' : 'Köszönjük ajánlatkérésed! — Élménypont',
+        text: en
+          ? `${name ? `Dear ${name}!` : 'Dear Enquirer!'}\n\nThank you for your enquiry! A colleague of ours will get in touch within 1 business day.\n\n` +
+            `What you asked about: ${serviceLine}\nEvent type: ${eventType || '–'}\nDate: ${date || '–'}\nGuests: ${guests || '–'}\n\n` +
+            `If it's urgent, reach us directly:\nhello@elmeny.hu | +36 20 468 0489\n\nThe Élménypont team · elmeny.hu`
+          : `${name ? `Kedves ${name}!` : 'Kedves Érdeklődő!'}\n\nKöszönjük ajánlatkérésed! Kollégánk 1 munkanapon belül felveszi veled a kapcsolatot.\n\n` +
+            `Amire ajánlatot kértél: ${serviceLine}\nEsemény típusa: ${eventType || '–'}\nIdőpont: ${date || '–'}\nVendégszám: ${guests || '–'}\n\n` +
+            `Ha sürgős, keress minket közvetlenül:\nhello@elmeny.hu | +36 20 468 0489\n\nÉlménypont csapata · elmeny.hu`,
         html: emailShell({
-          preheader: 'Köszönjük ajánlatkérésed! Kollégánk 1 munkanapon belül keres.',
+          preheader: en
+            ? 'Thank you for your enquiry! A colleague will contact you within 1 business day.'
+            : 'Köszönjük ajánlatkérésed! Kollégánk 1 munkanapon belül keres.',
+          badge: en ? 'Quote request' : undefined,
           body: confirmBody,
         }),
       })

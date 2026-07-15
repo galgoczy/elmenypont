@@ -1,5 +1,5 @@
 import { useRef, useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
-import { useT, useLoc } from '../i18n'
+import { useT, useLoc, useLang } from '../i18n'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { Magnetic } from './Magnetic'
@@ -47,6 +47,7 @@ const onBlur = (e: ReactFocusEvent<HTMLElement>) => {
 export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
   const t = useT()
   const loc = useLoc()
+  const lang = useLang()
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
@@ -79,6 +80,8 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
           // bot traps (invisible to real users)
           website: f.get('website'),
           elapsedMs: Date.now() - loadedAt.current,
+          // requester's language — the confirmation email is sent in it
+          lang,
         }),
       })
       const json = await res.json().catch(() => ({ ok: false }))

@@ -11,7 +11,7 @@ import { Faq } from '../components/Faq'
 import { ContactCTA } from '../components/ContactCTA'
 import { track } from '../components/CookieBar'
 import { Footer } from '../components/Footer'
-import { useT } from '../i18n'
+import { useT, useLang } from '../i18n'
 
 /** serpentine that STARTS at the 01 point (top-left), curves down to 02
  *  (mid-right), then to 03 (lower-left), then descends to land */
@@ -93,6 +93,7 @@ const CUSTOM = [
  */
 export function AiPage() {
   const t = useT()
+  const lang = useLang()
   const { scrolled } = useScene()
   const [style, setStyle] = useState(STYLES[0])
 
@@ -105,7 +106,7 @@ export function AiPage() {
       const res = await fetch('/api/demo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, lang }),
       })
       const json = await res.json().catch(() => ({ ok: false }))
       if (!res.ok || !json.ok) throw new Error()
