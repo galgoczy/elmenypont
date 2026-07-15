@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Reveal } from './Reveal'
 import { Words } from './Words'
+import { useT } from '../i18n'
 
 /* ------------------------------------------------------------------ *
  *  Rotatable paper-diorama event space.
@@ -318,26 +319,33 @@ const STATIONS = [
     key: 'selfiemata',
     href: '/ai-fotoautomata',
     label: 'AI Selfiemata',
+    labelEn: 'AI Selfiemata',
     color: '#4888F8',
     text: 'A vendég fotójából pár másodperc alatt egyedi, brandingelt AI-kép készül — nyomtatva vagy azonnal megosztva.',
+    textEn: 'From the guest’s photo, a unique, branded AI image is created in seconds — printed or shared instantly.',
   },
   {
     key: 'greenbox',
     href: '/greenbox',
     label: 'Greenbox stúdió',
+    labelEn: 'Greenbox studio',
     color: '#48D880',
     text: 'Zöld hátteres stúdió-automata profi világítással: a vendégek bármilyen helyszín vagy céges arculat elé varázsolhatók.',
+    textEn: 'A greenbox studio booth with pro lighting: guests can be placed in front of any location or corporate backdrop.',
   },
   {
     key: 'smartwall',
     href: '/smart-wall',
     label: 'Smart Wall',
+    labelEn: 'Smart Wall',
     color: '#E94A35',
     text: 'Interaktív, érinthető vetített fal — termékbemutató, infografika és játék egyetlen látványos felületen.',
+    textEn: 'An interactive, touchable projected wall — product showcase, infographics and games on one striking surface.',
   },
 ]
 
 export function IsoScene() {
+  const t = useT()
   const secRef = useRef<HTMLElement | null>(null)
   const stageRef = useRef<HTMLDivElement | null>(null)
   const labelRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
@@ -553,7 +561,7 @@ export function IsoScene() {
               marginBottom: 18,
             }}
           >
-            Élő, forgatható tér
+            {t('Élő, forgatható tér', 'A live, rotatable space')}
           </Reveal>
           <Words
             as="h2"
@@ -566,7 +574,7 @@ export function IsoScene() {
               letterSpacing: '-.03em',
             }}
           >
-            Minden rendezvényre{' '}
+            {t('Minden rendezvényre', 'Every event gets an')}{' '}
             <span
               style={{
                 background: 'linear-gradient(135deg,#4888F8,#9868F8 55%,#4888F8)',
@@ -577,10 +585,13 @@ export function IsoScene() {
             >
               (AI)
             </span>{' '}
-            élményt adunk.
+            {t('élményt adunk.', 'experience.')}
           </Words>
           <Reveal as="p" delay={300} style={{ fontSize: 16, color: 'rgba(255,255,255,.6)', marginTop: 16 }}>
-            Fogd meg és forgasd körbe a teret — kattints egy állomásra, és nézd meg közelebbről.
+            {t(
+              'Fogd meg és forgasd körbe a teret — kattints egy állomásra, és nézd meg közelebbről.',
+              'Grab and spin the space around — click a station to take a closer look.',
+            )}
           </Reveal>
         </div>
 
@@ -757,7 +768,7 @@ export function IsoScene() {
             <button
               key={`proxy-${s.key}`}
               type="button"
-              aria-label={s.label}
+              aria-label={t(s.label, s.labelEn)}
               ref={(el) => {
                 proxyRefs.current[s.key] = el
               }}
@@ -831,7 +842,7 @@ export function IsoScene() {
                   animation: 'ep-pulse 2.4s ease-in-out infinite',
                 }}
               />
-              {s.label}
+              {t(s.label, s.labelEn)}
             </a>
           ))}
 
@@ -865,7 +876,7 @@ export function IsoScene() {
               <button
                 type="button"
                 onClick={() => setActive(null)}
-                aria-label="Bezárás"
+                aria-label={t('Bezárás', 'Close')}
                 style={{
                   position: 'absolute',
                   top: 8,
@@ -883,14 +894,14 @@ export function IsoScene() {
               </button>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ width: 10, height: 10, borderRadius: '50%', background: activeInfo.color }} />
-                <strong style={{ fontFamily: 'Syne', fontSize: 16 }}>{activeInfo.label}</strong>
+                <strong style={{ fontFamily: 'Syne', fontSize: 16 }}>{t(activeInfo.label, activeInfo.labelEn)}</strong>
               </div>
-              <p style={{ fontSize: 14, lineHeight: 1.5, color: '#46433A', marginTop: 6 }}>{activeInfo.text}</p>
+              <p style={{ fontSize: 14, lineHeight: 1.5, color: '#46433A', marginTop: 6 }}>{t(activeInfo.text, activeInfo.textEn)}</p>
               <a
                 href={activeInfo.href}
                 style={{ display: 'inline-block', marginTop: 8, fontWeight: 600, fontSize: 14, color: '#E94A35' }}
               >
-                Tovább →
+                {t('Tovább →', 'More →')}
               </a>
             </div>
           )}
@@ -917,7 +928,7 @@ export function IsoScene() {
             }}
           >
             <span style={{ display: 'inline-block', animation: 'ep-sway 4s ease-in-out infinite' }}>⟲</span>
-            Húzd el a forgatáshoz · magától is körbejár
+            {t('Húzd el a forgatáshoz · magától is körbejár', 'Drag to rotate · it spins on its own too')}
           </span>
         </div>
       </Reveal>

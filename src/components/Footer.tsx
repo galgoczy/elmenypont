@@ -1,6 +1,9 @@
+import { useT } from '../i18n'
+
 const EMAIL = 'hello@elmeny.hu'
 
 export function Footer() {
+  const t = useT()
   return (
     <footer
       style={{
@@ -28,30 +31,30 @@ export function Footer() {
               style={{ height: 34, width: 'auto', display: 'block', marginBottom: 20 }}
             />
             <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,.6)' }}>
-              Interaktív rendezvényélmények —{' '}
+              {t('Interaktív rendezvényélmények —', 'Interactive event experiences —')}{' '}
               <a href="/ai-fotoautomata" style={{ color: 'rgba(255,255,255,.82)' }}>
                 AI Selfiemata
               </a>
-              , Videomata, greenbox és interaktív falak, kulcsrakészen.
+              {t(', Videomata, greenbox és interaktív falak, kulcsrakészen.', ', Videomata, greenbox and interactive walls, turnkey.')}
             </p>
           </div>
           <div style={{ display: 'flex', gap: 'clamp(34px,5vw,80px)', flexWrap: 'wrap' }}>
             <div>
               <p style={{ fontSize: 13, letterSpacing: '.12em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 14 }}>
-                Szolgáltatások
+                {t('Szolgáltatások', 'Services')}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9, fontSize: 15 }}>
                 <a href="/ai-fotoautomata" style={{ color: 'rgba(255,255,255,.82)' }}>
-                  AI fotóautomata bérlés rendezvényre
+                  {t('AI fotóautomata bérlés rendezvényre', 'AI photo booth rental for events')}
                 </a>
                 <a href="/greenbox" style={{ color: 'rgba(255,255,255,.82)' }}>
                   Greenbox Selfiemata
                 </a>
                 <a href="/smart-wall" style={{ color: 'rgba(255,255,255,.82)' }}>
-                  Smart Wall — interaktív fal
+                  {t('Smart Wall — interaktív fal', 'Smart Wall — interactive wall')}
                 </a>
                 <a href="/mosaic-wall" style={{ color: 'rgba(255,255,255,.82)' }}>
-                  Mosaic Wall — mozaikfal
+                  {t('Mosaic Wall — mozaikfal', 'Mosaic Wall — mosaic wall')}
                 </a>
                 <a href="/#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
                   AI Videomata
@@ -60,7 +63,7 @@ export function Footer() {
             </div>
             <div>
               <p style={{ fontSize: 13, letterSpacing: '.12em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 14 }}>
-                Elérhetőség
+                {t('Elérhetőség', 'Contact')}
               </p>
               <p style={{ fontSize: 15, lineHeight: 1.7, color: 'rgba(255,255,255,.82)' }}>
                 1135 Budapest,
@@ -78,7 +81,7 @@ export function Footer() {
             </div>
             <div>
               <p style={{ fontSize: 13, letterSpacing: '.12em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 14 }}>
-                Kövess
+                {t('Kövess', 'Follow')}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9, fontSize: 15 }}>
                 <a
@@ -102,9 +105,9 @@ export function Footer() {
           </div>
         </div>
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', marginTop: 28, display: 'flex', gap: 18, flexWrap: 'wrap' }}>
-          <span>© 2026 Élménypont. Minden jog fenntartva.</span>
+          <span>{t('© 2026 Élménypont. Minden jog fenntartva.', '© 2026 Élménypont. All rights reserved.')}</span>
           <a href="/adatkezeles" style={{ color: 'rgba(255,255,255,.55)' }}>
-            Adatkezelési tájékoztató
+            {t('Adatkezelési tájékoztató', 'Privacy policy')}
           </a>
         </p>
       </div>

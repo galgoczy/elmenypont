@@ -1,5 +1,6 @@
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
+import { useT } from '../i18n'
 
 const ROWS = [
   {
@@ -8,6 +9,7 @@ const ROWS = [
     color: '#4888F8',
     title: 'Smart Wall',
     body: 'Interaktív, érinthető vetített fal: termékbemutató, infografika, játék.',
+    bodyEn: 'An interactive, touchable projected wall: product demos, infographics, games.',
     delay: 0,
   },
   {
@@ -16,11 +18,13 @@ const ROWS = [
     color: '#48D880',
     title: 'Mosaic Wall',
     body: 'A vendégek fotóiból közösen összeálló, nagy közös mozaikkép.',
+    bodyEn: 'One big shared mosaic that builds up from your guests’ photos.',
     delay: 80,
   },
 ]
 
 export function OtherServices() {
+  const t = useT()
   return (
     <section
       className="ep-deco"
@@ -42,7 +46,7 @@ export function OtherServices() {
               color: '#7A766B',
             }}
           >
-            Egyéb szolgáltatások
+            {t('Egyéb szolgáltatások', 'Other services')}
           </span>
           <span style={{ flex: 1, height: 1, background: 'rgba(0,0,0,.1)' }} />
         </Reveal>
@@ -106,7 +110,7 @@ export function OtherServices() {
               />
               <div style={{ flex: 1 }}>
                 <h4 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 20 }}>{r.title}</h4>
-                <p style={{ fontSize: 15, color: '#46433A', marginTop: 4 }}>{r.body}</p>
+                <p style={{ fontSize: 15, color: '#46433A', marginTop: 4 }}>{t(r.body, r.bodyEn)}</p>
               </div>
               <span data-arrow style={{ color: '#7A766B', fontSize: 20, transition: 'transform .35s, color .35s' }}>→</span>
             </Reveal>

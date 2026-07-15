@@ -1,4 +1,5 @@
 import { useRef, useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
+import { useT } from '../i18n'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { Magnetic } from './Magnetic'
@@ -17,6 +18,11 @@ const SERVICES = [
   'Selfiebox',
   'Többfélére kérek ajánlatot!',
 ]
+
+/** English chip labels — brand names stay identical, only the CTA differs */
+const SERVICE_EN: Record<string, string> = {
+  'Többfélére kérek ajánlatot!': "I'd like a quote for several!",
+}
 
 const inputStyle: CSSProperties = {
   width: '100%',
@@ -39,6 +45,7 @@ const onBlur = (e: ReactFocusEvent<HTMLElement>) => {
 }
 
 export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
+  const t = useT()
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
@@ -78,7 +85,12 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
       track('generate_lead', { services: picked.join(',') || 'none' })
       setSent(true)
     } catch {
-      setError(`Nem sikerült elküldeni — írj nekünk közvetlenül: ${EMAIL}`)
+      setError(
+        t(
+          `Nem sikerült elküldeni — írj nekünk közvetlenül: ${EMAIL}`,
+          `Couldn't send — write to us directly: ${EMAIL}`,
+        ),
+      )
     } finally {
       setSending(false)
     }
@@ -139,15 +151,15 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
               marginBottom: 20,
             }}
           >
-            Ajánlatkérés
+            {t('Ajánlatkérés', 'Quote request')}
           </span>
           <h2 style={{ fontFamily: 'Syne', fontWeight: 500, fontSize: 'clamp(28px,3.4vw,48px)', lineHeight: 1, letterSpacing: '-.03em' }}>
-            Kérj személyre
+            {t('Kérj személyre', 'Get a quote made')}
             <br />
-            szabott ajánlatot.
+            {t('szabott ajánlatot.', 'just for you.')}
           </h2>
           <p style={{ fontSize: 16, lineHeight: 1.55, color: 'rgba(255,255,255,.82)', marginTop: 18, maxWidth: '34ch' }}>
-            Mondd el, milyen rendezvényt tervezel — 1 munkanapon belül válaszolunk.
+            {t('Mondd el, milyen rendezvényt tervezel — 1 munkanapon belül válaszolunk.', 'Tell us what kind of event you’re planning — we’ll reply within 1 business day.')}
           </p>
           <div style={{ marginTop: 34, display: 'flex', flexDirection: 'column', gap: 14, position: 'relative' }}>
             <a
@@ -187,7 +199,7 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
           {/* which service(s) — multi-select chips */}
           <div>
             <p style={{ fontSize: 13, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: '#7A766B', marginBottom: 10 }}>
-              Mi érdekel?
+              {t('Mi érdekel?', 'What are you interested in?')}
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {SERVICES.map((s) => {
@@ -211,7 +223,7 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
                       transition: 'background .2s, color .2s, border-color .2s',
                     }}
                   >
-                    {s}
+                    {t(s, SERVICE_EN[s] ?? s)}
                   </button>
                 )
               })}
@@ -221,26 +233,26 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
               fields identifiable to assistive tech and agents (a placeholder
               alone disappears on input and is not a label) */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <input required name="name" autoComplete="name" aria-label="Név" placeholder="Név" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-            <input required type="email" name="email" autoComplete="email" aria-label="E-mail" placeholder="E-mail" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input required name="name" autoComplete="name" aria-label={t('Név', 'Name')} placeholder={t('Név', 'Name')} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input required type="email" name="email" autoComplete="email" aria-label={t('E-mail', 'Email')} placeholder={t('E-mail', 'Email')} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <input type="tel" name="phone" autoComplete="tel" aria-label="Telefon (opcionális)" placeholder="Telefon (opc.)" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-            <input name="eventType" aria-label="Esemény típusa" placeholder="Esemény típusa" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input type="tel" name="phone" autoComplete="tel" aria-label={t('Telefon (opcionális)', 'Phone (optional)')} placeholder={t('Telefon (opc.)', 'Phone (opt.)')} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input name="eventType" aria-label={t('Esemény típusa', 'Event type')} placeholder={t('Esemény típusa', 'Event type')} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <input name="date" aria-label="Időpont" placeholder="Időpont" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-            <input name="guests" aria-label="Vendégszám" placeholder="Vendégszám" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input name="date" aria-label={t('Időpont', 'Date')} placeholder={t('Időpont', 'Date')} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+            <input name="guests" aria-label={t('Vendégszám', 'Guest count')} placeholder={t('Vendégszám', 'Guest count')} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
           </div>
-          <textarea name="message" aria-label="Üzenet" placeholder="Üzenet" rows={3} style={{ ...inputStyle, resize: 'vertical' }} onFocus={onFocus} onBlur={onBlur} />
+          <textarea name="message" aria-label={t('Üzenet', 'Message')} placeholder={t('Üzenet', 'Message')} rows={3} style={{ ...inputStyle, resize: 'vertical' }} onFocus={onFocus} onBlur={onBlur} />
           <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 13.5, lineHeight: 1.5, color: '#7A766B', cursor: 'pointer' }}>
             <input type="checkbox" name="gdpr" required style={{ marginTop: 3, width: 16, height: 16, accentColor: '#17150D' }} />
             <span>
-              Elolvastam és elfogadom az{' '}
+              {t('Elolvastam és elfogadom az', 'I have read and accept the')}{' '}
               <a href="/adatkezeles" target="_blank" rel="noopener" style={{ color: '#E94A35', textDecoration: 'underline' }}>
-                adatkezelési tájékoztatót
+                {t('adatkezelési tájékoztatót', 'privacy policy')}
               </a>
-              , és hozzájárulok adataim ajánlatadás céljából történő kezeléséhez.
+              {t(', és hozzájárulok adataim ajánlatadás céljából történő kezeléséhez.', ', and I consent to my data being processed for the purpose of preparing a quote.')}
             </span>
           </label>
           <Magnetic strength={6} style={{ marginTop: 6, display: 'block' }}>
@@ -262,7 +274,11 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
               onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 30px -14px rgba(23,21,13,.5)')}
               onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
             >
-              {sent ? 'Köszönjük! Hamarosan jelentkezünk ✓' : sending ? 'Küldés…' : 'Ajánlatot kérek →'}
+              {sent
+                ? t('Köszönjük! Hamarosan jelentkezünk ✓', 'Thank you! We’ll be in touch soon ✓')
+                : sending
+                  ? t('Küldés…', 'Sending…')
+                  : t('Ajánlatot kérek →', 'Get a quote →')}
             </button>
           </Magnetic>
           {error && (

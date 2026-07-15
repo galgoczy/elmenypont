@@ -1,10 +1,11 @@
 import { useRef, type CSSProperties } from 'react'
+import { useT } from '../i18n'
 
 const WORDS = [
-  { text: 'VILLÁMGYORS AI-KÉP', color: '#E94A35', doodle: 3, size: 40 },
-  { text: 'KULCSRAKÉSZEN', color: '#4888F8', doodle: 2, size: 44 },
-  { text: 'MEGOSZTHATÓ PILLANAT', color: '#9868F8', doodle: 1, size: 40 },
-  { text: 'RENDEZVÉNYRE SZABVA', color: '#48D880', doodle: 6, size: 42 },
+  { text: 'VILLÁMGYORS AI-KÉP', textEn: 'LIGHTNING-FAST AI PHOTO', color: '#E94A35', doodle: 3, size: 40 },
+  { text: 'KULCSRAKÉSZEN', textEn: 'TURNKEY', color: '#4888F8', doodle: 2, size: 44 },
+  { text: 'MEGOSZTHATÓ PILLANAT', textEn: 'SHAREABLE MOMENT', color: '#9868F8', doodle: 1, size: 40 },
+  { text: 'RENDEZVÉNYRE SZABVA', textEn: 'TAILORED TO YOUR EVENT', color: '#48D880', doodle: 6, size: 42 },
 ]
 
 const wordStyle = (color: string): CSSProperties => ({
@@ -16,12 +17,13 @@ const wordStyle = (color: string): CSSProperties => ({
 })
 
 function Row({ hidden }: { hidden?: boolean }) {
+  const t = useT()
   // trailing padding instead of a track gap keeps the -50% loop seamless
   return (
     <div style={{ display: 'flex', gap: 54, alignItems: 'center', paddingRight: 54 }} aria-hidden={hidden || undefined}>
       {WORDS.map((w, i) => (
         <span key={i} style={{ display: 'contents' }}>
-          <span style={wordStyle(w.color)}>{w.text}</span>
+          <span style={wordStyle(w.color)}>{t(w.text, w.textEn)}</span>
           <span
             style={{
               width: w.size,

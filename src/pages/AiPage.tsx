@@ -11,6 +11,7 @@ import { Faq } from '../components/Faq'
 import { ContactCTA } from '../components/ContactCTA'
 import { track } from '../components/CookieBar'
 import { Footer } from '../components/Footer'
+import { useT } from '../i18n'
 
 /** serpentine that STARTS at the 01 point (top-left), curves down to 02
  *  (mid-right), then to 03 (lower-left), then descends to land */
@@ -31,51 +32,57 @@ const h2Style: CSSProperties = {
 /** the ai.elmeny.hu hero's style switcher: the "after" side of the portrait
  *  slider swaps to the picked AI style */
 const STYLES = [
-  { key: 'uhajos', label: 'Űrhajós', src: '/assets/photos/ai/hero-uhajos-full.jpg' },
-  { key: 'festmeny', label: 'Festmény', src: '/assets/photos/ai/hero-festmeny-full.jpg' },
-  { key: 'karikatura', label: 'Karikatúra', src: '/assets/photos/ai/hero-karikatura-full.jpg' },
-  { key: 'extrem', label: 'Extrém', src: '/assets/photos/ai/hero-extrem-full.jpg' },
+  { key: 'uhajos', label: 'Űrhajós', labelEn: 'Astronaut', src: '/assets/photos/ai/hero-uhajos-full.jpg' },
+  { key: 'festmeny', label: 'Festmény', labelEn: 'Painting', src: '/assets/photos/ai/hero-festmeny-full.jpg' },
+  { key: 'karikatura', label: 'Karikatúra', labelEn: 'Caricature', src: '/assets/photos/ai/hero-karikatura-full.jpg' },
+  { key: 'extrem', label: 'Extrém', labelEn: 'Extreme', src: '/assets/photos/ai/hero-extrem-full.jpg' },
 ]
 
 /** ported 1:1 from the original landing's dark "Miért most? Miért AI?" */
 const WHY = [
   {
     title: 'A vendégek AI élményt várnak',
+    titleEn: 'Guests expect an AI experience',
     body: 'Az okostelefon már nem elég. Az emberek valami olyat akarnak, amit otthon nem tudnak könnyen megcsinálni.',
+    bodyEn: 'A smartphone just isn’t enough anymore. People want something they can’t easily make at home.',
   },
   {
     title: 'Organikus viral tartalom',
+    titleEn: 'Organic viral content',
     body: 'Egy egyedi AI kép 3× nagyobb valószínűséggel kerül ki social médiára, mint egy hagyományos fotó.',
+    bodyEn: 'A one-of-a-kind AI image is 3× more likely to land on social media than a traditional photo.',
   },
   {
     title: 'Brand aktiváció új szinten',
+    titleEn: 'Brand activation on a new level',
     body: 'Az AI kimenet brandingelhető – minden megosztott kép a te logóddal, a te rendezvényed nevével megy ki.',
+    bodyEn: 'The AI output is fully brandable – every shared image goes out with your logo and your event’s name.',
   },
 ]
 
 /** the original image-backed style cards */
 const STYLE_CARDS = [
-  { img: 'masterpiece', name: 'Masterpiece', desc: 'Van Gogh, Klimt, Pop Art' },
-  { img: 'epicscene', name: 'Epic Scene', desc: 'F1, viking, űrhajós' },
-  { img: 'karikatura', name: 'Karikatúra', desc: 'Vicces AI torzítás' },
-  { img: 'pixar', name: 'Pixar Mode', desc: '3D animációs karakter' },
-  { img: 'anime', name: 'Anime', desc: 'Japán animációs portré' },
-  { img: 'cyberpunk', name: 'Cyberpunk', desc: 'Neon city, 2076' },
-  { img: 'kocka', name: 'Kocka', desc: 'Építőkocka-figura stílus' },
+  { img: 'masterpiece', name: 'Masterpiece', nameEn: 'Masterpiece', desc: 'Van Gogh, Klimt, Pop Art', descEn: 'Van Gogh, Klimt, Pop Art' },
+  { img: 'epicscene', name: 'Epic Scene', nameEn: 'Epic Scene', desc: 'F1, viking, űrhajós', descEn: 'F1, viking, astronaut' },
+  { img: 'karikatura', name: 'Karikatúra', nameEn: 'Caricature', desc: 'Vicces AI torzítás', descEn: 'Playful AI distortion' },
+  { img: 'pixar', name: 'Pixar Mode', nameEn: 'Pixar Mode', desc: '3D animációs karakter', descEn: '3D animated character' },
+  { img: 'anime', name: 'Anime', nameEn: 'Anime', desc: 'Japán animációs portré', descEn: 'Japanese animation portrait' },
+  { img: 'cyberpunk', name: 'Cyberpunk', nameEn: 'Cyberpunk', desc: 'Neon city, 2076', descEn: 'Neon city, 2076' },
+  { img: 'kocka', name: 'Kocka', nameEn: 'Brick', desc: 'Építőkocka-figura stílus', descEn: 'Building-block figure style' },
 ]
 
 const STEPS = [
-  { title: 'Stílus', body: 'A vendég választ a rendezvényre tervezett AI stílusok közül.', doodle: 5, dur: 3.2 },
-  { title: 'Fotó', body: 'Az érintőképernyős automatával lefényképezi magát – ebben személyzet is segít neki.', doodle: 2, dur: 3.8 },
-  { title: 'AI varázsol', body: 'A felhőalapú AI 9–15 másodperc alatt újrarajzolja a képet.', doodle: 6, dur: 3.4 },
-  { title: 'Megosztás', body: 'QR-kóddal, emailen vagy nyomtatva átveszi – akár azonnal megosztja, brandingelt kerettel.', doodle: 3, dur: 4 },
+  { title: 'Stílus', titleEn: 'Style', body: 'A vendég választ a rendezvényre tervezett AI stílusok közül.', bodyEn: 'The guest picks from the AI styles designed for your event.', doodle: 5, dur: 3.2 },
+  { title: 'Fotó', titleEn: 'Photo', body: 'Az érintőképernyős automatával lefényképezi magát – ebben személyzet is segít neki.', bodyEn: 'They snap a photo of themselves on the touchscreen booth – with staff on hand to help.', doodle: 2, dur: 3.8 },
+  { title: 'AI varázsol', titleEn: 'AI works its magic', body: 'A felhőalapú AI 9–15 másodperc alatt újrarajzolja a képet.', bodyEn: 'The cloud-based AI redraws the image in 9–15 seconds.', doodle: 6, dur: 3.4 },
+  { title: 'Megosztás', titleEn: 'Share', body: 'QR-kóddal, emailen vagy nyomtatva átveszi – akár azonnal megosztja, brandingelt kerettel.', bodyEn: 'They grab it via QR code, email or print – and can share it instantly, in a branded frame.', doodle: 3, dur: 4 },
 ]
 
 const CUSTOM = [
-  { title: 'Esemény-koncepció', body: 'Közösen kitaláljuk, mi illik a rendezvényhez: téma, hangulat, üzenet.' },
-  { title: 'AI vizuális világ', body: 'A stílusokat az eseményedre tervezzük — céges party, csapatépítő, promóció, családi nap, esküvő.' },
-  { title: 'Brand-integráció', body: 'Logó, keret, esemény-arculat minden kimenő képen.' },
-  { title: 'Egyedi prompt-rendszer', body: 'Nem sablon: a képi világot promptszinten szabjuk a briefedre.' },
+  { title: 'Esemény-koncepció', titleEn: 'Event concept', body: 'Közösen kitaláljuk, mi illik a rendezvényhez: téma, hangulat, üzenet.', bodyEn: 'Together we figure out what fits your event: theme, mood, message.' },
+  { title: 'AI vizuális világ', titleEn: 'AI visual world', body: 'A stílusokat az eseményedre tervezzük — céges party, csapatépítő, promóció, családi nap, esküvő.', bodyEn: 'We design the styles for your event — company party, team-building, promo, family day, wedding.' },
+  { title: 'Brand-integráció', titleEn: 'Brand integration', body: 'Logó, keret, esemény-arculat minden kimenő képen.', bodyEn: 'Logo, frame and event identity on every image that goes out.' },
+  { title: 'Egyedi prompt-rendszer', titleEn: 'Custom prompt system', body: 'Nem sablon: a képi világot promptszinten szabjuk a briefedre.', bodyEn: 'No templates: we tailor the visual world to your brief at the prompt level.' },
 ]
 
 /**
@@ -85,6 +92,7 @@ const CUSTOM = [
  * (portré) előtte-utána heróval és merészebb beúszásokkal.
  */
 export function AiPage() {
+  const t = useT()
   const { scrolled } = useScene()
   const [style, setStyle] = useState(STYLES[0])
 
@@ -188,7 +196,7 @@ export function AiPage() {
                   marginBottom: 18,
                 }}
               >
-                AI Selfiemata · #1 rendezvénytrend 2026
+                {t('AI Selfiemata · #1 rendezvénytrend 2026', 'AI Selfiemata · #1 event trend of 2026')}
               </Reveal>
               <Reveal
                 as="h1"
@@ -203,7 +211,7 @@ export function AiPage() {
                   maxWidth: '18ch',
                 }}
               >
-                A fotóautomata újraírva —{' '}
+                {t('A fotóautomata újraírva —', 'The photo booth, reinvented —')}{' '}
                 <span
                   style={{
                     display: 'inline-block',
@@ -228,18 +236,20 @@ export function AiPage() {
                   marginTop: 26,
                 }}
               >
-                Valós idejű AI-képgenerálás rendezvényeken: a készült fotót az AI átvarázsolja —
-                egyedi, megosztható, brandingelt emlék, pár másodperc alatt.
+                {t(
+                  'Valós idejű AI-képgenerálás rendezvényeken: a készült fotót az AI átvarázsolja — egyedi, megosztható, brandingelt emlék, pár másodperc alatt.',
+                  'Real-time AI image generation at your events: the AI transforms the photo you take — a unique, shareable, branded memory in just a few seconds.',
+                )}
               </Reveal>
               <Reveal className="ep-ai-stats" delay={150} style={{ display: 'flex', gap: 22, marginTop: 26, flexWrap: 'wrap' }}>
                 {[
-                  { v: '9–15 mp', l: 'AI generálás', c: '#9B6BF2' },
-                  { v: '∞ stílus', l: 'választható téma', c: '#48D880' },
-                  { v: '100%', l: 'rendezvényre szabva', c: '#E94A35' },
+                  { v: '9–15 mp', vEn: '9–15 s', l: 'AI generálás', lEn: 'AI generation', c: '#9B6BF2' },
+                  { v: '∞ stílus', vEn: '∞ styles', l: 'választható téma', lEn: 'themes to choose from', c: '#48D880' },
+                  { v: '100%', vEn: '100%', l: 'rendezvényre szabva', lEn: 'tailored to your event', c: '#E94A35' },
                 ].map((s) => (
                   <div className="ep-ai-stat" key={s.l}>
-                    <div className="ep-ai-stat-v" style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 24, color: s.c, lineHeight: 1 }}>{s.v}</div>
-                    <div className="ep-ai-stat-l" style={{ fontSize: 13, color: '#7A766B', marginTop: 3 }}>{s.l}</div>
+                    <div className="ep-ai-stat-v" style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 24, color: s.c, lineHeight: 1 }}>{t(s.v, s.vEn)}</div>
+                    <div className="ep-ai-stat-l" style={{ fontSize: 13, color: '#7A766B', marginTop: 3 }}>{t(s.l, s.lEn)}</div>
                   </div>
                 ))}
               </Reveal>
@@ -258,7 +268,7 @@ export function AiPage() {
                       borderRadius: 100,
                     }}
                   >
-                    Kérj ajánlatot →
+                    {t('Kérj ajánlatot', 'Get a quote')} →
                   </a>
                 </Magnetic>
                 <Magnetic strength={6}>
@@ -275,7 +285,7 @@ export function AiPage() {
                       borderRadius: 100,
                     }}
                   >
-                    Bemutatót kérek →
+                    {t('Bemutatót kérek', 'Request a demo')} →
                   </a>
                 </Magnetic>
               </Reveal>
@@ -285,10 +295,13 @@ export function AiPage() {
                 <BeforeAfter
                   before="/assets/photos/ai/hero-before-full.jpg"
                   after={style.src}
-                  beforeLabel="Eredeti"
-                  afterLabel={`AI ✦ ${style.label}`}
-                  beforeAlt="Eredeti vendégfotó az AI Selfiemata automatából"
-                  afterAlt={`Az AI Selfiemata által generált ${style.label.toLowerCase()} stílusú változat ugyanarról a vendégről`}
+                  beforeLabel={t('Eredeti', 'Original')}
+                  afterLabel={`AI ✦ ${t(style.label, style.labelEn)}`}
+                  beforeAlt={t('Eredeti vendégfotó az AI Selfiemata automatából', 'Original guest photo from the AI Selfiemata booth')}
+                  afterAlt={t(
+                    `Az AI Selfiemata által generált ${style.label.toLowerCase()} stílusú változat ugyanarról a vendégről`,
+                    `The ${style.labelEn.toLowerCase()}-style version of the same guest, generated by AI Selfiemata`,
+                  )}
                   style={{ width: '100%', aspectRatio: '3 / 4' }}
                 />
               </Reveal>
@@ -315,14 +328,14 @@ export function AiPage() {
                         transition: 'background .2s, color .2s, border-color .2s',
                       }}
                     >
-                      {s.label}
+                      {t(s.label, s.labelEn)}
                     </button>
                   )
                 })}
                 {/* non-clickable "Egyedi" pill — signals fully custom styles,
                     dashed outline to set it apart from the selectable ones */}
                 <span
-                  aria-label="Egyedi stílus – kérésre bármilyen téma"
+                  aria-label={t('Egyedi stílus – kérésre bármilyen téma', 'Custom style – any theme on request')}
                   style={{
                     fontFamily: 'inherit',
                     fontSize: 13.5,
@@ -334,7 +347,7 @@ export function AiPage() {
                     color: '#9A968C',
                   }}
                 >
-                  Egyedi
+                  {t('Egyedi', 'Custom')}
                 </span>
               </Reveal>
             </div>
@@ -359,7 +372,7 @@ export function AiPage() {
                 marginBottom: 24,
               }}
             >
-              Miért most? Miért AI?
+              {t('Miért most? Miért AI?', 'Why now? Why AI?')}
             </Reveal>
             <Reveal
               as="h2"
@@ -374,8 +387,9 @@ export function AiPage() {
                 maxWidth: 700,
               }}
             >
-              A rendezvényipar <span style={{ color: '#4ade80' }}>legnagyobb trendje</span> 2026-ban
-              az AI élmény.
+              {t('A rendezvényipar', 'The events industry’s')}{' '}
+              <span style={{ color: '#4ade80' }}>{t('legnagyobb trendje', 'biggest trend')}</span>{' '}
+              {t('2026-ban az AI élmény.', 'in 2026 is the AI experience.')}
             </Reveal>
             <div style={{ position: 'relative' }}>
               <RocketTrail trail={WHY_TRAIL} color="#4ade80" />
@@ -391,8 +405,8 @@ export function AiPage() {
                       0{i + 1}
                     </span>
                     <div>
-                      <h3 style={{ color: '#fff' }}>{w.title}</h3>
-                      <p style={{ color: 'rgba(255,255,255,.62)' }}>{w.body}</p>
+                      <h3 style={{ color: '#fff' }}>{t(w.title, w.titleEn)}</h3>
+                      <p style={{ color: 'rgba(255,255,255,.62)' }}>{t(w.body, w.bodyEn)}</p>
                     </div>
                   </Reveal>
                 ))}
@@ -408,7 +422,7 @@ export function AiPage() {
               as="p"
               style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: '#FF6B35' }}
             >
-              AI stílusok
+              {t('AI stílusok', 'AI styles')}
             </Reveal>
             <Reveal
               as="h2"
@@ -416,9 +430,9 @@ export function AiPage() {
               delay={60}
               style={{ ...h2Style, fontSize: 'clamp(30px,4vw,52px)', marginTop: 14 }}
             >
-              Nem filter. Nem sablon.
+              {t('Nem filter. Nem sablon.', 'Not a filter. Not a template.')}
               <br />
-              Minden kép <span style={{ color: '#FF6B35' }}>egyedi alkotás.</span>
+              {t('Minden kép', 'Every image is a')} <span style={{ color: '#FF6B35' }}>{t('egyedi alkotás.', 'unique creation.')}</span>
             </Reveal>
             <Reveal delay={120}>
               <div className="ep-strack" ref={trackRef}>
@@ -427,12 +441,12 @@ export function AiPage() {
                     <div
                       className="ep-scard-bg"
                       role="img"
-                      aria-label={`AI Selfiemata ${c.name} stílusminta: ${c.desc}`}
+                      aria-label={t(`AI Selfiemata ${c.name} stílusminta: ${c.desc}`, `AI Selfiemata ${c.nameEn} style sample: ${c.descEn}`)}
                       style={{ backgroundImage: `url(/assets/photos/ai/style-${c.img}.jpg)` }}
                     />
                     <div className="ep-scard-info">
-                      <h3>{c.name}</h3>
-                      <p>{c.desc}</p>
+                      <h3>{t(c.name, c.nameEn)}</h3>
+                      <p>{t(c.desc, c.descEn)}</p>
                     </div>
                   </div>
                 ))}
@@ -441,9 +455,9 @@ export function AiPage() {
                     +
                   </span>
                   <span>
-                    Egyedi
+                    {t('Egyedi', 'Custom')}
                     <br />
-                    kérésre
+                    {t('kérésre', 'on request')}
                   </span>
                 </div>
               </div>
@@ -462,7 +476,7 @@ export function AiPage() {
                     borderRadius: 100,
                   }}
                 >
-                  Ajánlatot kérek →
+                  {t('Ajánlatot kérek', 'Get a quote')} →
                 </a>
               </Magnetic>
             </Reveal>
@@ -477,12 +491,12 @@ export function AiPage() {
               as="p"
               style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: '#4888F8' }}
             >
-              Hogyan működik?
+              {t('Hogyan működik?', 'How it works?')}
             </Reveal>
             <Reveal as="h2" variant="pop" delay={60} style={{ ...h2Style, fontSize: 'clamp(30px,4vw,52px)', marginTop: 14 }}>
-              4 lépés.
+              {t('4 lépés.', '4 steps.')}
               <br />
-              10 másodperc.
+              {t('10 másodperc.', '10 seconds.')}
             </Reveal>
             <div style={{ position: 'relative' }}>
               {/* the original landing's dotted connector: draws itself from
@@ -511,8 +525,8 @@ export function AiPage() {
                       0{i + 1}
                     </span>
                     <div>
-                      <h3 style={{ color: '#17150D' }}>{s.title}</h3>
-                      <p style={{ color: '#46433A' }}>{s.body}</p>
+                      <h3 style={{ color: '#17150D' }}>{t(s.title, s.titleEn)}</h3>
+                      <p style={{ color: '#46433A' }}>{t(s.body, s.bodyEn)}</p>
                     </div>
                   </Reveal>
                 ))}
@@ -538,16 +552,18 @@ export function AiPage() {
               >
                 <div style={{ flex: '1 1 320px' }}>
                   <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 22, color: '#17150D' }}>
-                    Kérek bemutatót!
+                    {t('Kérek bemutatót!', 'Request a demo!')}
                   </h3>
                   <p style={{ fontSize: 15.5, lineHeight: 1.55, color: '#46433A', marginTop: 8 }}>
-                    Add meg az e-mail-címed, és azonnal küldjük az élő demó linkjét és jelszavát —
-                    kipróbálhatod, mielőtt ajánlatot kérsz.
+                    {t(
+                      'Add meg az e-mail-címed, és azonnal küldjük az élő demó linkjét és jelszavát — kipróbálhatod, mielőtt ajánlatot kérsz.',
+                      'Drop your email and we’ll send the live demo link and password right away — try it out before you request a quote.',
+                    )}
                   </p>
                 </div>
                 {demoState === 'ok' ? (
                   <p style={{ fontSize: 15.5, fontWeight: 600, color: '#2FB268' }}>
-                    ✅ Elküldtük! Nézd meg a postafiókod.
+                    {t('✅ Elküldtük! Nézd meg a postafiókod.', '✅ Sent! Check your inbox.')}
                   </p>
                 ) : (
                   <form
@@ -563,8 +579,8 @@ export function AiPage() {
                       type="email"
                       name="demoEmail"
                       required
-                      placeholder="E-mail címed"
-                      aria-label="E-mail cím a demóhoz"
+                      placeholder={t('E-mail címed', 'Your email')}
+                      aria-label={t('E-mail cím a demóhoz', 'Email address for the demo')}
                       style={{
                         flex: '1 1 200px',
                         maxWidth: 300,
@@ -593,11 +609,11 @@ export function AiPage() {
                         cursor: 'pointer',
                       }}
                     >
-                      {demoState === 'sending' ? 'Küldés…' : 'Kérek bemutatót →'}
+                      {demoState === 'sending' ? t('Küldés…', 'Sending…') : `${t('Kérek bemutatót', 'Request a demo')} →`}
                     </button>
                     {demoState === 'err' && (
                       <p role="alert" style={{ width: '100%', textAlign: 'right', fontSize: 13.5, color: '#C6402E' }}>
-                        Nem sikerült — írj nekünk: hello@elmeny.hu
+                        {t('Nem sikerült — írj nekünk: hello@elmeny.hu', 'Something went wrong — email us: hello@elmeny.hu')}
                       </p>
                     )}
                   </form>
@@ -612,14 +628,14 @@ export function AiPage() {
           <div style={{ ...wrap, display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'clamp(24px,4vw,56px)', alignItems: 'start' }}>
             <div>
               <Reveal as="h2" variant="pop" style={h2Style}>
-                Nem sablon. Teljesen rád szabjuk.
+                {t('Nem sablon. Teljesen rád szabjuk.', 'No templates. Fully tailored to you.')}
               </Reveal>
               <div style={{ display: 'grid', gap: '12px 0', marginTop: 26 }}>
                 {CUSTOM.map((c, i) => (
                   <Reveal key={c.title} variant="left" delay={i * 70} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                     <span aria-hidden="true" style={{ color: '#9B6BF2', fontWeight: 700, fontSize: 18, lineHeight: 1.4 }}>✓</span>
                     <span style={{ fontSize: 16, lineHeight: 1.55, color: '#46433A' }}>
-                      <strong style={{ color: '#17150D' }}>{c.title}:</strong> {c.body}
+                      <strong style={{ color: '#17150D' }}>{t(c.title, c.titleEn)}:</strong> {t(c.body, c.bodyEn)}
                     </span>
                   </Reveal>
                 ))}
@@ -627,13 +643,13 @@ export function AiPage() {
             </div>
             <Reveal variant="pop" delay={150} style={{ background: '#FBF8F3', border: '1px solid rgba(0,0,0,.12)', borderRadius: 18, padding: '26px 28px' }}>
               <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: '#7A766B' }}>
-                Példa brief
+                {t('Példa brief', 'Sample brief')}
               </p>
               <dl style={{ marginTop: 14, fontSize: 15.5, lineHeight: 1.7, color: '#46433A' }}>
-                <div><strong style={{ color: '#17150D' }}>Rendezvény:</strong> év végi céges gála, 200 fő</div>
-                <div><strong style={{ color: '#17150D' }}>Stílus:</strong> hollywoodi filmplakát, céges logóval</div>
-                <div><strong style={{ color: '#17150D' }}>Kimenet:</strong> digitális + opcionális nyomtatás</div>
-                <div><strong style={{ color: '#17150D' }}>Időtartam:</strong> 8 óra, Egerben</div>
+                <div><strong style={{ color: '#17150D' }}>{t('Rendezvény:', 'Event:')}</strong> {t('év végi céges gála, 200 fő', 'year-end company gala, 200 guests')}</div>
+                <div><strong style={{ color: '#17150D' }}>{t('Stílus:', 'Style:')}</strong> {t('hollywoodi filmplakát, céges logóval', 'Hollywood movie poster, with company logo')}</div>
+                <div><strong style={{ color: '#17150D' }}>{t('Kimenet:', 'Output:')}</strong> {t('digitális + opcionális nyomtatás', 'digital + optional print')}</div>
+                <div><strong style={{ color: '#17150D' }}>{t('Időtartam:', 'Duration:')}</strong> {t('8 óra, Egerben', '8 hours, in Eger')}</div>
               </dl>
             </Reveal>
           </div>
@@ -643,27 +659,29 @@ export function AiPage() {
         <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>
           <div style={wrap}>
             <Reveal variant="mask" radius={28} style={{ background: '#17150D', borderRadius: 28, padding: 'clamp(32px,4.5vw,58px)', color: '#F6F1E9' }}>
-              <h2 style={{ ...h2Style, color: '#F6F1E9' }}>Árak</h2>
+              <h2 style={{ ...h2Style, color: '#F6F1E9' }}>{t('Árak', 'Pricing')}</h2>
               <p style={{ fontSize: 16.5, lineHeight: 1.6, color: 'rgba(246,241,233,.78)', maxWidth: '62ch', marginTop: 16 }}>
-                A legkisebb egység: 4 órás kitelepülés Budapesten, online megosztással.
+                {t('A legkisebb egység: 4 órás kitelepülés Budapesten, online megosztással.', 'The smallest package: a 4-hour setup in Budapest, with online sharing.')}
               </p>
               <div style={{ marginTop: 30, borderTop: '1px solid rgba(246,241,233,.16)' }}>
                 {[
-                  { label: 'AI Selfiemata — 4 óra, Budapest, online megosztás', value: '105 000 Ft-tól' },
-                  { label: 'Nyomatcsomagok (10×15 cm papírkép)', value: '20 000 Ft-tól' },
+                  { label: 'AI Selfiemata — 4 óra, Budapest, online megosztás', labelEn: 'AI Selfiemata — 4 hours, Budapest, online sharing', value: '105 000 Ft-tól', valueEn: 'from 105,000 HUF' },
+                  { label: 'Nyomatcsomagok (10×15 cm papírkép)', labelEn: 'Print packages (10×15 cm paper photo)', value: '20 000 Ft-tól', valueEn: 'from 20,000 HUF' },
                 ].map((r) => (
                   <div
                     key={r.label}
                     style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 20, flexWrap: 'wrap', padding: '16px 0', borderBottom: '1px solid rgba(246,241,233,.16)' }}
                   >
-                    <span style={{ fontSize: 16, color: 'rgba(246,241,233,.85)', maxWidth: '46ch' }}>{r.label}</span>
-                    <span style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 'clamp(19px,2.2vw,24px)', color: '#9B6BF2' }}>{r.value}</span>
+                    <span style={{ fontSize: 16, color: 'rgba(246,241,233,.85)', maxWidth: '46ch' }}>{t(r.label, r.labelEn)}</span>
+                    <span style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 'clamp(19px,2.2vw,24px)', color: '#9B6BF2' }}>{t(r.value, r.valueEn)}</span>
                   </div>
                 ))}
               </div>
               <p style={{ fontSize: 14, color: 'rgba(246,241,233,.55)', marginTop: 18 }}>
-                Az árak nettó árak. Mitől függ a pontos ár: időtartam · helyszín (Budapesten kívül kiszállás) · vendégszám és
-                nyomatcsomag.
+                {t(
+                  'Az árak nettó árak. Mitől függ a pontos ár: időtartam · helyszín (Budapesten kívül kiszállás) · vendégszám és nyomatcsomag.',
+                  'Prices are net. What the exact price depends on: duration · location (travel outside Budapest) · guest count and print package.',
+                )}
               </p>
             </Reveal>
           </div>
@@ -673,15 +691,13 @@ export function AiPage() {
         <section style={{ position: 'relative', padding: 'clamp(24px,3vw,40px) clamp(24px,6vw,90px) clamp(20px,2.5vw,36px)' }}>
           <div style={wrap}>
             <Reveal as="h2" style={{ ...h2Style, fontSize: 'clamp(22px,2.6vw,32px)' }}>
-              Új generációs szelfigép — mesterséges intelligenciával
+              {t('Új generációs szelfigép — mesterséges intelligenciával', 'Next-generation selfie machine — powered by artificial intelligence')}
             </Reveal>
             <Reveal as="p" delay={60} style={{ fontSize: 16.5, lineHeight: 1.65, color: '#46433A', maxWidth: '78ch', marginTop: 16 }}>
-              Az AI Selfiemata a hagyományos szelfigép és fotóautomata következő generációja. Ha fotós
-              rendezvényprogramot vagy egyedi AI-rendezvényélményt keresel — esküvőre, céges bulira, gálára
-              vagy csapatépítőre —, ez az élményállomás garantáltan a rendezvény legemlékezetesebb eleme
-              lesz. Nem sablon, nem nyomtatott fotó: valós idejű AI-képgenerálás, ami minden vendégből
-              főszereplőt csinál. Az AI-transzformáció teremt igazán megosztásra érdemes pillanatot —
-              rendezvényenként, vendégenként, egyedileg.
+              {t(
+                'Az AI Selfiemata a hagyományos szelfigép és fotóautomata következő generációja. Ha fotós rendezvényprogramot vagy egyedi AI-rendezvényélményt keresel — esküvőre, céges bulira, gálára vagy csapatépítőre —, ez az élményállomás garantáltan a rendezvény legemlékezetesebb eleme lesz. Nem sablon, nem nyomtatott fotó: valós idejű AI-képgenerálás, ami minden vendégből főszereplőt csinál. Az AI-transzformáció teremt igazán megosztásra érdemes pillanatot — rendezvényenként, vendégenként, egyedileg.',
+                'The AI Selfiemata is the next generation of the classic selfie machine and photo booth. If you’re looking for a photo-based event activity or a one-of-a-kind AI event experience — for a wedding, company party, gala or team-building day — this experience station is guaranteed to be the most memorable part of your event. No templates, no printed photos: real-time AI image generation that turns every guest into the star. It’s the AI transformation that creates a truly share-worthy moment — event by event, guest by guest, uniquely.',
+              )}
             </Reveal>
           </div>
         </section>

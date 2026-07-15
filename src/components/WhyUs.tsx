@@ -2,16 +2,18 @@ import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { Words } from './Words'
 import { Squiggle } from './Squiggle'
+import { useT } from '../i18n'
 
 const POINTS = [
-  { n: '01', title: 'Kulcsrakész', body: 'A teljes technika, alapanyag és profi személyzet felkészült az eseményedre!', delay: 0 },
-  { n: '02', title: 'Gyors', body: 'AI-kép 10–15 mp alatt; helyben nyomtatás vagy e-mail küldés.', delay: 60 },
-  { n: '03', title: 'Brandingelhető', body: 'Minden a rendezvény arculatára szabható.', delay: 120 },
-  { n: '04', title: 'Korlátlan', body: 'A program alatt akár korlátlan kép/nyomat opció.', delay: 180 },
-  { n: '05', title: 'Utólag is', body: 'A teljes képanyag megosztható — a te döntésed szerint.', delay: 240 },
+  { n: '01', title: 'Kulcsrakész', titleEn: 'Turnkey', body: 'A teljes technika, alapanyag és profi személyzet felkészült az eseményedre!', bodyEn: 'The full tech setup, materials and pro crew — all ready for your event!', delay: 0 },
+  { n: '02', title: 'Gyors', titleEn: 'Fast', body: 'AI-kép 10–15 mp alatt; helyben nyomtatás vagy e-mail küldés.', bodyEn: 'AI photo in 10–15 sec; printed on the spot or sent by e-mail.', delay: 60 },
+  { n: '03', title: 'Brandingelhető', titleEn: 'Brandable', body: 'Minden a rendezvény arculatára szabható.', bodyEn: 'Everything tailored to your event branding.', delay: 120 },
+  { n: '04', title: 'Korlátlan', titleEn: 'Unlimited', body: 'A program alatt akár korlátlan kép/nyomat opció.', bodyEn: 'Unlimited photo/print option throughout the program.', delay: 180 },
+  { n: '05', title: 'Utólag is', titleEn: 'Afterwards too', body: 'A teljes képanyag megosztható — a te döntésed szerint.', bodyEn: 'The whole gallery is shareable — your call.', delay: 240 },
 ]
 
 export function WhyUs() {
+  const t = useT()
   return (
     <section
       id="rolunk"
@@ -45,7 +47,7 @@ export function WhyUs() {
                 marginBottom: 22,
               }}
             >
-              Miért mi
+              {t('Miért mi', 'Why us')}
             </span>
             <Words
               as="h2"
@@ -59,14 +61,15 @@ export function WhyUs() {
               }}
             >
               <Squiggle color="rgba(72,216,128,.6)" delay={900}>
-                Élmény
+                {t('Élmény', 'Experience')}
               </Squiggle>{' '}
-              az eseményeden.
+              {t('az eseményeden.', 'at your event.')}
             </Words>
             <p style={{ fontSize: 17, lineHeight: 1.55, color: '#46433A', marginTop: 22, maxWidth: '38ch' }}>
-              15 éve készítünk rendezvényprogramokat — azon belül is vizuális, fotós élményeket.
-              Hisszük, hogy minden rendezvény lelke az élmény, és a mi dolgunk, hogy ez tartós is
-              legyen.
+              {t(
+                '15 éve készítünk rendezvényprogramokat — azon belül is vizuális, fotós élményeket. Hisszük, hogy minden rendezvény lelke az élmény, és a mi dolgunk, hogy ez tartós is legyen.',
+                'For 15 years we have been crafting event programs — visual, photo-driven experiences above all. We believe the soul of every event is the experience, and our job is to make it last.',
+              )}
             </p>
             <span
               aria-hidden="true"
@@ -129,8 +132,8 @@ export function WhyUs() {
                   {p.n}
                 </span>
                 <div>
-                  <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 21 }}>{p.title}</h3>
-                  <p style={{ fontSize: 16, color: '#46433A', marginTop: 6, lineHeight: 1.5 }}>{p.body}</p>
+                  <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 21 }}>{t(p.title, p.titleEn)}</h3>
+                  <p style={{ fontSize: 16, color: '#46433A', marginTop: 6, lineHeight: 1.5 }}>{t(p.body, p.bodyEn)}</p>
                 </div>
               </Reveal>
             ))}

@@ -22,9 +22,15 @@ export const GREENBOX: ServiceData = {
   slug: 'greenbox',
   docTitle: 'Greenbox fotózás bérlés rendezvényre | Élménypont — Greenbox Selfiemata',
   crumb: 'Greenbox Selfiemata',
+  crumbEn: 'Greenbox Selfiemata',
   title: (
     <>
       Bármilyen háttér, egy <Boxed bg="#48D880">gombnyomásra.</Boxed>
+    </>
+  ),
+  titleEn: (
+    <>
+      Any backdrop, at the <Boxed bg="#48D880">press of a button.</Boxed>
     </>
   ),
   accent: '#48D880',
@@ -36,82 +42,118 @@ export const GREENBOX: ServiceData = {
       e-mailben.
     </>
   ),
+  leadEn: (
+    <>
+      A green-screen studio automat with professional lighting: on the 24" touchscreen the guest
+      picks a backdrop — an exotic beach, a movie scene or your corporate visuals — strikes a pose,
+      and the machine instantly drops them into the chosen setting. A finished photo in 15 seconds,
+      printed or by e-mail.
+    </>
+  ),
   steps: [
     {
       title: 'Háttérválasztás',
+      titleEn: 'Choose a backdrop',
       body: 'A vendég a 24"-os érintőképernyőn kiválasztja a neki tetsző hátteret a rendezvényre szabott képvilágból.',
+      bodyEn: 'On the 24" touchscreen the guest picks their favourite backdrop from the visuals tailored to your event.',
     },
     {
       title: 'Póz — élő előnézettel',
+      titleEn: 'Pose — with live preview',
       body: 'A zöld háttér előtt pózol, és a képernyőn folyamatosan látja magát a választott környezetben — mindenki a legjobb arcát hozza.',
+      bodyEn: 'They pose in front of the green screen and see themselves in the chosen setting in real time — everyone brings their best angle.',
     },
     {
       title: 'Fotó és azonnali kompozit',
+      titleEn: 'Photo and instant compositing',
       body: 'A gép visszaszámol, elkészíti a fotót, és azonnal a háttérbe helyezi a vendéget.',
+      bodyEn: 'The machine counts down, takes the photo and instantly places the guest into the backdrop.',
     },
     {
       title: 'Nyomtatás vagy megosztás',
+      titleEn: 'Print or share',
       body: 'A kész kép 15 másodperc alatt nyomtatható vagy e-mailben megosztható, és igény szerint privát online galériába is felkerül.',
+      bodyEn: 'The finished image can be printed or shared by e-mail within 15 seconds, and on request it is added to a private online gallery too.',
     },
   ],
   featuresTitle: 'Miért szeretik a vendégek?',
+  featuresTitleEn: 'Why guests love it',
   features: [
     {
       color: '#48D880',
       title: 'Nincs sorban állás',
+      titleEn: 'No queueing',
       body: 'Az automata másodpercek alatt elkészíti és kinyomtatja a képet, senki sem marad le a buli többi részéről.',
+      bodyEn: 'The automat shoots and prints the photo within seconds, so no one misses the rest of the party.',
     },
     {
       color: '#E94A35',
       title: 'Kézzelfogható emlék',
+      titleEn: 'A tangible keepsake',
       body: 'A vendégek azonnal nyomtatott képet visznek haza — és digitálisan is megkapják, megoszthatóan.',
+      bodyEn: 'Guests take home a printed photo right away — and get it digitally too, ready to share.',
     },
     {
       color: '#4888F8',
       title: 'Kompakt kialakítás',
+      titleEn: 'Compact footprint',
       body: 'Kis helyen is elfér, nem foglalja el a rendezvényteret — mégis a program központi eleme lesz.',
+      bodyEn: 'It fits into a small space without taking over the venue — yet it becomes the centrepiece of the programme.',
     },
     {
       color: '#9B6BF2',
       title: 'Teljesen testreszabható',
+      titleEn: 'Fully customisable',
       body: 'Logók, egyedi keretek, digitális kellékek: a képvilágot a rendezvény témájához igazítjuk.',
+      bodyEn: 'Logos, custom frames, digital props: we match the visuals to your event theme.',
     },
     {
       color: '#E9A13B',
       title: 'Animátor a helyszínen',
+      titleEn: 'A host on site',
       body: '1 fő animátorunk végig segíti a vendégeket, hogy mindenkinek élmény legyen a fotózkodás.',
+      bodyEn: 'One of our hosts helps guests throughout, so the photo session is an experience for everyone.',
     },
     {
       color: '#48D880',
       title: 'Profi minőség',
+      titleEn: 'Professional quality',
       body: 'Professzionális fényképezőgép, világítás és nyomtató — nincs több elmosódott vagy sötét kép.',
+      bodyEn: 'A professional camera, lighting and printer — no more blurry or dark photos.',
     },
   ],
   useCases: ['Céges rendezvény', 'Esküvő', 'Születésnap', 'Csapatépítő', 'Brandaktiváció'],
+  useCasesEn: ['Corporate event', 'Wedding', 'Birthday', 'Team building', 'Brand activation'],
   heroImage: {
     src: '/assets/photos/greenbox-before-after.jpg',
     alt: 'Greenbox előtte-utána: baráti társaság a zöld háttér előtt, majd ugyanők egy napsütötte tengerparton',
+    altEn: 'Greenbox before and after: a group of friends in front of the green screen, then the same group on a sunlit beach',
   },
   images: [
     {
       src: '/assets/photos/greenbox-studio-setup.jpg',
       alt: 'A greenbox stúdió felépítése a helyszínen: zöld háttér, stúdióvilágítás és a fotóautomata',
+      altEn: 'The greenbox studio set up on site: green screen, studio lighting and the photo automat',
       rotate: -1.1,
     },
     {
       src: '/assets/photos/greenbox-gatsby.jpg',
       alt: 'Gatsby-jelmezes csapat fotózkodik a greenbox zöld háttere előtt egy rendezvényen',
+      altEn: 'A Gatsby-costumed team posing in front of the greenbox green screen at an event',
       rotate: 1,
     },
   ],
   price: {
     headline: 'Árak',
+    headlineEn: 'Pricing',
     blurb: 'A legkisebb egység: 4 órás kitelepülés Budapesten, online megosztással.',
+    blurbEn: 'The smallest package: a 4-hour deployment in Budapest, with online sharing.',
     rows: [
-      { label: 'Greenbox Selfiemata — 4 óra, Budapest, online megosztás', value: '80 000 Ft-tól' },
-      { label: 'Nyomatcsomagok (10×15 cm papírkép)', value: '20 000 Ft-tól' },
+      { label: 'Greenbox Selfiemata — 4 óra, Budapest, online megosztás', value: '80 000 Ft-tól', labelEn: 'Greenbox Selfiemata — 4 hours, Budapest, online sharing', valueEn: 'from 80,000 HUF' },
+      { label: 'Nyomatcsomagok (10×15 cm papírkép)', value: '20 000 Ft-tól', labelEn: 'Print packages (10×15 cm paper photo)', valueEn: 'from 20,000 HUF' },
     ],
     factors: ['időtartam', 'helyszín (Budapesten kívül kiszállás)', 'vendégszám és nyomatcsomag'],
+    factorsEn: ['duration', 'venue (travel outside Budapest)', 'number of guests and print package'],
   },
   provide: [
     'Greenbox stúdió-automata profi világítással',
@@ -120,9 +162,18 @@ export const GREENBOX: ServiceData = {
     'Helyszíni nyomtatás a választott nyomatcsomaggal',
     'Online megosztás és privát galéria',
   ],
+  provideEn: [
+    'Greenbox studio automat with professional lighting',
+    'Event-tailored digital visuals and frames',
+    'One host who assists guests throughout',
+    'On-site printing with the chosen print package',
+    'Online sharing and a private gallery',
+  ],
   crossLink: {
     text: 'A mesterséges intelligenciás képgenerálás érdekel?',
+    textEn: 'Interested in AI-powered image generation?',
     label: 'AI Selfiemata →',
+    labelEn: 'AI Selfiemata →',
     href: '/ai-fotoautomata',
   },
 }
@@ -131,9 +182,15 @@ export const SMART_WALL: ServiceData = {
   slug: 'smart-wall',
   docTitle: 'Smart Wall — interaktív fal bérlés rendezvényre | Élménypont',
   crumb: 'Smart Wall',
+  crumbEn: 'Smart Wall',
   title: (
     <>
       A fal, ami <Boxed bg="#4888F8">életre kel.</Boxed>
+    </>
+  ),
+  titleEn: (
+    <>
+      The wall that <Boxed bg="#4888F8">comes to life.</Boxed>
     </>
   ),
   accent: '#4888F8',
@@ -144,45 +201,69 @@ export const SMART_WALL: ServiceData = {
       infografika — a rendezvényed arculatában.
     </>
   ),
+  leadEn: (
+    <>
+      Printed graphics and projected animation that springs to life at a touch, on a single surface.
+      The guest touches the wall and the content sets in motion: programmes, timelines, product
+      showcases, infographics — all in your event's branding.
+    </>
+  ),
   steps: [
     {
       title: 'Kreatív koncepció',
+      titleEn: 'Creative concept',
       body: 'Közösen kitaláljuk, mit meséljen a fal: program, idővonal, termék, játék — elkészül a fix grafikai nyomat terve.',
+      bodyEn: 'Together we work out what the wall should tell: programme, timeline, product, game — and the design for the fixed printed graphic is finalised.',
     },
     {
       title: 'Tartalomgyártás',
+      titleEn: 'Content production',
       body: 'Az interaktív, vetített animációk AI-alapú tartalomgyártásunkkal napok alatt elkészülnek — nem hetek alatt.',
+      bodyEn: 'The interactive projected animations are produced in days with our AI-powered content production — not weeks.',
     },
     {
       title: 'Telepítés és kalibrálás',
+      titleEn: 'Installation and calibration',
       body: 'A falszerkezetet és az érintésszenzorral kalibrált HD projektort a helyszínen állítjuk üzembe — minden beltéri fényviszonynál jól látható.',
+      bodyEn: 'We set up the wall structure and the touch-sensor-calibrated HD projector on site — clearly visible in any indoor lighting.',
     },
     {
       title: 'Élmény a rendezvényen',
+      titleEn: 'The experience at the event',
       body: 'Érintésre indulnak az animációk; nyugalmi állapotban figyelemfelkeltő mozgás csalogatja oda a vendégeket. Technikai felügyelet végig a helyszínen.',
+      bodyEn: 'A touch triggers the animations; while idle, eye-catching motion draws guests over. Technical supervision on site throughout.',
     },
   ],
   featuresTitle: 'Mire való?',
+  featuresTitleEn: 'What is it for?',
   features: [
     {
       color: '#4888F8',
       title: 'Információ, ami élmény',
+      titleEn: 'Information that becomes an experience',
       body: 'Programlista, idővonal vagy előadó-bemutató interaktív formában — a vendég magának fedezi fel, ezért meg is jegyzi.',
+      bodyEn: 'A programme list, timeline or speaker line-up in interactive form — the guest discovers it themselves, so they remember it.',
     },
     {
       color: '#E94A35',
       title: 'Termékbemutató másképp',
+      titleEn: 'Product showcases, reimagined',
       body: 'Új termék vagy szolgáltatás bemutatása érintésre elinduló animációkkal, infografikákkal.',
+      bodyEn: 'Present a new product or service with touch-triggered animations and infographics.',
     },
     {
       color: '#48D880',
       title: 'Magához vonzza a vendéget',
+      titleEn: 'It draws guests in',
       body: 'A fal nyugalmi állapotban is mozog — távolról felkelti a figyelmet, közelről interakcióra hív.',
+      bodyEn: 'The wall moves even while idle — it catches attention from afar and invites interaction up close.',
     },
     {
       color: '#9B6BF2',
       title: '100% arculatra szabva',
+      titleEn: '100% on-brand',
       body: 'A nyomat és a vetített tartalom is teljes egészében az esemény arculatára készül.',
+      bodyEn: "Both the print and the projected content are made entirely to your event's branding.",
     },
   ],
   useCases: [
@@ -195,25 +276,39 @@ export const SMART_WALL: ServiceData = {
     'Ügyfélparty',
     'Fesztivál',
   ],
+  useCasesEn: [
+    'Conference',
+    'Exhibition',
+    'Press event',
+    'Product launch',
+    'Awards ceremony',
+    'Employee event',
+    'Client party',
+    'Festival',
+  ],
   video: {
     src: '/assets/video/smartwall-loop.mp4',
     poster: '/assets/photos/smartwall-nespresso.jpg',
     label: 'A Smart Wall működés közben: vendégek egy interaktív Nespresso kávétérképet érintenek',
+    labelEn: 'The Smart Wall in action: guests touching an interactive Nespresso coffee map',
   },
   images: [
     {
       src: '/assets/photos/smartwall-event.jpg',
       alt: 'Vendégek a Nespresso rendezvényén az interaktív Smart Wall kávétérképét nézik',
+      altEn: 'Guests at the Nespresso event looking at the interactive Smart Wall coffee map',
       rotate: -1.1,
     },
     {
       src: '/assets/photos/smartwall-touch.jpg',
       alt: 'Egy vendég megérinti a Smart Wall vetített felületét, és elindul az animáció',
+      altEn: 'A guest touches the Smart Wall projected surface and the animation starts',
       rotate: 1.2,
     },
   ],
   price: {
     headline: 'Árak — az AI-fordulat',
+    headlineEn: 'Pricing — the AI turning point',
     blurb: (
       <>
         Az egyedi interaktív tartalom fejlesztése a sarokpont — egyben a legösszetettebb tétel is
@@ -222,15 +317,27 @@ export const SMART_WALL: ServiceData = {
         töredéke mellett elkészülhet. És minél többször veted be ugyanazt a tartalmat, annál jobban megéri.
       </>
     ),
+    blurbEn: (
+      <>
+        Developing the bespoke interactive content is the cornerstone — and also the most complex
+        item in this service. Fortunately, a process that used to be long and required many
+        specialists can now be delivered in days with our AI-powered but human-made content
+        production, at a fraction of the former cost. And the more often you deploy the same content,
+        the more it pays off.
+      </>
+    ),
     rows: [
       {
         label: 'Első bevetés: koncepció + tartalomfejlesztés + fali nyomat + 1 nap telepítés és üzemeltetés',
         value: '600 000 Ft-tól',
+        labelEn: 'First deployment: concept + content development + wall print + 1 day of installation and operation',
+        valueEn: 'from 600,000 HUF',
       },
-      { label: 'További napok ugyanazon a rendezvényen (nincs újraszerelés)', value: '+80 000 Ft/nap-tól' },
-      { label: 'Meglévő tartalommal újabb rendezvényen', value: '150 000 Ft/nap-tól' },
+      { label: 'További napok ugyanazon a rendezvényen (nincs újraszerelés)', value: '+80 000 Ft/nap-tól', labelEn: 'Additional days at the same event (no re-installation)', valueEn: '+80,000 HUF/day' },
+      { label: 'Meglévő tartalommal újabb rendezvényen', value: '150 000 Ft/nap-tól', labelEn: 'With existing content at a new event', valueEn: 'from 150,000 HUF/day' },
     ],
     factors: ['napok száma', 'helyszín', 'a tartalom összetettsége'],
+    factorsEn: ['number of days', 'venue', 'the complexity of the content'],
   },
   provide: [
     'Kreatív koncepció és grafikai tervezés',
@@ -240,9 +347,19 @@ export const SMART_WALL: ServiceData = {
     'Telepítés, kalibrálás és technikai felügyelet',
     'Igény szerint hostess',
   ],
+  provideEn: [
+    'Creative concept and graphic design',
+    'Smart Projector and wall structure',
+    'Animation creation and application development',
+    'Wall print',
+    'Installation, calibration and technical supervision',
+    'A hostess on request',
+  ],
   crossLink: {
     text: 'A vendégek fotóiból épülő közös élményt keresel?',
+    textEn: "Looking for a shared experience built from your guests' photos?",
     label: 'Mosaic Wall →',
+    labelEn: 'Mosaic Wall →',
     href: '/mosaic-wall',
   },
 }

@@ -3,6 +3,7 @@ import { Reveal } from './Reveal'
 import { Words } from './Words'
 import { Squiggle } from './Squiggle'
 import { Doodle } from './Doodle'
+import { useT } from '../i18n'
 
 const TRAIL = 'M12 8 C 12 24, 86 24, 86 42 C 86 60, 12 60, 12 76 C 12 90, 40 92, 62 98'
 
@@ -16,7 +17,9 @@ const STEPS = [
     n: '01',
     color: '#48D880',
     title: 'A vendég mindig új élményt vár',
+    titleEn: 'Guests always want a new experience',
     body: 'Olyat akarnak, amit otthon nem tudnak könnyen megcsinálni, és leesik helyben az álluk.',
+    bodyEn: 'They want something they can’t easily pull off at home — the kind of thing that drops their jaw on the spot.',
     style: { maxWidth: '34ch', marginRight: 'auto' } as const,
     delay: 0,
   },
@@ -24,8 +27,11 @@ const STEPS = [
     n: '02',
     color: '#4888F8',
     title: 'A megosztható pillanat a marketing',
+    titleEn: 'The shareable moment is the marketing',
     body:
       'Minden brandingelt kép a te arculatoddal kerül majd fel a közösségi médiába — organikus elérés, AI szuperboost-tal.',
+    bodyEn:
+      'Every branded photo goes up on social media carrying your identity — organic reach, with an AI superboost.',
     style: { maxWidth: '36ch', marginLeft: 'auto', textAlign: 'right' } as const,
     delay: 80,
   },
@@ -33,7 +39,9 @@ const STEPS = [
     n: '03',
     color: '#F2937F',
     title: 'Mindenki a saját élményét viszi haza',
+    titleEn: 'Everyone takes home their own experience',
     body: 'Személyre szabott, egyedi AI-alkotás — emlék, amit tényleg hazavisznek és megőriznek.',
+    bodyEn: 'A personalized, one-of-a-kind AI creation — a keepsake they truly take home and hold on to.',
     style: { maxWidth: '34ch', marginLeft: '12%' } as const,
     delay: 160,
   },
@@ -103,6 +111,7 @@ export function RocketArt() {
  * revealed behind it via a growing SVG mask.
  */
 export function TrendSection() {
+  const t = useT()
   const wrapRef = useRef<HTMLDivElement | null>(null)
   const rocketRef = useRef<HTMLSpanElement | null>(null)
   const geoRef = useRef<SVGPathElement | null>(null)
@@ -307,7 +316,7 @@ export function TrendSection() {
             marginBottom: 30,
           }}
         >
-          Miért most
+          {t('Miért most', 'Why now')}
         </Reveal>
         <Words
           as="h2"
@@ -321,13 +330,13 @@ export function TrendSection() {
             maxWidth: '16ch',
           }}
         >
-          A rendezvényipar{' '}
+          {t('A rendezvényipar', 'The events industry’s')}{' '}
           <span style={{ color: '#48D880' }}>
             <Squiggle color="rgba(72,216,128,.55)" delay={900}>
-              legnagyobb trendje
+              {t('legnagyobb trendje', 'biggest trend')}
             </Squiggle>
           </span>{' '}
-          2026-ban az AI&nbsp;élmény.
+          {t('2026-ban az AI', 'in 2026 is the AI')}&nbsp;{t('élmény.', 'experience.')}
         </Words>
 
         {/* staggered steps with the spring-smoothed flying rocket */}
@@ -483,7 +492,7 @@ export function TrendSection() {
                     marginTop: 16,
                   }}
                 >
-                  {s.title}
+                  {t(s.title, s.titleEn)}
                 </h3>
                 <p
                   style={{
@@ -493,7 +502,7 @@ export function TrendSection() {
                     marginTop: 12,
                   }}
                 >
-                  {s.body}
+                  {t(s.body, s.bodyEn)}
                 </p>
               </Reveal>
             ))}

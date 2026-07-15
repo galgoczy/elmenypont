@@ -3,23 +3,25 @@ import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
 import { Squiggle } from './Squiggle'
+import { useT } from '../i18n'
 
 // real AI Selfiemata output samples — mixed portrait/landscape crops, each
 // tilted a few degrees for a scattered-polaroid feel; ordered so no two
 // similar styles/subjects sit adjacent (loop seam included). Portraits are
 // framed to their upper third so faces stay in view.
-const STRIP: { w: number; h: number; src: string; alt: string; pos?: string; rot: number }[] = [
-  { w: 200, h: 260, src: '/assets/photos/ai/hero-pixar.jpg', alt: 'AI Selfiemata minta: vendégfotó Pixar-stílusú animációs karakterként', pos: '50% 20%', rot: -2.5 },
-  { w: 300, h: 185, src: '/assets/photos/ai/man-space.jpg', alt: 'AI Selfiemata minta: vendég űrhajósként', rot: 1.8 },
-  { w: 195, h: 255, src: '/assets/photos/ai/woman-baroque.jpg', alt: 'AI Selfiemata minta: vendég barokk festményportrén', pos: '50% 22%', rot: 2.4 },
-  { w: 300, h: 190, src: '/assets/photos/ai/man-f1.jpg', alt: 'AI Selfiemata minta: vendég Forma-1-es versenyzőként', rot: -1.6 },
-  { w: 205, h: 265, src: '/assets/photos/ai/festmeny.jpg', alt: 'AI Selfiemata minta: vendégfotó klasszikus festményként', pos: '50% 20%', rot: 2 },
-  { w: 290, h: 180, src: '/assets/photos/ai/man-viking.jpg', alt: 'AI Selfiemata minta: vendég viking harcosként', pos: '50% 24%', rot: -2.2 },
-  { w: 200, h: 260, src: '/assets/photos/ai/karikatura.jpg', alt: 'AI Selfiemata minta: vendégfotó rajzolt karikatúraként', pos: '50% 20%', rot: 1.4 },
-  { w: 210, h: 265, src: '/assets/photos/ai/woman-pirate.jpg', alt: 'AI Selfiemata minta: vendég kalózkapitányként', pos: '50% 22%', rot: -1.8 },
+const STRIP: { w: number; h: number; src: string; alt: string; altEn: string; pos?: string; rot: number }[] = [
+  { w: 200, h: 260, src: '/assets/photos/ai/hero-pixar.jpg', alt: 'AI Selfiemata minta: vendégfotó Pixar-stílusú animációs karakterként', altEn: 'AI Selfiemata sample: guest photo as a Pixar-style animated character', pos: '50% 20%', rot: -2.5 },
+  { w: 300, h: 185, src: '/assets/photos/ai/man-space.jpg', alt: 'AI Selfiemata minta: vendég űrhajósként', altEn: 'AI Selfiemata sample: guest as an astronaut', rot: 1.8 },
+  { w: 195, h: 255, src: '/assets/photos/ai/woman-baroque.jpg', alt: 'AI Selfiemata minta: vendég barokk festményportrén', altEn: 'AI Selfiemata sample: guest in a Baroque painted portrait', pos: '50% 22%', rot: 2.4 },
+  { w: 300, h: 190, src: '/assets/photos/ai/man-f1.jpg', alt: 'AI Selfiemata minta: vendég Forma-1-es versenyzőként', altEn: 'AI Selfiemata sample: guest as a Formula 1 racing driver', rot: -1.6 },
+  { w: 205, h: 265, src: '/assets/photos/ai/festmeny.jpg', alt: 'AI Selfiemata minta: vendégfotó klasszikus festményként', altEn: 'AI Selfiemata sample: guest photo as a classical painting', pos: '50% 20%', rot: 2 },
+  { w: 290, h: 180, src: '/assets/photos/ai/man-viking.jpg', alt: 'AI Selfiemata minta: vendég viking harcosként', altEn: 'AI Selfiemata sample: guest as a Viking warrior', pos: '50% 24%', rot: -2.2 },
+  { w: 200, h: 260, src: '/assets/photos/ai/karikatura.jpg', alt: 'AI Selfiemata minta: vendégfotó rajzolt karikatúraként', altEn: 'AI Selfiemata sample: guest photo as a hand-drawn caricature', pos: '50% 20%', rot: 1.4 },
+  { w: 210, h: 265, src: '/assets/photos/ai/woman-pirate.jpg', alt: 'AI Selfiemata minta: vendég kalózkapitányként', altEn: 'AI Selfiemata sample: guest as a pirate captain', pos: '50% 22%', rot: -1.8 },
 ]
 
 function StripRow({ hidden }: { hidden?: boolean }) {
+  const t = useT()
   // trailing padding instead of a track gap keeps the -50% loop seamless
   return (
     <div style={{ display: 'flex', gap: 26, paddingRight: 26, alignItems: 'center' }} aria-hidden={hidden || undefined}>
@@ -30,7 +32,7 @@ function StripRow({ hidden }: { hidden?: boolean }) {
           radius={16}
           fit="cover"
           src={s.src}
-          alt={hidden ? '' : s.alt}
+          alt={hidden ? '' : t(s.alt, s.altEn)}
           position={s.pos}
           style={{
             width: s.w,
@@ -170,6 +172,7 @@ function DragStrip() {
 
 /** "Mit csinálunk" + a drag-to-fling photo reference strip. */
 export function WhatWeDo() {
+  const t = useT()
   return (
     <section
       id="elmeny"
@@ -204,7 +207,7 @@ export function WhatWeDo() {
             marginBottom: 30,
           }}
         >
-          Mit csinálunk
+          {t('Mit csinálunk', 'What we do')}
         </Reveal>
         <Reveal
           as="h2"
@@ -218,15 +221,14 @@ export function WhatWeDo() {
             maxWidth: '22ch',
           }}
         >
-          Interaktív rendezvény&shy;élményeket készítünk. A klasszikus fotóautomatát{' '}
+          {t('Interaktív rendezvény', 'Interactive event')}&shy;{t('élményeket készítünk. A klasszikus fotóautomatát', ' experiences we craft. The classic photo booth')}{' '}
           <span style={{ color: '#E94A35' }}>
             <Squiggle color="rgba(233,74,53,.45)" delay={500}>
-              újragondoltuk:
+              {t('újragondoltuk:', 'reinvented:')}
             </Squiggle>
           </span>{' '}
-          valós idejű AI-val a vendég
-          fotója pár másodperc alatt{' '}
-          <span style={{ color: '#9868F8' }}>egyedi, megosztható, brandingelt</span> alkotássá válik.
+          {t('valós idejű AI-val a vendég fotója pár másodperc alatt', 'with real-time AI, a guest photo becomes, in seconds, a')}{' '}
+          <span style={{ color: '#9868F8' }}>{t('egyedi, megosztható, brandingelt', 'unique, shareable, branded')}</span>{t(' alkotássá válik.', ' creation.')}
         </Reveal>
         <Reveal
           as="p"
@@ -239,7 +241,7 @@ export function WhatWeDo() {
             marginTop: 30,
           }}
         >
-          Te csak válassz — a technikát, a személyzetet és a teljes hátteret mi hozzuk.
+          {t('Te csak válassz — a technikát, a személyzetet és a teljes hátteret mi hozzuk.', 'You just choose — we bring the tech, the staff and the entire setup.')}
         </Reveal>
       </div>
 

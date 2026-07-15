@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useT } from '../i18n'
 
 declare global {
   interface Window {
@@ -19,6 +20,7 @@ export function track(name: string, params?: Record<string, unknown>) {
  */
 export function CookieBar() {
   const [show, setShow] = useState(false)
+  const t = useT()
 
   useEffect(() => {
     try {
@@ -43,7 +45,7 @@ export function CookieBar() {
   return (
     <div
       role="dialog"
-      aria-label="Süti-beállítások"
+      aria-label={t('Süti-beállítások', 'Cookie settings')}
       style={{
         position: 'fixed',
         right: 12,
@@ -64,9 +66,9 @@ export function CookieBar() {
       }}
     >
       <p style={{ fontSize: 12.5, lineHeight: 1.45, flex: '1 1 210px', margin: 0, color: 'rgba(246,241,233,.85)' }}>
-        Méréshez sütiket használunk —{' '}
+        {t('Méréshez sütiket használunk —', 'We use cookies for analytics —')}{' '}
         <a href="/adatkezeles" style={{ color: '#F2937F', textDecoration: 'underline' }}>
-          részletek
+          {t('részletek', 'details')}
         </a>
         .
       </p>
@@ -86,7 +88,7 @@ export function CookieBar() {
             cursor: 'pointer',
           }}
         >
-          Elutasítom
+          {t('Elutasítom', 'Decline')}
         </button>
         <button
           type="button"
@@ -103,7 +105,7 @@ export function CookieBar() {
             cursor: 'pointer',
           }}
         >
-          Elfogadom
+          {t('Elfogadom', 'Accept')}
         </button>
       </div>
     </div>

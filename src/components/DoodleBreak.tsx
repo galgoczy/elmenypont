@@ -1,7 +1,9 @@
 import { useEffect, useRef, type CSSProperties } from 'react'
+import { useT } from '../i18n'
 
 const ROW1 = 'AI SELFIEMATA ✦ GREENBOX ✦ SMART WALL ✦ MOSAIC WALL ✦ '
 const ROW2 = 'EGY TÉRBEN ✹ EGY CSAPATTÓL ✹ KULCSRAKÉSZEN ✹ '
+const ROW2_EN = 'ONE SPACE ✹ ONE TEAM ✹ TURNKEY ✹ '
 
 /** extra scroll (px) the finished panel stays pinned before releasing */
 const HOLD_PX = 120
@@ -23,6 +25,7 @@ const rowStyle: CSSProperties = {
  * and a drawn arrow points on toward the rotatable event space below.
  */
 export function DoodleBreak() {
+  const t = useT()
   const secRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
@@ -114,10 +117,10 @@ export function DoodleBreak() {
               transform: 'scale(calc(.9 + var(--p, 0) * .1))',
             }}
           >
-            Így áll össze nálunk egy rendezvénytér.
+            {t('Így áll össze nálunk egy rendezvénytér.', 'This is how an event space comes together with us.')}
           </div>
           <div style={{ ...rowStyle, color: 'rgba(255,255,255,.35)', transform: 'translateX(calc(-26% + var(--p, 0) * 22%))' }}>
-            {ROW2.repeat(4)}
+            {t(ROW2, ROW2_EN).repeat(4)}
           </div>
 
           {/* drawn arrow pointing onward, draws in with progress */}

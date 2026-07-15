@@ -7,34 +7,50 @@ import { Doodle } from '../components/Doodle'
 import { Magnetic } from '../components/Magnetic'
 import { ContactCTA } from '../components/ContactCTA'
 import { Footer } from '../components/Footer'
+import { useLang, useT, localizedPath } from '../i18n'
 
+/**
+ * ServiceData is module-level (no hooks), so every user-facing text field has
+ * an OPTIONAL English counterpart with an `En` suffix. Hungarian is canonical;
+ * `ServicePage` renders the English value when the language is `en` and the
+ * counterpart exists, otherwise it falls back to Hungarian.
+ */
 export interface ServiceData {
   slug: string
   /** document.title for dev/client navigation — the prerender step patches
    *  the real <head> of the static HTML from scripts/prerender.mjs */
   docTitle: string
   crumb: string
+  crumbEn?: string
   title: ReactNode
+  titleEn?: ReactNode
   accent: string
   lead: ReactNode
-  steps: { title: string; body: string }[]
+  leadEn?: ReactNode
+  steps: { title: string; body: string; titleEn?: string; bodyEn?: string }[]
   featuresTitle: string
-  features: { color: string; title: string; body: string }[]
+  featuresTitleEn?: string
+  features: { color: string; title: string; body: string; titleEn?: string; bodyEn?: string }[]
   useCases?: string[]
+  useCasesEn?: string[]
   /** silent looping product video — plays as the hero's media card */
-  video?: { src: string; poster: string; label: string }
+  video?: { src: string; poster: string; label: string; labelEn?: string }
   /** hero media card when there is no video */
-  heroImage?: { src: string; alt: string }
+  heroImage?: { src: string; alt: string; altEn?: string }
   /** real product photos — sticker-tilted band under "Hogyan működik" */
-  images?: { src: string; alt: string; rotate?: number }[]
+  images?: { src: string; alt: string; rotate?: number; altEn?: string }[]
   price: {
     headline: string
+    headlineEn?: string
     blurb?: ReactNode
-    rows: { label: string; value: string }[]
+    blurbEn?: ReactNode
+    rows: { label: string; value: string; labelEn?: string; valueEn?: string }[]
     factors: string[]
+    factorsEn?: string[]
   }
   provide: string[]
-  crossLink?: { text: string; label: string; href: string }
+  provideEn?: string[]
+  crossLink?: { text: string; label: string; href: string; textEn?: string; labelEn?: string }
 }
 
 const wrap: CSSProperties = { maxWidth: 1180, margin: '0 auto' }
@@ -55,6 +71,12 @@ const h2Style: CSSProperties = {
  */
 export function ServicePage({ data }: { data: ServiceData }) {
   const { scrolled } = useScene()
+  const lang = useLang()
+  const t = useT()
+  // pick the English value when it exists and we're in English, else Hungarian
+  const pick = <T,>(hu: T, en: T | undefined): T => (lang === 'en' && en !== undefined ? en : hu)
+  // localize an absolute internal href for the current language (same as Nav)
+  const loc = (href: string) => (href.startsWith('/') ? localizedPath(href, lang) : href)
 
   useEffect(() => {
     document.title = data.docTitle
@@ -89,7 +111,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 marginBottom: 18,
               }}
             >
-              {data.crumb}
+              {pick(data.crumb, data.crumbEn)}
             </Reveal>
             <Reveal
               as="h1"
@@ -105,7 +127,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 maxWidth: '18ch',
               }}
             >
-              {data.title}
+              {pick(data.title, data.titleEn)}
             </Reveal>
             <Reveal
               as="p"
@@ -118,7 +140,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 marginTop: 26,
               }}
             >
-              {data.lead}
+              {pick(data.lead, data.leadEn)}
             </Reveal>
             <Reveal delay={160} style={{ display: 'flex', gap: 14, alignItems: 'center', marginTop: 34, flexWrap: 'wrap' }}>
               <Magnetic strength={7}>
@@ -134,13 +156,13 @@ export function ServicePage({ data }: { data: ServiceData }) {
                     borderRadius: 100,
                   }}
                 >
-                  Kérj ajánlatot →
+                  {t('Kérj ajánlatot →', 'Request a quote →')}
                 </a>
               </Magnetic>
               {/* no arrow here: the CTA's "→" right next to a "←" read as two
                   arrows pointing at each other */}
-              <a href="/#elmeny" style={{ fontWeight: 600, fontSize: 16, color: '#46433A', textDecoration: 'underline', textUnderlineOffset: 4 }}>
-                Minden szolgáltatás
+              <a href={`${loc('/')}#elmeny`} style={{ fontWeight: 600, fontSize: 16, color: '#46433A', textDecoration: 'underline', textUnderlineOffset: 4 }}>
+                {t('Minden szolgáltatás', 'All services')}
               </a>
             </Reveal>
             </div>
@@ -155,7 +177,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
                     loop
                     playsInline
                     poster={data.video.poster}
-                    aria-label={data.video.label}
+                    aria-label={pick(data.video.label, data.video.labelEn)}
                     style={{
                       display: 'block',
                       width: '100%',
@@ -169,7 +191,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 ) : (
                   <img
                     src={data.heroImage!.src}
-                    alt={data.heroImage!.alt}
+                    alt={pick(data.heroImage!.alt, data.heroImage!.altEn)}
                     style={{
                       display: 'block',
                       width: '100%',
@@ -188,7 +210,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
         <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px)' }}>
           <div style={wrap}>
             <Reveal as="h2" style={h2Style}>
-              Hogyan működik?
+              {t('Hogyan működik?', 'How it works')}
             </Reveal>
             <div
               style={{
@@ -213,9 +235,9 @@ export function ServicePage({ data }: { data: ServiceData }) {
                     {i + 1}
                   </div>
                   <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 19, marginTop: 12, color: '#17150D' }}>
-                    {s.title}
+                    {pick(s.title, s.titleEn)}
                   </h3>
-                  <p style={{ fontSize: 15, lineHeight: 1.55, color: '#46433A', marginTop: 8 }}>{s.body}</p>
+                  <p style={{ fontSize: 15, lineHeight: 1.55, color: '#46433A', marginTop: 8 }}>{pick(s.body, s.bodyEn)}</p>
                 </Reveal>
               ))}
             </div>
@@ -240,7 +262,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 <Reveal key={im.src} pop delay={i * 90}>
                   <img
                     src={im.src}
-                    alt={im.alt}
+                    alt={pick(im.alt, im.altEn)}
                     loading="lazy"
                     style={{
                       display: 'block',
@@ -261,7 +283,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
           <Doodle n={3} color="rgba(0,0,0,.045)" size={76} right="4%" top="8%" anim="float2" duration={9.5} rotate="4deg" />
           <div style={wrap}>
             <Reveal as="h2" style={h2Style}>
-              {data.featuresTitle}
+              {pick(data.featuresTitle, data.featuresTitleEn)}
             </Reveal>
             <div
               style={{
@@ -289,15 +311,15 @@ export function ServicePage({ data }: { data: ServiceData }) {
                     style={{ flex: 'none', width: 12, height: 12, borderRadius: '50%', background: f.color, marginTop: 7 }}
                   />
                   <div>
-                    <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 18, color: '#17150D' }}>{f.title}</h3>
-                    <p style={{ fontSize: 15, lineHeight: 1.55, color: '#46433A', marginTop: 6 }}>{f.body}</p>
+                    <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 18, color: '#17150D' }}>{pick(f.title, f.titleEn)}</h3>
+                    <p style={{ fontSize: 15, lineHeight: 1.55, color: '#46433A', marginTop: 6 }}>{pick(f.body, f.bodyEn)}</p>
                   </div>
                 </Reveal>
               ))}
             </div>
             {data.useCases && (
               <Reveal delay={120} style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 28 }}>
-                {data.useCases.map((u) => (
+                {(lang === 'en' && data.useCasesEn ? data.useCasesEn : data.useCases).map((u) => (
                   <span
                     key={u}
                     style={{
@@ -328,10 +350,10 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 color: '#F6F1E9',
               }}
             >
-              <h2 style={{ ...h2Style, color: '#F6F1E9' }}>{data.price.headline}</h2>
+              <h2 style={{ ...h2Style, color: '#F6F1E9' }}>{pick(data.price.headline, data.price.headlineEn)}</h2>
               {data.price.blurb && (
                 <p style={{ fontSize: 16.5, lineHeight: 1.6, color: 'rgba(246,241,233,.78)', maxWidth: '62ch', marginTop: 16 }}>
-                  {data.price.blurb}
+                  {pick(data.price.blurb, data.price.blurbEn)}
                 </p>
               )}
               <div style={{ marginTop: 30, borderTop: '1px solid rgba(246,241,233,.16)' }}>
@@ -348,15 +370,16 @@ export function ServicePage({ data }: { data: ServiceData }) {
                       borderBottom: '1px solid rgba(246,241,233,.16)',
                     }}
                   >
-                    <span style={{ fontSize: 16, color: 'rgba(246,241,233,.85)', maxWidth: '46ch' }}>{r.label}</span>
+                    <span style={{ fontSize: 16, color: 'rgba(246,241,233,.85)', maxWidth: '46ch' }}>{pick(r.label, r.labelEn)}</span>
                     <span style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 'clamp(19px,2.2vw,24px)', color: data.accent }}>
-                      {r.value}
+                      {pick(r.value, r.valueEn)}
                     </span>
                   </div>
                 ))}
               </div>
               <p style={{ fontSize: 14, color: 'rgba(246,241,233,.55)', marginTop: 18 }}>
-                Az árak nettó árak. Mitől függ a pontos ár: {data.price.factors.join(' · ')}.
+                {t('Az árak nettó árak. Mitől függ a pontos ár', 'Prices are net. What the exact price depends on')}:{' '}
+                {(lang === 'en' && data.price.factorsEn ? data.price.factorsEn : data.price.factors).join(' · ')}.
               </p>
             </Reveal>
           </div>
@@ -366,7 +389,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
         <section style={{ position: 'relative', padding: 'clamp(40px,5vw,70px) clamp(24px,6vw,90px) clamp(80px,9vw,120px)' }}>
           <div style={wrap}>
             <Reveal as="h2" style={h2Style}>
-              Amit biztosítunk
+              {t('Amit biztosítunk', 'What we provide')}
             </Reveal>
             <div
               style={{
@@ -376,7 +399,7 @@ export function ServicePage({ data }: { data: ServiceData }) {
                 marginTop: 28,
               }}
             >
-              {data.provide.map((p, i) => (
+              {(lang === 'en' && data.provideEn ? data.provideEn : data.provide).map((p, i) => (
                 <Reveal key={p} delay={i * 50} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <span aria-hidden="true" style={{ color: data.accent, fontWeight: 700, fontSize: 18, lineHeight: 1.4 }}>
                     ✓
@@ -388,9 +411,9 @@ export function ServicePage({ data }: { data: ServiceData }) {
             {data.crossLink && (
               <Reveal delay={140} style={{ marginTop: 40 }}>
                 <p style={{ fontSize: 16.5, color: '#46433A' }}>
-                  {data.crossLink.text}{' '}
-                  <a href={data.crossLink.href} style={{ fontWeight: 700, color: '#E94A35' }}>
-                    {data.crossLink.label}
+                  {pick(data.crossLink.text, data.crossLink.textEn)}{' '}
+                  <a href={loc(data.crossLink.href)} style={{ fontWeight: 700, color: '#E94A35' }}>
+                    {pick(data.crossLink.label, data.crossLink.labelEn)}
                   </a>
                 </p>
               </Reveal>

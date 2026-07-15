@@ -1,4 +1,5 @@
 import { Reveal } from './Reveal'
+import { useT } from '../i18n'
 
 /**
  * Real partner marks (monochrome SVGs under /assets/logos), tinted to the
@@ -46,6 +47,7 @@ function Row({ hidden }: { hidden?: boolean }) {
 }
 
 export function Partners() {
+  const t = useT()
   return (
     <section style={{ position: 'relative', background: '#F6F1E9', padding: 'clamp(60px,8vw,100px) 0', overflow: 'hidden' }}>
       <Reveal
@@ -60,7 +62,7 @@ export function Partners() {
           marginBottom: 46,
         }}
       >
-        Több száz rendezvényen — ők is velünk dolgoztak
+        {t('Több száz rendezvényen — ők is velünk dolgoztak', 'Hundreds of events — they have worked with us too')}
       </Reveal>
       <div
         style={{

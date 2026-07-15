@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { cl } from '../hooks/useScene'
 import { Magnetic } from './Magnetic'
+import { useT } from '../i18n'
 
 interface HeroProps {
   heroP: number
 }
 
 const STAT_CHIPS = [
-  { value: '9–15 mp', label: 'AI generálás', color: '#4888F8' },
-  { value: '∞ stílus', label: 'választható téma', color: '#9868F8' },
-  { value: '100%', label: 'rendezvényre szabva', color: '#E94A35' },
+  { value: '9–15 mp', valueEn: '9–15 sec', label: 'AI generálás', labelEn: 'AI generation', color: '#4888F8' },
+  { value: '∞ stílus', valueEn: '∞ styles', label: 'választható téma', labelEn: 'themes to pick from', color: '#9868F8' },
+  { value: '100%', valueEn: '100%', label: 'rendezvényre szabva', labelEn: 'tailored to your event', color: '#E94A35' },
 ]
 
 /** One headline unit rising out of its own mask, scrubbed by the reveal progress. */
@@ -122,6 +123,7 @@ function Kiosk3D({
   photoOn: number
   screenFlash: number
 }) {
+  const t = useT()
   const whiteFace = 'linear-gradient(180deg,#fcfcfb,#e9e9e5)'
   const sideFace = 'linear-gradient(180deg,#f1f1ee,#dededa)'
   const wheels = [
@@ -180,7 +182,7 @@ function Kiosk3D({
                 stays on screen through the whole turn */}
             <img
               src="/assets/photos/team-original.jpg"
-              alt="Csoportkép az AI Selfiemata fotóautomatával egy rendezvényen"
+              alt={t('Csoportkép az AI Selfiemata fotóautomatával egy rendezvényen', 'Group photo taken with the AI Selfiemata photo booth at an event')}
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -203,7 +205,7 @@ function Kiosk3D({
             {/* the AI-transformed version — swaps in with the second flash */}
             <img
               src="/assets/photos/team-heroes.jpg"
-              alt="Ugyanaz a csoport az AI Selfiemata által generált szuperhős-képen"
+              alt={t('Ugyanaz a csoport az AI Selfiemata által generált szuperhős-képen', 'The same group in an AI Selfiemata-generated superhero image')}
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -355,6 +357,7 @@ function Kiosk3D({
  * stage dissolves to cream while the headline + stat chips rise in.
  */
 export function Hero({ heroP: p }: HeroProps) {
+  const t = useT()
   // Click-to-play: some visitors tap instead of scrolling. A tween drives
   // the window scroll through the hero's phases (spin → flash → photo →
   // copy rise) up to the snap point, so the whole entrance plays on tap.
@@ -623,7 +626,7 @@ export function Hero({ heroP: p }: HeroProps) {
             }}
           >
             <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff' }} />
-            #1 rendezvény trend · 2026
+            {t('#1 rendezvény trend · 2026', '#1 event trend · 2026')}
           </span>
           <h1
             style={{
@@ -637,13 +640,13 @@ export function Hero({ heroP: p }: HeroProps) {
             }}
           >
             <RiseWord p={reveal} i={0}>
-              A
+              {t('A', 'The')}
             </RiseWord>{' '}
             <RiseWord p={reveal} i={1}>
-              fotóautomata
+              {t('fotóautomata', 'photo booth')}
             </RiseWord>{' '}
             <RiseWord p={reveal} i={2}>
-              <span style={{ fontWeight: 600, color: '#E94A35' }}>újragondolva</span>
+              <span style={{ fontWeight: 600, color: '#E94A35' }}>{t('újragondolva', 'reinvented')}</span>
             </RiseWord>{' '}
             <RiseWord p={reveal} i={3}>
               <span
@@ -669,8 +672,10 @@ export function Hero({ heroP: p }: HeroProps) {
               marginTop: 28,
             }}
           >
-            AI fotóautomata rendezvényre: a vendég fotóját az AI pár másodperc alatt egyedi,
-            megosztható, brandingelt alkotássá varázsolja.
+            {t(
+              'AI fotóautomata rendezvényre: a vendég fotóját az AI pár másodperc alatt egyedi, megosztható, brandingelt alkotássá varázsolja.',
+              "AI photo booth for events: in just a few seconds, AI turns your guest's photo into a unique, shareable, branded creation.",
+            )}
           </p>
           <div
             style={{
@@ -699,7 +704,7 @@ export function Hero({ heroP: p }: HeroProps) {
                 onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 34px -14px rgba(23,21,13,.55)')}
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
               >
-                Érdekel! Mutasd →
+                {t('Érdekel! Mutasd', "I'm in! Show me")} →
               </a>
             </Magnetic>
             <Magnetic strength={6}>
@@ -719,7 +724,7 @@ export function Hero({ heroP: p }: HeroProps) {
                 onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.05)')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
               >
-                Szolgáltatások
+                {t('Szolgáltatások', 'Services')}
               </a>
             </Magnetic>
             <a
@@ -736,7 +741,7 @@ export function Hero({ heroP: p }: HeroProps) {
                 animation: 'ep-nudge 1.8s ease-in-out infinite',
               }}
             >
-              Ismerd meg!
+              {t('Ismerd meg!', 'See how it works')}
               <span aria-hidden="true" style={{ fontSize: 18, lineHeight: 1 }}>
                 ↓
               </span>
@@ -764,9 +769,9 @@ export function Hero({ heroP: p }: HeroProps) {
                       color: c.color,
                     }}
                   >
-                    {c.value}
+                    {t(c.value, c.valueEn)}
                   </div>
-                  <div className="ep-chip-label" style={{ color: '#7A766B', marginTop: 2 }}>{c.label}</div>
+                  <div className="ep-chip-label" style={{ color: '#7A766B', marginTop: 2 }}>{t(c.label, c.labelEn)}</div>
                 </div>
               )
             })}
@@ -777,7 +782,7 @@ export function Hero({ heroP: p }: HeroProps) {
         <button
           type="button"
           onClick={playHero}
-          aria-label="Animáció lejátszása"
+          aria-label={t('Animáció lejátszása', 'Play animation')}
           style={{
             position: 'absolute',
             bottom: 34,
@@ -798,7 +803,7 @@ export function Hero({ heroP: p }: HeroProps) {
           }}
         >
           <span style={{ fontSize: 12, letterSpacing: '.16em', textTransform: 'uppercase' }}>
-            Görgess vagy koppints
+            {t('Görgess vagy koppints', 'Scroll or tap')}
           </span>
           <span
             style={{
