@@ -497,26 +497,35 @@ a {
 @media (max-width: 640px) {
   .ep-ai-stats {
     flex-wrap: nowrap !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
   .ep-ai-stat {
     flex: 1 1 0;
     min-width: 0;
   }
   .ep-ai-stat-v {
-    font-size: 18px !important;
+    font-size: 22px !important;
   }
   .ep-ai-stat-l {
-    font-size: 11px !important;
+    font-size: 13px !important;
     line-height: 1.2;
+    margin-top: 5px !important;
   }
   .ep-ai-cta {
     flex-wrap: nowrap !important;
-    gap: 8px !important;
+    gap: 10px !important;
+  }
+  /* buttons fill the row equally so they're as large as the width allows */
+  .ep-ai-cta > * {
+    flex: 1 1 0;
+    min-width: 0;
   }
   .ep-ai-cta-btn {
-    font-size: 14px !important;
-    padding: 12px 14px !important;
+    display: block !important;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 15.5px !important;
+    padding: 16px 8px !important;
     white-space: nowrap;
     text-align: center;
   }
