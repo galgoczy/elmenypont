@@ -1,5 +1,5 @@
 import { useRef, useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
-import { useT } from '../i18n'
+import { useT, useLoc } from '../i18n'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { Magnetic } from './Magnetic'
@@ -46,6 +46,7 @@ const onBlur = (e: ReactFocusEvent<HTMLElement>) => {
 
 export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
   const t = useT()
+  const loc = useLoc()
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
@@ -249,7 +250,7 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
             <input type="checkbox" name="gdpr" required style={{ marginTop: 3, width: 16, height: 16, accentColor: '#17150D' }} />
             <span>
               {t('Elolvastam és elfogadom az', 'I have read and accept the')}{' '}
-              <a href="/adatkezeles" target="_blank" rel="noopener" style={{ color: '#E94A35', textDecoration: 'underline' }}>
+              <a href={loc('/adatkezeles')} target="_blank" rel="noopener" style={{ color: '#E94A35', textDecoration: 'underline' }}>
                 {t('adatkezelési tájékoztatót', 'privacy policy')}
               </a>
               {t(', és hozzájárulok adataim ajánlatadás céljából történő kezeléséhez.', ', and I consent to my data being processed for the purpose of preparing a quote.')}

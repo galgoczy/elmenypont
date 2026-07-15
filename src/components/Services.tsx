@@ -4,7 +4,7 @@ import { Doodle } from './Doodle'
 import { BeforeAfter } from './BeforeAfter'
 import { TiltCard } from './TiltCard'
 import { Words } from './Words'
-import { useT } from '../i18n'
+import { useT, useLoc } from '../i18n'
 
 const SHOWCASE_STATS = [
   { value: '9–15 mp', valueEn: '9–15 sec', label: 'AI generálás', labelEn: 'AI generation', color: '#9868F8' },
@@ -31,6 +31,7 @@ const badge: CSSProperties = {
 /** Services + AI showcase: featured AI Selfiemata with live before/after + Videomata. */
 export function Services() {
   const t = useT()
+  const loc = useLoc()
   return (
     <section
       id="szolgaltatasok"
@@ -141,7 +142,7 @@ export function Services() {
               ))}
             </div>
             <a
-              href="/ai-fotoautomata"
+              href={loc('/ai-fotoautomata')}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',

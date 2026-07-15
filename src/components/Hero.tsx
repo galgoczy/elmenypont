@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { cl } from '../hooks/useScene'
 import { Magnetic } from './Magnetic'
-import { useT } from '../i18n'
+import { useT, useLoc } from '../i18n'
 
 interface HeroProps {
   heroP: number
@@ -358,6 +358,7 @@ function Kiosk3D({
  */
 export function Hero({ heroP: p }: HeroProps) {
   const t = useT()
+  const loc = useLoc()
   // Click-to-play: some visitors tap instead of scrolling. A tween drives
   // the window scroll through the hero's phases (spin → flash → photo →
   // copy rise) up to the snap point, so the whole entrance plays on tap.
@@ -688,7 +689,7 @@ export function Hero({ heroP: p }: HeroProps) {
           >
             <Magnetic strength={8}>
               <a
-                href="/ai-fotoautomata"
+                href={loc('/ai-fotoautomata')}
                 style={{
                   background: '#17150D',
                   color: '#F6F1E9',

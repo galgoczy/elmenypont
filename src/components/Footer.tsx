@@ -1,9 +1,10 @@
-import { useT } from '../i18n'
+import { useT, useLoc } from '../i18n'
 
 const EMAIL = 'hello@elmeny.hu'
 
 export function Footer() {
   const t = useT()
+  const loc = useLoc()
   return (
     <footer
       style={{
@@ -32,7 +33,7 @@ export function Footer() {
             />
             <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,.6)' }}>
               {t('Interaktív rendezvényélmények —', 'Interactive event experiences —')}{' '}
-              <a href="/ai-fotoautomata" style={{ color: 'rgba(255,255,255,.82)' }}>
+              <a href={loc('/ai-fotoautomata')} style={{ color: 'rgba(255,255,255,.82)' }}>
                 AI Selfiemata
               </a>
               {t(', Videomata, greenbox és interaktív falak, kulcsrakészen.', ', Videomata, greenbox and interactive walls, turnkey.')}
@@ -44,19 +45,19 @@ export function Footer() {
                 {t('Szolgáltatások', 'Services')}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9, fontSize: 15 }}>
-                <a href="/ai-fotoautomata" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a href={loc('/ai-fotoautomata')} style={{ color: 'rgba(255,255,255,.82)' }}>
                   {t('AI fotóautomata bérlés rendezvényre', 'AI photo booth rental for events')}
                 </a>
-                <a href="/greenbox" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a href={loc('/greenbox')} style={{ color: 'rgba(255,255,255,.82)' }}>
                   Greenbox Selfiemata
                 </a>
-                <a href="/smart-wall" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a href={loc('/smart-wall')} style={{ color: 'rgba(255,255,255,.82)' }}>
                   {t('Smart Wall — interaktív fal', 'Smart Wall — interactive wall')}
                 </a>
-                <a href="/mosaic-wall" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a href={loc('/mosaic-wall')} style={{ color: 'rgba(255,255,255,.82)' }}>
                   {t('Mosaic Wall — mozaikfal', 'Mosaic Wall — mosaic wall')}
                 </a>
-                <a href="/#elmeny" style={{ color: 'rgba(255,255,255,.82)' }}>
+                <a href={loc('/#elmeny')} style={{ color: 'rgba(255,255,255,.82)' }}>
                   AI Videomata
                 </a>
               </div>
@@ -106,7 +107,7 @@ export function Footer() {
         </div>
         <p style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', marginTop: 28, display: 'flex', gap: 18, flexWrap: 'wrap' }}>
           <span>{t('© 2026 Élménypont. Minden jog fenntartva.', '© 2026 Élménypont. All rights reserved.')}</span>
-          <a href="/adatkezeles" style={{ color: 'rgba(255,255,255,.55)' }}>
+          <a href={loc('/adatkezeles')} style={{ color: 'rgba(255,255,255,.55)' }}>
             {t('Adatkezelési tájékoztató', 'Privacy policy')}
           </a>
         </p>

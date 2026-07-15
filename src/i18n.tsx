@@ -42,3 +42,17 @@ export function localizedPath(path: string, lang: Lang): string {
   const base = path === '/' ? '' : path
   return lang === 'en' ? `/en${base}` : path || '/'
 }
+
+/**
+ * Hook returning a localizer for internal hrefs: on the English site it
+ * prefixes absolute in-site paths with /en (leaving hashes, mailto/tel and
+ * already-/en links untouched); on Hungarian it returns the href unchanged.
+ */
+export function useLoc() {
+  const lang = useContext(LangContext)
+  return (href: string) => {
+    if (lang !== 'en' || !href.startsWith('/')) return href
+    if (href === '/en' || href.startsWith('/en/') || href.startsWith('/en#')) return href
+    return `/en${href === '/' ? '' : href}`
+  }
+}

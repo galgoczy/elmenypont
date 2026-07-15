@@ -368,9 +368,15 @@ export const MOSAIC_WALL: ServiceData = {
   slug: 'mosaic-wall',
   docTitle: 'Mosaic Wall — mozaikfal rendezvényre | Élménypont',
   crumb: 'Mosaic Wall',
+  crumbEn: 'Mosaic Wall',
   title: (
     <>
       Mindenki hozzátesz a nagy <Boxed bg="#E94A35">egészhez.</Boxed>
+    </>
+  ),
+  titleEn: (
+    <>
+      Everyone adds to the bigger <Boxed bg="#E94A35">picture.</Boxed>
     </>
   ),
   accent: '#E94A35',
@@ -381,66 +387,95 @@ export const MOSAIC_WALL: ServiceData = {
       nyomtass, ragassz.
     </>
   ),
+  leadEn: (
+    <>
+      Photos of the guests go up as stickers on a numbered wall, and before our eyes they assemble
+      into the big picture chosen together. A truly communal activity: shoot, print, stick.
+    </>
+  ),
   steps: [
     {
       title: 'Fotózz',
+      titleEn: 'Shoot',
       body: 'A vendégekről a kihelyezett digitális fotóautomatánk készít képet — az érintőkijelzős felület tükörként is szolgál.',
+      bodyEn: 'Our on-site digital photo automat takes a picture of the guests — the touchscreen surface doubles as a mirror.',
     },
     {
       title: 'Nyomtass',
+      titleEn: 'Print',
       body: 'A képek perceken belül filterezést kapnak, és matricaként kerülnek a vendég kezébe.',
+      bodyEn: 'Within minutes the photos are filtered and handed to the guest as a sticker.',
     },
     {
       title: 'Ragassz',
+      titleEn: 'Stick',
       body: 'A rácsháló azonosítói megmutatják a matrica helyét — minden kép oda kerül, ahová szánták.',
+      bodyEn: 'The grid coordinates show where the sticker goes — every photo ends up exactly where it belongs.',
     },
     {
       title: 'Összeáll a nagy kép',
+      titleEn: 'The big picture takes shape',
       body: 'A sok kicsi mozaikból kirajzolódik az előre közösen kiválasztott kompozíció. Kollégáink végig segítenek.',
+      bodyEn: 'From the many small tiles the composition chosen together in advance emerges. Our colleagues help throughout.',
     },
   ],
   featuresTitle: 'Miért különleges?',
+  featuresTitleEn: 'What makes it special?',
   features: [
     {
       color: '#E94A35',
       title: 'Kétszeres élmény',
+      titleEn: 'A double experience',
       body: 'A fotózkodás önmagában is szórakoztató — és közben mindenki próbálja kitalálni, mi lesz a végső kép.',
+      bodyEn: 'Posing for photos is fun in itself — and meanwhile everyone tries to guess what the final picture will be.',
     },
     {
       color: '#48D880',
       title: 'Maradandó végeredmény',
+      titleEn: 'A lasting result',
       body: 'A kész mozaik a rendezvény dekorációja lesz, utólag plakátként vagy keretezett képként is kérhető.',
+      bodyEn: 'The finished mosaic becomes the event decoration, and can be ordered afterwards as a poster or a framed print.',
     },
     {
       color: '#4888F8',
       title: 'Közösségformáló',
+      titleEn: 'Community-building',
       body: 'Mindenki hozzátesz egy darabot — a közös alkotás erősíti a résztvevők közötti kapcsolatot.',
+      bodyEn: 'Everyone adds a piece — creating something together strengthens the bond between participants.',
     },
     {
       color: '#9B6BF2',
       title: 'Brandingelhető',
+      titleEn: 'Fully brandable',
       body: 'A fal nyomata és a fotóautomata szoftverének felülete is a rendezvény arculatára szabható.',
+      bodyEn: "Both the wall print and the photo automat's software interface can be tailored to your event branding.",
     },
   ],
   useCases: ['Nagylétszámú céges esemény', 'Konferencia', 'Fesztivál', 'Jubileum', 'Brandaktiváció'],
+  useCasesEn: ['Large-scale corporate event', 'Conference', 'Festival', 'Anniversary', 'Brand activation'],
   heroImage: {
     src: '/assets/photos/mosaic-wall-real.jpg',
     alt: 'Kész Mosaic Wall egy rendezvényen: vendégek ragasztják fel az utolsó fotómatricákat a nagy közös képre',
+    altEn: 'A finished Mosaic Wall at an event: guests sticking the last photo stickers onto the big shared picture',
   },
   images: [
     {
       src: '/assets/photos/mosaic-grid.jpg',
       alt: 'Rendezvényfotókból összeálló mozaikrács — sok kicsi képből egy nagy kompozíció',
+      altEn: 'A mosaic grid assembled from event photos — one big composition from many small images',
       rotate: -1,
     },
   ],
   price: {
     headline: 'Árak',
+    headlineEn: 'Pricing',
     blurb: 'Nagylétszámú eseményekre ajánljuk — a fal több méretben elérhető.',
+    blurbEn: 'Recommended for large-scale events — the wall is available in several sizes.',
     rows: [
-      { label: '200 darabos mozaik, 130×90 cm-es nyomattal', value: '450 000 Ft-tól' },
+      { label: '200 darabos mozaik, 130×90 cm-es nyomattal', value: '450 000 Ft-tól', labelEn: '200-piece mosaic, with a 130×90 cm print', valueEn: 'from 450,000 HUF' },
     ],
     factors: ['a mozaik mérete és darabszáma', 'időtartam', 'helyszín'],
+    factorsEn: ['the size and piece count of the mosaic', 'duration', 'venue'],
   },
   provide: [
     'Mozaikfal, nyomtató és minden szükséges eszköz',
@@ -449,9 +484,18 @@ export const MOSAIC_WALL: ServiceData = {
     'Igény szerint hostess a program aktivizálásához',
     'Utólagos plakát vagy keretezett kép igény szerint',
   ],
+  provideEn: [
+    'Mosaic wall, printer and all the necessary equipment',
+    'Graphic design — we shape the mosaic tiles into a visual whole',
+    'One-person technical supervision: printing, assistance, moderation',
+    'A hostess on request to energise the activity',
+    'A poster or framed print afterwards on request',
+  ],
   crossLink: {
     text: 'Informatív, érinthető felületet keresel inkább?',
+    textEn: 'Looking for an informative, touchable surface instead?',
     label: 'Smart Wall →',
+    labelEn: 'Smart Wall →',
     href: '/smart-wall',
   },
 }
@@ -460,9 +504,15 @@ export const SELFIEBOX: ServiceData = {
   slug: 'selfiebox',
   docTitle: 'Selfiebox — szelfigép és fotóbox bérlés rendezvényre | Élménypont',
   crumb: 'Selfiebox',
+  crumbEn: 'Selfiebox',
   title: (
     <>
       A klasszikus fotóbox — ami <Boxed bg="#E9A13B">mindig működik.</Boxed>
+    </>
+  ),
+  titleEn: (
+    <>
+      The classic photo booth — that <Boxed bg="#E9A13B">always works.</Boxed>
     </>
   ),
   accent: '#E9A13B',
@@ -473,56 +523,83 @@ export const SELFIEBOX: ServiceData = {
       korosztálynak — és mindig működik.
     </>
   ),
+  leadEn: (
+    <>
+      A selfie machine and photo automat for hire with instant printing: one press of a button,
+      professional lighting, and a few seconds later the finished photo is in the guest's hand.
+      Simple, fast, for every age group — and it always works.
+    </>
+  ),
   steps: [
     {
       title: 'Pózolj',
+      titleEn: 'Pose',
       body: 'A vendég beáll a fotóbox elé, az érintőképernyőn látja magát, és kiválasztja a brandingelt keretet.',
+      bodyEn: 'The guest steps up to the photo booth, sees themselves on the touchscreen and picks the branded frame.',
     },
     {
       title: 'Egy gombnyomás',
+      titleEn: 'One button press',
       body: 'Az automata visszaszámol és elkészíti a képet — profi világítással, éles, jól exponált fotóval.',
+      bodyEn: 'The automat counts down and takes the photo — with professional lighting, sharp and well-exposed.',
     },
     {
       title: 'Azonnali nyomtatás',
+      titleEn: 'Instant printing',
       body: 'A kész kép pár másodperc alatt nyomtatva a kézben, és igény szerint e-mailben vagy QR-kóddal is megosztható.',
+      bodyEn: 'The finished photo is in hand within seconds, and can also be shared by e-mail or QR code on request.',
     },
   ],
   featuresTitle: 'Miért szeretik a vendégek?',
+  featuresTitleEn: 'Why guests love it',
   features: [
     {
       color: '#E9A13B',
       title: 'Egyszerű és gyors',
+      titleEn: 'Simple and fast',
       body: 'Nincs tanulási görbe: odaáll, mosolyog, gombot nyom — kész. Sorban állás nélkül pörög.',
+      bodyEn: 'No learning curve: step up, smile, press a button — done. It keeps moving without queues.',
     },
     {
       color: '#E94A35',
       title: 'Kézzelfogható emlék',
+      titleEn: 'A tangible keepsake',
       body: 'A vendég azonnal nyomtatott képet visz haza — a klasszikus, amit mindenki imád.',
+      bodyEn: 'The guest takes home a printed photo right away — the classic everyone loves.',
     },
     {
       color: '#4888F8',
       title: 'Minden korosztálynak',
+      titleEn: 'For every age group',
       body: 'A nagyszülőtől a gyerekekig mindenki azonnal érti és használja.',
+      bodyEn: 'From grandparents to children, everyone understands and uses it straight away.',
     },
     {
       color: '#9B6BF2',
       title: 'Brandingelhető keret',
+      titleEn: 'A brandable frame',
       body: 'A nyomat kerete és a képernyő is a rendezvény arculatára szabható.',
+      bodyEn: 'Both the print frame and the screen can be tailored to your event branding.',
     },
   ],
   useCases: ['Esküvő', 'Céges buli', 'Születésnap', 'Ballagás', 'Családi nap'],
+  useCasesEn: ['Wedding', 'Company party', 'Birthday', 'Graduation', 'Family day'],
   heroImage: {
     src: '/assets/photos/team-original.jpg',
     alt: 'Klasszikus fotóboxban készült csoportkép egy rendezvényen',
+    altEn: 'A group photo taken in a classic photo booth at an event',
   },
   price: {
     headline: 'Árak',
+    headlineEn: 'Pricing',
     blurb: 'A legkisebb egység: 4 órás kitelepülés Budapesten.',
+    blurbEn: 'The smallest package: a 4-hour deployment in Budapest.',
     rows: [
-      { label: 'Selfiebox — 4 óra, Budapest', value: '80 000 Ft-tól' },
-      { label: 'Nyomatcsomagok (10×15 cm papírkép)', value: '20 000 Ft-tól' },
+      { label: 'Selfiebox — 4 óra, Budapest', value: '80 000 Ft-tól', labelEn: 'Selfiebox — 4 hours, Budapest', valueEn: 'from 80,000 HUF' },
+      { label: 'Nyomatcsomagok (10×15 cm papírkép)', value: '20 000 Ft-tól', labelEn: 'Print packages (10×15 cm paper photo)', valueEn: 'from 20,000 HUF' },
     ],
     factors: ['időtartam', 'helyszín (Budapesten kívül kiszállás)', 'vendégszám és nyomatcsomag'],
+    factorsEn: ['duration', 'venue (travel outside Budapest)', 'number of guests and print package'],
   },
   provide: [
     'Fotóbox automata profi világítással és nyomtatóval',
@@ -531,9 +608,18 @@ export const SELFIEBOX: ServiceData = {
     'Helyszíni nyomtatás a választott nyomatcsomaggal',
     'Online megosztás e-mailben vagy QR-kóddal',
   ],
+  provideEn: [
+    'Photo booth automat with professional lighting and a printer',
+    'An event-tailored, brandable frame',
+    'One operator / host on site',
+    'On-site printing with the chosen print package',
+    'Online sharing by e-mail or QR code',
+  ],
   crossLink: {
     text: 'Dobd fel mesterséges intelligenciával?',
+    textEn: 'Want to spice it up with artificial intelligence?',
     label: 'AI Selfiemata →',
+    labelEn: 'AI Selfiemata →',
     href: '/ai-fotoautomata',
   },
 }

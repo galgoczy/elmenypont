@@ -2,7 +2,7 @@ import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { ImageSlot } from './ImageSlot'
 import { TiltCard } from './TiltCard'
-import { useT } from '../i18n'
+import { useT, useLoc } from '../i18n'
 
 const CARDS = [
   {
@@ -33,6 +33,7 @@ const CARDS = [
 
 export function MoreSelfiematak() {
   const t = useT()
+  const loc = useLoc()
   return (
     <section
       id="selfiebox"
@@ -64,7 +65,7 @@ export function MoreSelfiematak() {
             <Reveal key={c.title} pop delay={c.delay}>
               <TiltCard tilt={5} lift={7} radius={22} hoverShadow="0 34px 56px -28px rgba(0,0,0,.4)" style={{ height: '100%' }}>
                 <a
-                  href={c.href}
+                  href={loc(c.href)}
                   style={{
                     background: '#F6F1E9',
                     border: '1px solid rgba(0,0,0,.08)',

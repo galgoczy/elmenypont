@@ -1,6 +1,6 @@
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
-import { useT } from '../i18n'
+import { useT, useLoc } from '../i18n'
 
 const ROWS = [
   {
@@ -25,6 +25,7 @@ const ROWS = [
 
 export function OtherServices() {
   const t = useT()
+  const loc = useLoc()
   return (
     <section
       className="ep-deco"
@@ -62,7 +63,7 @@ export function OtherServices() {
               key={r.title}
               as="a"
               delay={r.delay}
-              href={r.href}
+              href={loc(r.href)}
               style={{
                 background: 'transparent',
                 border: '1px solid rgba(0,0,0,.12)',
