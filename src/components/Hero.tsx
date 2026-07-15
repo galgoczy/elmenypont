@@ -699,7 +699,7 @@ export function Hero({ heroP: p }: HeroProps) {
                 onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 34px -14px rgba(23,21,13,.55)')}
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
               >
-                Kérek bemutatót →
+                Érdekel! Mutasd →
               </a>
             </Magnetic>
             <Magnetic strength={6}>
