@@ -29,17 +29,21 @@ export function decide({ pathname, cookieLang, country, primaryLang }) {
   const toEn = (p) => '/en' + (p === '/' ? '' : p)
   const stripEn = (p) => p.slice(3) || '/'
 
-  // 1) explicit choice wins — keep the visitor on their chosen language
+  // 1) explicit choice wins — keep the visitor on their chosen language,
+  //    on every path
   if (cookieLang === 'en') return isEn ? null : toEn(pathname)
   if (cookieLang === 'hu') return isEn ? stripEn(pathname) : null
 
-  // 2) no cookie: only auto-route the HU-root entry; never pull a visitor
-  //    off an explicit /en URL
-  if (isEn) return null
+  // 2) no cookie: auto-detect ONLY on the homepage. Deep links keep the
+  //    language their URL specifies — old-domain 301s (e.g. mosaicwall.hu →
+  //    /mosaic-wall), shared links and search results must never flip a
+  //    Hungarian page to English (or vice versa).
+  if (pathname !== '/') return null
 
   const c = (country || '').toUpperCase()
-  const stayHu = c === 'HU' || (primaryLang || '').toLowerCase().startsWith('hu') || !c
-  return stayHu ? null : toEn(pathname)
+  const known = /^[A-Z]{2}$/.test(c) && c !== 'XX' && c !== 'T1' // real ISO-2, not a placeholder
+  const stayHu = !known || c === 'HU' || (primaryLang || '').toLowerCase().startsWith('hu')
+  return stayHu ? null : '/en'
 }
 
 export default function middleware(request) {
