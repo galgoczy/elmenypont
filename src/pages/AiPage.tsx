@@ -406,7 +406,7 @@ export function AiPage() {
               height: 560,
               overflow: 'hidden',
               perspective: '1500px',
-              opacity: 0.18,
+              opacity: 0.22,
               pointerEvents: 'none',
               zIndex: 0,
             }}
