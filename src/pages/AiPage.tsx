@@ -402,10 +402,10 @@ export function AiPage() {
               top: 'clamp(30px,7vw,90px)',
               right: 'clamp(-110px,-3vw,-30px)',
               width: 340,
-              height: 470,
+              height: 560,
               overflow: 'hidden',
               perspective: '1500px',
-              opacity: 0.14,
+              opacity: 0.18,
               pointerEvents: 'none',
               zIndex: 0,
             }}
@@ -414,7 +414,7 @@ export function AiPage() {
               style={{
                 position: 'absolute',
                 left: '50%',
-                top: 0,
+                top: 52,
                 marginLeft: -150,
                 transformOrigin: 'top center',
                 transform: `rotateX(6deg) rotateY(${(-360 * (whyTurn * whyTurn * (3 - 2 * whyTurn))).toFixed(2)}deg) scale(0.72)`,
