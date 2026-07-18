@@ -56,7 +56,8 @@ const COL_D = 54
 const COL_H = 380
 const BASE_W = 240
 const BASE_H = 14
-const TOTAL_H = HEAD_H + COL_H + BASE_H
+export const KIOSK_TOTAL_H = HEAD_H + COL_H + BASE_H
+const TOTAL_H = KIOSK_TOTAL_H
 
 function face(w: number, h: number, transform: string, extra?: CSSProperties): CSSProperties {
   return {
@@ -112,7 +113,7 @@ function HeadSide({ turn }: { turn: number }) {
   )
 }
 
-function Kiosk3D({
+export function Kiosk3D({
   turn,
   photo1On,
   photoOn,
@@ -350,6 +351,71 @@ function Kiosk3D({
   )
 }
 
+/** Gala opening atmosphere: warm spotlight beams sweeping down + soft
+ *  floating bokeh. Rendered on the dark stage behind the kiosk; the caller
+ *  fades the whole layer out as the machine spins closer. */
+function GalaLights({ op }: { op: number }) {
+  if (op <= 0.002) return null
+  const beams = [
+    { left: '20%', rot: -17, w: 230, hue: 'rgba(245,196,110,0.50)' },
+    { left: '50%', rot: 2, w: 280, hue: 'rgba(255,236,205,0.40)' },
+    { left: '80%', rot: 16, w: 230, hue: 'rgba(242,147,127,0.50)' },
+  ]
+  const bokeh = [
+    { left: '13%', top: '30%', s: 92, c: 'rgba(245,196,110,.55)', d: '0s' },
+    { left: '83%', top: '25%', s: 74, c: 'rgba(242,147,127,.55)', d: '1.2s' },
+    { left: '31%', top: '65%', s: 60, c: 'rgba(255,236,205,.5)', d: '.6s' },
+    { left: '67%', top: '71%', s: 104, c: 'rgba(245,196,110,.42)', d: '2s' },
+    { left: '50%', top: '16%', s: 44, c: 'rgba(255,255,255,.55)', d: '1.6s' },
+    { left: '91%', top: '56%', s: 54, c: 'rgba(242,147,127,.48)', d: '.9s' },
+  ]
+  return (
+    <div aria-hidden="true" style={{ position: 'absolute', inset: 0, opacity: op, pointerEvents: 'none', overflow: 'hidden' }}>
+      {beams.map((b, i) => (
+        <div
+          key={`b${i}`}
+          className="ep-gala-beam"
+          style={{
+            position: 'absolute',
+            top: '-14%',
+            left: b.left,
+            width: b.w,
+            height: '150%',
+            marginLeft: -b.w / 2,
+            background: `linear-gradient(to bottom, ${b.hue} 0%, rgba(0,0,0,0) 72%)`,
+            clipPath: 'polygon(43% 0, 57% 0, 100% 100%, 0% 100%)',
+            transformOrigin: 'top center',
+            filter: 'blur(7px)',
+            mixBlendMode: 'screen',
+            ['--rot' as string]: `${b.rot}deg`,
+            animationDelay: `${i * 0.8}s`,
+          }}
+        />
+      ))}
+      {bokeh.map((k, i) => (
+        <span
+          key={`k${i}`}
+          className="ep-gala-bokeh"
+          style={{
+            position: 'absolute',
+            left: k.left,
+            top: k.top,
+            width: k.s,
+            height: k.s,
+            marginLeft: -k.s / 2,
+            marginTop: -k.s / 2,
+            borderRadius: '50%',
+            background: `radial-gradient(closest-side, ${k.c}, rgba(0,0,0,0) 70%)`,
+            filter: 'blur(2px)',
+            mixBlendMode: 'screen',
+            animationDelay: k.d,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 /**
  * Sticky scroll-choreographed hero. The kiosk starts far away in full
  * figure, spins all the way around while gliding closer, the camera
@@ -469,6 +535,9 @@ export function Hero({ heroP: p }: HeroProps) {
   const bg = dark.map((d, i) => Math.round(d + (cream[i] - d) * mix))
   const heroBg = `rgb(${bg[0]},${bg[1]},${bg[2]})`
 
+  // gala atmosphere: full at the opening (kiosk far away), gone by the time
+  // it has spun close — beams + bokeh fade as the machine approaches
+  const galaOp = Math.max(0, 1 - cl(p, 0.03, 0.32))
   const heroGlow = (0.5 * (1 - mix) * (0.35 + 0.65 * spinE)).toFixed(3)
   const copyOp = reveal.toFixed(2)
   // once risen, the copy stands perfectly still until the sticky releases
@@ -516,6 +585,10 @@ export function Hero({ heroP: p }: HeroProps) {
             pointerEvents: 'none',
           }}
         />
+
+        {/* gala opening: warm spotlight beams + floating bokeh behind the
+            kiosk, fading out as the machine spins closer */}
+        <GalaLights op={galaOp} />
 
         {/* 3D kiosk stage — while the copy takes over, a soft mask trims
             the column below the CTA/chips midline so the ghosted leg

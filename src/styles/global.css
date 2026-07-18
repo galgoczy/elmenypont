@@ -340,6 +340,46 @@ a {
   pointer-events: none;
   z-index: 0;
 }
+/* gala opening — spotlight beams gently sway, bokeh drifts */
+.ep-gala-beam {
+  transform: rotate(var(--rot, 0deg));
+  animation: ep-gala-sway 7s ease-in-out infinite;
+}
+@keyframes ep-gala-sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--rot, 0deg) - 2.5deg));
+  }
+  50% {
+    transform: rotate(calc(var(--rot, 0deg) + 2.5deg));
+  }
+}
+.ep-gala-bokeh {
+  animation: ep-gala-bokeh 5.5s ease-in-out infinite;
+}
+@keyframes ep-gala-bokeh {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.09);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-gala-beam,
+  .ep-gala-bokeh {
+    animation: none;
+  }
+}
+
+/* the "Miért most?" background kiosk would crowd the text on phones */
+@media (max-width: 820px) {
+  .ep-why-kiosk {
+    display: none;
+  }
+}
+
 /* not enough room next to the copy on small screens */
 @media (max-width: 820px) {
   .ep-camdoodle {

@@ -11,6 +11,7 @@ import { Faq } from '../components/Faq'
 import { ContactCTA } from '../components/ContactCTA'
 import { track } from '../components/CookieBar'
 import { Footer } from '../components/Footer'
+import { Kiosk3D } from '../components/Hero'
 import { useT, useLang } from '../i18n'
 
 /** serpentine that STARTS at the 01 point (top-left), curves down to 02
@@ -94,6 +95,35 @@ const CUSTOM = [
 export function AiPage() {
   const t = useT()
   const lang = useLang()
+
+  // "Miért most?" background kiosk: spins in as the section scrolls up into
+  // view (0 → 1), then holds — mirrors the home hero's entrance.
+  const whyRef = useRef<HTMLElement>(null)
+  const [whyTurn, setWhyTurn] = useState(0)
+  useEffect(() => {
+    const el = whyRef.current
+    if (!el) return
+    let raf = 0
+    const compute = () => {
+      raf = 0
+      const r = el.getBoundingClientRect()
+      const winH = window.innerHeight || 1
+      // 0 when the section top sits at the viewport bottom, 1 by the time it
+      // has risen to ~15% from the top; clamped so it stays put afterwards
+      setWhyTurn(Math.min(1, Math.max(0, (winH - r.top) / (winH * 0.85))))
+    }
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(compute)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    compute()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      cancelAnimationFrame(raf)
+    }
+  }, [])
   const { scrolled } = useScene()
   const [style, setStyle] = useState(STYLES[0])
 
@@ -358,10 +388,44 @@ export function AiPage() {
         {/* Miért most? Miért AI? — the original dark section, 1:1, with the
             home page's rocket flying point to point and landing at the end */}
         <section
+          ref={whyRef}
           data-rockethome
           style={{ position: 'relative', background: '#1C1917', padding: 'clamp(70px,9vw,100px) clamp(24px,6vw,90px) clamp(100px,13vw,150px)', overflow: 'hidden' }}
         >
-          <div style={wrap}>
+          {/* faint home-hero kiosk in the background right: spins in with
+              scroll (like the home entrance), base cropped, then just stays */}
+          <div
+            aria-hidden="true"
+            className="ep-why-kiosk"
+            style={{
+              position: 'absolute',
+              top: 'clamp(30px,7vw,90px)',
+              right: 'clamp(-110px,-3vw,-30px)',
+              width: 340,
+              height: 470,
+              overflow: 'hidden',
+              perspective: '1500px',
+              opacity: 0.14,
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: 0,
+                marginLeft: -150,
+                transformOrigin: 'top center',
+                transform: `rotateX(6deg) rotateY(${(-360 * (whyTurn * whyTurn * (3 - 2 * whyTurn))).toFixed(2)}deg) scale(0.72)`,
+                transformStyle: 'preserve-3d',
+                willChange: 'transform',
+              }}
+            >
+              <Kiosk3D turn={whyTurn * whyTurn * (3 - 2 * whyTurn)} photo1On={0} photoOn={0} screenFlash={0} />
+            </div>
+          </div>
+          <div style={{ ...wrap, position: 'relative', zIndex: 1 }}>
             <Reveal
               as="p"
               style={{
