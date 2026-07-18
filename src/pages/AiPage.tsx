@@ -108,9 +108,10 @@ export function AiPage() {
       raf = 0
       const r = el.getBoundingClientRect()
       const winH = window.innerHeight || 1
-      // 0 when the section top sits at the viewport bottom, 1 by the time it
-      // has risen to ~15% from the top; clamped so it stays put afterwards
-      setWhyTurn(Math.min(1, Math.max(0, (winH - r.top) / (winH * 0.85))))
+      // 0 when the section top sits at the viewport bottom, 1 once it has
+      // risen a bit further; clamped so it holds afterwards. The tighter the
+      // divisor, the fewer pixels the full turn takes — ~20% faster here.
+      setWhyTurn(Math.min(1, Math.max(0, (winH - r.top) / (winH * 0.708))))
     }
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(compute)
