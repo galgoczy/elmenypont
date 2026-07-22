@@ -12,27 +12,38 @@ const SHOWCASE_STATS = [
 ]
 
 /**
- * Prominent product-name label for the AI services, so their name reads as
- * large as the other products' titles — the name in a dark glass bubble with
- * the purple "AI ✦" chip beside it (matching the nav). Works on a dark panel
- * or over a photo.
+ * Prominent product-name label for the AI services, matching the other
+ * products' 25px title size — the name in a pill bubble with the purple
+ * "AI ✦" chip beside it (matching the nav). `light` renders a cream bubble
+ * with dark text (for the dark AI showcase panel); default is dark glass
+ * for use over a photo.
  */
-function AiProductTitle({ name }: { name: string }) {
+function AiProductTitle({ name, light = false }: { name: string; light?: boolean }) {
   return (
     <span
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: 12,
-        background: 'rgba(23,21,13,.52)',
+        background: light ? 'rgba(246,241,233,.94)' : 'rgba(23,21,13,.52)',
         backdropFilter: 'blur(6px)',
         WebkitBackdropFilter: 'blur(6px)',
-        border: '1px solid rgba(255,255,255,.18)',
+        border: light ? '1px solid rgba(0,0,0,.08)' : '1px solid rgba(255,255,255,.18)',
         borderRadius: 100,
-        padding: '9px 12px 9px 20px',
+        padding: '10px 13px 10px 22px',
+        boxShadow: light ? '0 10px 26px -14px rgba(0,0,0,.45)' : 'none',
       }}
     >
-      <span style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 23, letterSpacing: '-.01em', color: '#fff', lineHeight: 1 }}>
+      <span
+        style={{
+          fontFamily: 'Syne',
+          fontWeight: 700,
+          fontSize: 25,
+          letterSpacing: '-.01em',
+          color: light ? '#17150D' : '#fff',
+          lineHeight: 1,
+        }}
+      >
         {name}
       </span>
       <span
@@ -123,7 +134,7 @@ export function Services() {
           }}
         >
           <div style={{ position: 'relative', color: '#F6F1E9' }}>
-            <AiProductTitle name="AI Selfiemata" />
+            <AiProductTitle name="AI Selfiemata" light />
             <h3
               style={{
                 fontFamily: 'Syne',

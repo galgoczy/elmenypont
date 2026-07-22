@@ -203,7 +203,10 @@ export function Kiosk3D({
                 pointerEvents: 'none',
               }}
             />
-            {/* the AI-transformed version — swaps in with the second flash */}
+            {/* the AI-transformed version — "generates" in like a diffusion
+                render: a scan line sweeps down revealing the image, its edge
+                glowing in the AI purple–blue, the picture slightly oversat
+                while forming, settling as it completes. Scroll-scrubbed. */}
             <img
               src="/assets/photos/team-heroes.jpg"
               alt={t('Ugyanaz a csoport az AI Selfiemata által generált szuperhős-képen', 'The same group in an AI Selfiemata-generated superhero image')}
@@ -215,10 +218,63 @@ export function Kiosk3D({
                 objectFit: 'cover',
                 // keep the faces in frame
                 objectPosition: '50% 24%',
-                opacity: photoOn.toFixed(3),
-                transform: `scale(${(1.08 - 0.08 * photoOn).toFixed(3)})`,
+                opacity: photoOn > 0.01 ? 1 : 0,
+                clipPath: `inset(0 0 ${((1 - photoOn) * 100).toFixed(2)}% 0)`,
+                WebkitClipPath: `inset(0 0 ${((1 - photoOn) * 100).toFixed(2)}% 0)`,
+                filter: `saturate(${(1 + 0.6 * photoOn * (1 - photoOn) * 4).toFixed(3)}) brightness(${(1 + 0.25 * photoOn * (1 - photoOn) * 4).toFixed(3)})`,
+                transform: `scale(${(1.05 - 0.05 * photoOn).toFixed(3)})`,
               }}
             />
+            {/* glowing scan line at the reveal edge */}
+            {photoOn > 0.01 && photoOn < 0.995 && (
+              <span
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: `${(photoOn * 100).toFixed(2)}%`,
+                  height: 3,
+                  marginTop: -1.5,
+                  background: 'linear-gradient(90deg, rgba(155,107,242,0), #9B6BF2 22%, #7FB4FF 50%, #9B6BF2 78%, rgba(72,136,248,0))',
+                  boxShadow: '0 0 14px 3px rgba(140,120,250,.85), 0 0 34px 10px rgba(90,130,250,.4)',
+                  pointerEvents: 'none',
+                }}
+              />
+            )}
+            {/* sparkles popping around the screen while the image forms */}
+            {photoOn > 0.05 && photoOn < 1 && (
+              <span aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+                {[
+                  { l: '14%', t: '22%', s: 13, a: 0.1, b: 0.5 },
+                  { l: '82%', t: '14%', s: 10, a: 0.25, b: 0.65 },
+                  { l: '70%', t: '58%', s: 15, a: 0.4, b: 0.85 },
+                  { l: '22%', t: '70%', s: 10, a: 0.55, b: 0.95 },
+                  { l: '48%', t: '38%', s: 11, a: 0.3, b: 0.7 },
+                ].map((sp, i) => {
+                  const k = Math.max(0, Math.min(1, (photoOn - sp.a) / (sp.b - sp.a)))
+                  const tw = k * (1 - k) * 4 // 0→1→0 twinkle
+                  return (
+                    <span
+                      key={i}
+                      style={{
+                        position: 'absolute',
+                        left: sp.l,
+                        top: sp.t,
+                        fontSize: sp.s,
+                        lineHeight: 1,
+                        color: '#fff',
+                        textShadow: '0 0 8px rgba(155,107,242,.95), 0 0 18px rgba(72,136,248,.7)',
+                        opacity: tw.toFixed(3),
+                        transform: `scale(${(0.5 + tw).toFixed(3)}) rotate(${(k * 90).toFixed(1)}deg)`,
+                      }}
+                    >
+                      ✦
+                    </span>
+                  )
+                })}
+              </span>
+            )}
             <span
               style={{
                 position: 'absolute',
@@ -484,7 +540,9 @@ export function Hero({ heroP: p }: HeroProps) {
   const flashEnd = cl(p, 0.385, 0.408) * (1 - cl(p, 0.416, 0.453))
   const flash = Math.min(1, flashStart + flashEnd)
   const photo1On = cl(p, 0.038, 0.05)
-  const photoOn = cl(p, 0.408, 0.446)
+  // the AI image "generates" over a longer stretch so the scan-line reveal
+  // reads as a real moment (kicked off by the second flash)
+  const photoOn = cl(p, 0.408, 0.53)
   // the landed photo gets a long sticky moment (~350px of scroll) before
   // the copy rises in, then holds to the end. Scroll only sets the TARGET —
   // the reveal itself chases it with a ~1s time constant, so a hard flick
