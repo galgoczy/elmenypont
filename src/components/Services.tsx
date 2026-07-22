@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { BeforeAfter } from './BeforeAfter'
@@ -12,20 +11,49 @@ const SHOWCASE_STATS = [
   { value: '100%', valueEn: '100%', label: 'rendezvényre szabva', labelEn: 'tailored to your event', color: '#28D0B8' },
 ]
 
-const badge: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: 8,
-  padding: '9px 16px',
-  borderRadius: 100,
-  background: 'linear-gradient(105deg,#9868F8,#4888F8)',
-  backgroundSize: '160% 160%',
-  animation: 'ep-grad 6s ease infinite',
-  fontFamily: 'Syne',
-  fontWeight: 700,
-  fontSize: 13,
-  letterSpacing: '.08em',
-  color: '#fff',
+/**
+ * Prominent product-name label for the AI services, so their name reads as
+ * large as the other products' titles — the name in a dark glass bubble with
+ * the purple "AI ✦" chip beside it (matching the nav). Works on a dark panel
+ * or over a photo.
+ */
+function AiProductTitle({ name }: { name: string }) {
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 12,
+        background: 'rgba(23,21,13,.52)',
+        backdropFilter: 'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
+        border: '1px solid rgba(255,255,255,.18)',
+        borderRadius: 100,
+        padding: '9px 12px 9px 20px',
+      }}
+    >
+      <span style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 23, letterSpacing: '-.01em', color: '#fff', lineHeight: 1 }}>
+        {name}
+      </span>
+      <span
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          fontFamily: 'Syne',
+          fontWeight: 700,
+          fontSize: 12,
+          letterSpacing: '.05em',
+          color: '#fff',
+          background: 'linear-gradient(120deg,#9B6BF2,#4888F8)',
+          borderRadius: 100,
+          padding: '5px 10px',
+          lineHeight: 1,
+        }}
+      >
+        AI ✦
+      </span>
+    </span>
+  )
 }
 
 /** Services + AI showcase: featured AI Selfiemata with live before/after + Videomata. */
@@ -95,7 +123,7 @@ export function Services() {
           }}
         >
           <div style={{ position: 'relative', color: '#F6F1E9' }}>
-            <span style={badge}>AI SELFIEMATA</span>
+            <AiProductTitle name="AI Selfiemata" />
             <h3
               style={{
                 fontFamily: 'Syne',
@@ -226,7 +254,9 @@ export function Services() {
               pointerEvents: 'none',
             }}
           />
-          <div style={{ ...badge, position: 'absolute', top: 30, left: 30 }}>AI VIDEOMATA</div>
+          <div style={{ position: 'absolute', top: 30, left: 30 }}>
+            <AiProductTitle name="AI Videomata" />
+          </div>
           <div style={{ position: 'relative', pointerEvents: 'none', maxWidth: '48ch' }}>
             <h3
               style={{

@@ -269,8 +269,8 @@ export function AiPage() {
                 }}
               >
                 {t(
-                  'Valós idejű AI-képgenerálás rendezvényeken: a készült fotót az AI átvarázsolja — egyedi, megosztható, brandingelt emlék, pár másodperc alatt.',
-                  'Real-time AI image generation at your events: the AI transforms the photo you take — a unique, shareable, branded memory in just a few seconds.',
+                  'Valós idejű AI-kép fotóautomata rendezvényeken: a vendégekről készült fotót az AI átvarázsolja — egyedi, megosztható, brandingelt emlék, pár másodperc alatt.',
+                  'A real-time AI-image photo booth for events: AI transforms the photo taken of your guests — a unique, shareable, branded memory in just a few seconds.',
                 )}
               </Reveal>
               <Reveal className="ep-ai-stats" delay={150} style={{ display: 'flex', gap: 22, marginTop: 26, flexWrap: 'wrap' }}>
