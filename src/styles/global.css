@@ -340,6 +340,92 @@ a {
   pointer-events: none;
   z-index: 0;
 }
+/* hero AI-image completion: one heartbeat + a lens ripple from the centre.
+   The heartbeat uses the standalone `scale` property so it composes with
+   the image's inline transform instead of overriding it. */
+.ep-heartbeat {
+  animation: ep-heartbeat 0.95s cubic-bezier(0.34, 1.3, 0.5, 1) 0.08s both;
+}
+@keyframes ep-heartbeat {
+  0% {
+    scale: 1;
+  }
+  28% {
+    scale: 1.06;
+  }
+  52% {
+    scale: 0.982;
+  }
+  74% {
+    scale: 1.015;
+  }
+  100% {
+    scale: 1;
+  }
+}
+.ep-ripple {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.ep-ripple-glow,
+.ep-ripple-lens {
+  position: absolute;
+  left: -170px;
+  top: -170px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  animation: ep-ripple 1.15s cubic-bezier(0.16, 0.6, 0.35, 1) both;
+}
+/* thin bright ring, brand purple→blue→white, additive over the photo */
+.ep-ripple-glow {
+  background: radial-gradient(
+    closest-side,
+    transparent 58%,
+    rgba(155, 107, 242, 0.55) 68%,
+    rgba(127, 180, 255, 0.9) 73%,
+    rgba(255, 255, 255, 0.95) 76%,
+    rgba(72, 136, 248, 0.45) 81%,
+    transparent 88%
+  );
+  mix-blend-mode: screen;
+}
+/* the same ring as a glassy band: backdrop-filter masked to the ring
+   refracts/brightens the picture it passes over — the lens feel */
+.ep-ripple-lens {
+  backdrop-filter: blur(2.6px) saturate(1.5) brightness(1.07);
+  -webkit-backdrop-filter: blur(2.6px) saturate(1.5) brightness(1.07);
+  -webkit-mask: radial-gradient(closest-side, transparent 58%, #000 68%, #000 82%, transparent 90%);
+  mask: radial-gradient(closest-side, transparent 58%, #000 68%, #000 82%, transparent 90%);
+}
+@keyframes ep-ripple {
+  0% {
+    transform: scale(0.05);
+    opacity: 1;
+  }
+  65% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: scale(2.15);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ep-heartbeat,
+  .ep-ripple-glow,
+  .ep-ripple-lens {
+    animation: none;
+  }
+  .ep-ripple {
+    display: none;
+  }
+}
+
 /* gala opening — spotlight beams gently sway, bokeh drifts */
 .ep-gala-beam {
   transform: rotate(var(--rot, 0deg));

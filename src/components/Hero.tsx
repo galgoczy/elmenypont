@@ -133,6 +133,22 @@ export function Kiosk3D({
     [-86, 86],
     [86, 86],
   ]
+  // completion beat: the instant the scan-reveal finishes, the picture gives
+  // one heartbeat and a lens ripple runs from the centre outwards. One-shot,
+  // re-armed if the visitor scrubs back before the reveal (so replaying the
+  // hero pulses again); skipped under prefers-reduced-motion.
+  const [ripple, setRipple] = useState(0)
+  const rippleArmed = useRef(true)
+  useEffect(() => {
+    if (photoOn >= 0.999 && rippleArmed.current) {
+      rippleArmed.current = false
+      const reduce =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (!reduce) setRipple((k) => k + 1)
+    } else if (photoOn < 0.5 && !rippleArmed.current) {
+      rippleArmed.current = true
+    }
+  }, [photoOn])
   return (
     <div style={{ position: 'relative', width: HEAD_W, height: TOTAL_H, transformStyle: 'preserve-3d' }}>
       {/* -------- head box -------- */}
@@ -210,6 +226,10 @@ export function Kiosk3D({
             <img
               src="/assets/photos/team-heroes.jpg"
               alt={t('Ugyanaz a csoport az AI Selfiemata által generált szuperhős-képen', 'The same group in an AI Selfiemata-generated superhero image')}
+              className={ripple ? 'ep-heartbeat' : undefined}
+              // the CSS `scale` property in the heartbeat keyframes composes
+              // with (does not override) the inline transform below
+              key={`ai-${ripple}`}
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -303,6 +323,15 @@ export function Kiosk3D({
                 pointerEvents: 'none',
               }}
             />
+            {/* completion ripple: a glowing ring races outwards from the
+                centre; a matching backdrop-filter band riding the same ring
+                refracts the picture beneath — a passing lens */}
+            {ripple > 0 && (
+              <span key={`rp-${ripple}`} aria-hidden="true" className="ep-ripple">
+                <span className="ep-ripple-lens" />
+                <span className="ep-ripple-glow" />
+              </span>
+            )}
           </div>
         </div>
         {/* back with service door */}
