@@ -631,6 +631,48 @@ export function Hero({ heroP: p }: HeroProps) {
       rippleArmed.current = true
     }
   }, [photoOn])
+
+  // JS-driven lens wave: an expanding ring mask reveals a slightly magnified
+  // duplicate of the stage — the mismatch at the band edges is genuine
+  // optical displacement, like the rim of a real lens (or a water ring).
+  // A dark inner lip + bright outer lip overlay makes the wavefront read
+  // as curved glass. Per-frame mask regeneration for exact control.
+  const [lensOn, setLensOn] = useState(false)
+  const lensMaskRef = useRef<HTMLDivElement | null>(null)
+  const lensLipRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (!ripple) return
+    setLensOn(true)
+    const DUR = 1600
+    const t0 = performance.now()
+    let raf = 0
+    const step = (now: number) => {
+      const k = Math.min(1, (now - t0) / DUR)
+      const e = 1 - Math.pow(1 - k, 2.2) // decelerating wavefront
+      const w = window.innerWidth
+      const h = window.innerHeight
+      const rMax = Math.hypot(w * 0.5, h * 0.58) + 90
+      const r = 14 + e * rMax
+      const fade = k > 0.72 ? Math.max(0, (1 - k) / 0.28) : 1
+      const m = lensMaskRef.current
+      if (m) {
+        const grad = `radial-gradient(circle at 50% 42%, transparent ${Math.max(0, r - 46).toFixed(1)}px, #000 ${Math.max(0, r - 28).toFixed(1)}px, #000 ${(r + 28).toFixed(1)}px, transparent ${(r + 46).toFixed(1)}px)`
+        m.style.webkitMaskImage = grad
+        m.style.maskImage = grad
+        m.style.opacity = fade.toFixed(3)
+      }
+      const lip = lensLipRef.current
+      if (lip) {
+        lip.style.background =
+          `radial-gradient(circle at 50% 42%, transparent ${Math.max(0, r - 54).toFixed(1)}px, rgba(0,0,0,.26) ${Math.max(0, r - 36).toFixed(1)}px, transparent ${Math.max(0, r - 18).toFixed(1)}px, rgba(255,255,255,.20) ${(r + 20).toFixed(1)}px, rgba(200,215,255,.09) ${(r + 34).toFixed(1)}px, transparent ${(r + 54).toFixed(1)}px)`
+        lip.style.opacity = (0.9 * fade).toFixed(3)
+      }
+      if (k < 1) raf = requestAnimationFrame(step)
+      else setLensOn(false)
+    }
+    raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+  }, [ripple])
   // the landed photo gets a long sticky moment (~350px of scroll) before
   // the copy rises in, then holds to the end. Scroll only sets the TARGET —
   // the reveal itself chases it with a ~1s time constant, so a hard flick
@@ -696,6 +738,76 @@ export function Hero({ heroP: p }: HeroProps) {
   // chip visuals live in .ep-chip (global.css) so mobile can compact them
   const chip: CSSProperties = {}
 
+  // The stage (ambient glow + gala + 3D kiosk) is rendered twice while the
+  // lens wave runs: once normally, and once magnified inside the expanding
+  // ring mask. `dup` skips the heartbeat ref (the duplicate gets the class
+  // directly — it mounts at fire time, so both beats run in sync).
+  const stage = (dup: boolean) => (
+    <>
+      {/* ambient glow — drifts with the cursor */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `radial-gradient(120% 80% at calc(50% + var(--mxs, 0) * 12%) calc(38% + var(--mys, 0) * 10%), rgba(233,74,53,${heroGlow}) 0%, rgba(233,74,53,0) 55%)`,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* gala opening: warm spotlight beams + floating bokeh behind the
+          kiosk, fading out as the machine spins closer */}
+      <GalaLights op={galaOp} />
+
+      {/* 3D kiosk stage — while the copy takes over, a soft mask trims
+          the column below the CTA/chips midline so the ghosted leg
+          doesn't run through the text block */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          perspective: '1600px',
+          WebkitMaskImage: `linear-gradient(180deg, #000 ${(100 - reveal * 30).toFixed(1)}%, transparent ${(104 - reveal * 30).toFixed(1)}%)`,
+          maskImage: `linear-gradient(180deg, #000 ${(100 - reveal * 30).toFixed(1)}%, transparent ${(104 - reveal * 30).toFixed(1)}%)`,
+        }}
+      >
+        {/* NO opacity here: opacity < 1 is a grouping property that forces
+            transform-style back to flat and collapses the box to 2D — the
+            fade is done by the scrim layer below instead */}
+        <div
+          ref={dup ? undefined : kioskRef}
+          className={dup && lensOn ? 'ep-heartbeat' : undefined}
+          // the heartbeat animates the standalone `scale` property, which
+          // composes with (never overrides) this inline transform
+          style={{
+            position: 'relative',
+            transform: `translateY(${ty.toFixed(1)}px) rotateX(calc(${tiltX.toFixed(2)}deg + var(--mys, 0) * 5deg)) rotateY(calc(${rotY.toFixed(2)}deg + var(--mxs, 0) * -10deg)) scale(${finalScale.toFixed(3)})`,
+            transformStyle: 'preserve-3d',
+            willChange: 'transform',
+          }}
+        >
+          <Kiosk3D turn={spinE} photo1On={photo1On} photoOn={photoOn} screenFlash={flash} topFlash={flashStart} />
+          {/* ground shadow */}
+          <span
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: '50%',
+              top: TOTAL_H + 12,
+              width: 360,
+              height: 66,
+              transform: 'translateX(-50%) rotateX(90deg) translateZ(-26px)',
+              borderRadius: '50%',
+              background: `radial-gradient(closest-side, rgba(0,0,0,${shadowOp}), transparent 70%)`,
+            }}
+          />
+        </div>
+      </div>
+    </>
+  )
+
   return (
     <section id="top" data-hero style={{ position: 'relative', height: '247vh' }}>
       {/* scroll-snap marker at p≈0.87 (copy fully risen): momentum comes to
@@ -722,66 +834,7 @@ export function Hero({ heroP: p }: HeroProps) {
           background: heroBg,
         }}
       >
-        {/* ambient glow — drifts with the cursor */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: `radial-gradient(120% 80% at calc(50% + var(--mxs, 0) * 12%) calc(38% + var(--mys, 0) * 10%), rgba(233,74,53,${heroGlow}) 0%, rgba(233,74,53,0) 55%)`,
-            pointerEvents: 'none',
-          }}
-        />
-
-        {/* gala opening: warm spotlight beams + floating bokeh behind the
-            kiosk, fading out as the machine spins closer */}
-        <GalaLights op={galaOp} />
-
-        {/* 3D kiosk stage — while the copy takes over, a soft mask trims
-            the column below the CTA/chips midline so the ghosted leg
-            doesn't run through the text block */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            perspective: '1600px',
-            WebkitMaskImage: `linear-gradient(180deg, #000 ${(100 - reveal * 30).toFixed(1)}%, transparent ${(104 - reveal * 30).toFixed(1)}%)`,
-            maskImage: `linear-gradient(180deg, #000 ${(100 - reveal * 30).toFixed(1)}%, transparent ${(104 - reveal * 30).toFixed(1)}%)`,
-          }}
-        >
-          {/* NO opacity here: opacity < 1 is a grouping property that forces
-              transform-style back to flat and collapses the box to 2D — the
-              fade is done by the scrim layer below instead */}
-          <div
-            ref={kioskRef}
-            // the heartbeat animates the standalone `scale` property, which
-            // composes with (never overrides) this inline transform
-            style={{
-              position: 'relative',
-              transform: `translateY(${ty.toFixed(1)}px) rotateX(calc(${tiltX.toFixed(2)}deg + var(--mys, 0) * 5deg)) rotateY(calc(${rotY.toFixed(2)}deg + var(--mxs, 0) * -10deg)) scale(${finalScale.toFixed(3)})`,
-              transformStyle: 'preserve-3d',
-              willChange: 'transform',
-            }}
-          >
-            <Kiosk3D turn={spinE} photo1On={photo1On} photoOn={photoOn} screenFlash={flash} topFlash={flashStart} />
-            {/* ground shadow */}
-            <span
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: TOTAL_H + 12,
-                width: 360,
-                height: 66,
-                transform: 'translateX(-50%) rotateX(90deg) translateZ(-26px)',
-                borderRadius: '50%',
-                background: `radial-gradient(closest-side, rgba(0,0,0,${shadowOp}), transparent 70%)`,
-              }}
-            />
-          </div>
-        </div>
+        {stage(false)}
 
         {/* fade scrim: dissolves the kiosk into the (solid) background while
             the copy takes over — replaces the opacity that used to sit on
@@ -808,17 +861,37 @@ export function Hero({ heroP: p }: HeroProps) {
           }}
         />
 
-        {/* completion ripple: a gravitational-lens wave rolling from the
-            machine out to the browser edges — a refracting crest band and a
-            darker trough right behind it warp the stage like a water ring,
-            with only a whisper of light on the crest; a weaker, delayed echo
-            ring follows, as on water */}
-        {ripple > 0 && (
-          <div key={`rip-${ripple}`} aria-hidden="true" className="ep-ripple-stage">
-            <span className="ep-rl ep-rl-trough" />
-            <span className="ep-rl ep-rl-crest" />
-            <span className="ep-rl ep-rl-glow" />
-            <span className="ep-rl ep-rl-crest ep-rl-echo" />
+        {/* completion wave: true optical lens — inside the expanding ring
+            band a slightly magnified duplicate of the whole stage shows
+            through, so the background genuinely bends at the band edges;
+            a dark inner lip + bright outer lip make the wavefront read as
+            curved glass rolling out to the browser edges */}
+        {lensOn && (
+          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+            <div
+              ref={lensMaskRef}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                // start fully masked-out; the rAF loop drives the ring
+                WebkitMaskImage: 'radial-gradient(circle at 50% 42%, transparent 0px, transparent 100%)',
+                maskImage: 'radial-gradient(circle at 50% 42%, transparent 0px, transparent 100%)',
+                willChange: 'mask-image, opacity',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: heroBg,
+                  transform: 'scale(1.06)',
+                  transformOrigin: '50% 42%',
+                }}
+              >
+                {stage(true)}
+              </div>
+            </div>
+            <div ref={lensLipRef} style={{ position: 'absolute', inset: 0 }} />
           </div>
         )}
 

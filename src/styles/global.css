@@ -363,92 +363,9 @@ a {
     scale: 1;
   }
 }
-/* full-stage ripple layer inside the sticky hero viewport */
-.ep-ripple-stage {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-/* gravitational-lens wave: the ring starts at the machine's screen (~42%
-   height) and rolls past the browser corners (base 400px × scale 8 →
-   1600px radius). Distortion-first, like a water ring: a refracting crest
-   band leads, a darker compressed trough trails right behind it, and only
-   a whisper of light sits on the crest. */
-.ep-rl {
-  position: absolute;
-  left: 50%;
-  top: 42%;
-  width: 400px;
-  height: 400px;
-  margin: -200px 0 0 -200px;
-  border-radius: 50%;
-  animation: ep-ripple 1.6s cubic-bezier(0.3, 0.45, 0.35, 1) both;
-}
-/* leading crest — glassy band that bends/brightens what it passes over */
-.ep-rl-crest {
-  backdrop-filter: blur(2.4px) brightness(1.11) contrast(1.05) saturate(1.15);
-  -webkit-backdrop-filter: blur(2.4px) brightness(1.11) contrast(1.05) saturate(1.15);
-  -webkit-mask: radial-gradient(closest-side, transparent 66%, #000 74%, #000 86%, transparent 93%);
-  mask: radial-gradient(closest-side, transparent 66%, #000 74%, #000 86%, transparent 93%);
-}
-/* trailing trough — slightly darker and softer, the water dip behind the crest */
-.ep-rl-trough {
-  backdrop-filter: blur(3.4px) brightness(0.92) saturate(1.1);
-  -webkit-backdrop-filter: blur(3.4px) brightness(0.92) saturate(1.1);
-  -webkit-mask: radial-gradient(closest-side, transparent 52%, #000 62%, #000 72%, transparent 80%);
-  mask: radial-gradient(closest-side, transparent 52%, #000 62%, #000 72%, transparent 80%);
-}
-/* faint light catch on the crest — barely-there, not a glow ring */
-.ep-rl-glow {
-  background: radial-gradient(
-    closest-side,
-    transparent 70%,
-    rgba(255, 250, 240, 0.14) 78%,
-    rgba(255, 255, 255, 0.3) 82%,
-    rgba(200, 215, 255, 0.12) 87%,
-    transparent 92%
-  );
-  mix-blend-mode: screen;
-}
-/* weaker echo ring following the main wave, as on water */
-.ep-rl-echo {
-  animation-name: ep-ripple-echo;
-  animation-delay: 0.3s;
-}
-@keyframes ep-ripple {
-  0% {
-    transform: scale(0.04);
-    opacity: 1;
-  }
-  70% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: scale(8);
-    opacity: 0;
-  }
-}
-@keyframes ep-ripple-echo {
-  0% {
-    transform: scale(0.04);
-    opacity: 0.55;
-  }
-  70% {
-    opacity: 0.45;
-  }
-  100% {
-    transform: scale(6.4);
-    opacity: 0;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .ep-heartbeat,
-  .ep-rl {
+  .ep-heartbeat {
     animation: none;
-  }
-  .ep-ripple-stage {
-    display: none;
   }
 }
 
