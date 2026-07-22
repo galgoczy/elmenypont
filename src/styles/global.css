@@ -370,10 +370,12 @@ a {
   pointer-events: none;
   overflow: hidden;
 }
-/* the ring starts at the machine's screen (~42% height) and expands past
-   the browser corners: base 400px × scale 8 → 1600px radius */
-.ep-ripple-glow,
-.ep-ripple-lens {
+/* gravitational-lens wave: the ring starts at the machine's screen (~42%
+   height) and rolls past the browser corners (base 400px × scale 8 →
+   1600px radius). Distortion-first, like a water ring: a refracting crest
+   band leads, a darker compressed trough trails right behind it, and only
+   a whisper of light sits on the crest. */
+.ep-rl {
   position: absolute;
   left: 50%;
   top: 42%;
@@ -381,30 +383,38 @@ a {
   height: 400px;
   margin: -200px 0 0 -200px;
   border-radius: 50%;
-  animation: ep-ripple 1.5s cubic-bezier(0.3, 0.45, 0.35, 1) both;
+  animation: ep-ripple 1.6s cubic-bezier(0.3, 0.45, 0.35, 1) both;
 }
-/* bright ring, brand purple→blue→white, additive over the stage; a faint
-   inner glow trails behind the wavefront so its path stays readable */
-.ep-ripple-glow {
+/* leading crest — glassy band that bends/brightens what it passes over */
+.ep-rl-crest {
+  backdrop-filter: blur(2.4px) brightness(1.11) contrast(1.05) saturate(1.15);
+  -webkit-backdrop-filter: blur(2.4px) brightness(1.11) contrast(1.05) saturate(1.15);
+  -webkit-mask: radial-gradient(closest-side, transparent 66%, #000 74%, #000 86%, transparent 93%);
+  mask: radial-gradient(closest-side, transparent 66%, #000 74%, #000 86%, transparent 93%);
+}
+/* trailing trough — slightly darker and softer, the water dip behind the crest */
+.ep-rl-trough {
+  backdrop-filter: blur(3.4px) brightness(0.92) saturate(1.1);
+  -webkit-backdrop-filter: blur(3.4px) brightness(0.92) saturate(1.1);
+  -webkit-mask: radial-gradient(closest-side, transparent 52%, #000 62%, #000 72%, transparent 80%);
+  mask: radial-gradient(closest-side, transparent 52%, #000 62%, #000 72%, transparent 80%);
+}
+/* faint light catch on the crest — barely-there, not a glow ring */
+.ep-rl-glow {
   background: radial-gradient(
     closest-side,
-    rgba(155, 107, 242, 0.1) 30%,
-    rgba(155, 107, 242, 0.16) 52%,
-    rgba(155, 107, 242, 0.75) 64%,
-    rgba(127, 180, 255, 1) 71%,
-    rgba(255, 255, 255, 1) 75%,
-    rgba(72, 136, 248, 0.6) 82%,
-    transparent 90%
+    transparent 70%,
+    rgba(255, 250, 240, 0.14) 78%,
+    rgba(255, 255, 255, 0.3) 82%,
+    rgba(200, 215, 255, 0.12) 87%,
+    transparent 92%
   );
   mix-blend-mode: screen;
 }
-/* the same ring as a glassy band: backdrop-filter masked to the ring
-   refracts/brightens the picture it passes over — the lens feel */
-.ep-ripple-lens {
-  backdrop-filter: blur(3.5px) saturate(1.6) brightness(1.12);
-  -webkit-backdrop-filter: blur(3.5px) saturate(1.6) brightness(1.12);
-  -webkit-mask: radial-gradient(closest-side, transparent 56%, #000 66%, #000 84%, transparent 92%);
-  mask: radial-gradient(closest-side, transparent 56%, #000 66%, #000 84%, transparent 92%);
+/* weaker echo ring following the main wave, as on water */
+.ep-rl-echo {
+  animation-name: ep-ripple-echo;
+  animation-delay: 0.3s;
 }
 @keyframes ep-ripple {
   0% {
@@ -419,10 +429,22 @@ a {
     opacity: 0;
   }
 }
+@keyframes ep-ripple-echo {
+  0% {
+    transform: scale(0.04);
+    opacity: 0.55;
+  }
+  70% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: scale(6.4);
+    opacity: 0;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .ep-heartbeat,
-  .ep-ripple-glow,
-  .ep-ripple-lens {
+  .ep-rl {
     animation: none;
   }
   .ep-ripple-stage {

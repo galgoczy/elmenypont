@@ -118,11 +118,14 @@ export function Kiosk3D({
   photo1On,
   photoOn,
   screenFlash,
+  topFlash = 0,
 }: {
   turn: number
   photo1On: number
   photoOn: number
   screenFlash: number
+  /** strobe burst above the head — driven by the first (teaser) flash */
+  topFlash?: number
 }) {
   const t = useT()
   const whiteFace = 'linear-gradient(180deg,#fcfcfb,#e9e9e5)'
@@ -135,6 +138,64 @@ export function Kiosk3D({
   ]
   return (
     <div style={{ position: 'relative', width: HEAD_W, height: TOTAL_H, transformStyle: 'preserve-3d' }}>
+      {/* camera strobe on top of the machine — fires with the first flash */}
+      {topFlash > 0.01 && (
+        <span
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: -4,
+            width: 0,
+            height: 0,
+            transform: `translateZ(${HEAD_D / 2}px) scale(${(0.75 + 0.45 * topFlash).toFixed(3)})`,
+            opacity: topFlash.toFixed(3),
+            pointerEvents: 'none',
+          }}
+        >
+          {/* burst core */}
+          <span
+            style={{
+              position: 'absolute',
+              left: -55,
+              top: -55,
+              width: 110,
+              height: 110,
+              borderRadius: '50%',
+              background:
+                'radial-gradient(closest-side, rgba(255,255,255,.95), rgba(255,244,214,.55) 40%, rgba(255,244,214,0) 72%)',
+              filter: 'blur(1px)',
+              mixBlendMode: 'screen',
+            }}
+          />
+          {/* horizontal flare streak */}
+          <span
+            style={{
+              position: 'absolute',
+              left: -110,
+              top: -1.5,
+              width: 220,
+              height: 3,
+              background:
+                'linear-gradient(90deg, transparent, rgba(255,255,255,.9) 30%, #fff 50%, rgba(255,255,255,.9) 70%, transparent)',
+              mixBlendMode: 'screen',
+            }}
+          />
+          {/* vertical spike */}
+          <span
+            style={{
+              position: 'absolute',
+              left: -1.5,
+              top: -74,
+              width: 3,
+              height: 118,
+              background:
+                'linear-gradient(180deg, transparent, rgba(255,255,255,.85) 35%, #fff 55%, transparent)',
+              mixBlendMode: 'screen',
+            }}
+          />
+        </span>
+      )}
       {/* -------- head box -------- */}
       <div style={{ position: 'absolute', left: 0, top: 0, width: HEAD_W, height: HEAD_H, transformStyle: 'preserve-3d' }}>
         {/* front */}
@@ -704,7 +765,7 @@ export function Hero({ heroP: p }: HeroProps) {
               willChange: 'transform',
             }}
           >
-            <Kiosk3D turn={spinE} photo1On={photo1On} photoOn={photoOn} screenFlash={flash} />
+            <Kiosk3D turn={spinE} photo1On={photo1On} photoOn={photoOn} screenFlash={flash} topFlash={flashStart} />
             {/* ground shadow */}
             <span
               aria-hidden="true"
@@ -747,13 +808,17 @@ export function Hero({ heroP: p }: HeroProps) {
           }}
         />
 
-        {/* completion ripple: a glowing ring races from the machine out to
-            the browser edges; a matching backdrop-filter band riding the same
-            ring refracts the whole stage beneath — a passing lens */}
+        {/* completion ripple: a gravitational-lens wave rolling from the
+            machine out to the browser edges — a refracting crest band and a
+            darker trough right behind it warp the stage like a water ring,
+            with only a whisper of light on the crest; a weaker, delayed echo
+            ring follows, as on water */}
         {ripple > 0 && (
           <div key={`rip-${ripple}`} aria-hidden="true" className="ep-ripple-stage">
-            <span className="ep-ripple-lens" />
-            <span className="ep-ripple-glow" />
+            <span className="ep-rl ep-rl-trough" />
+            <span className="ep-rl ep-rl-crest" />
+            <span className="ep-rl ep-rl-glow" />
+            <span className="ep-rl ep-rl-crest ep-rl-echo" />
           </div>
         )}
 
