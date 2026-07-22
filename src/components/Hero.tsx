@@ -133,22 +133,6 @@ export function Kiosk3D({
     [-86, 86],
     [86, 86],
   ]
-  // completion beat: the instant the scan-reveal finishes, the picture gives
-  // one heartbeat and a lens ripple runs from the centre outwards. One-shot,
-  // re-armed if the visitor scrubs back before the reveal (so replaying the
-  // hero pulses again); skipped under prefers-reduced-motion.
-  const [ripple, setRipple] = useState(0)
-  const rippleArmed = useRef(true)
-  useEffect(() => {
-    if (photoOn >= 0.999 && rippleArmed.current) {
-      rippleArmed.current = false
-      const reduce =
-        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      if (!reduce) setRipple((k) => k + 1)
-    } else if (photoOn < 0.5 && !rippleArmed.current) {
-      rippleArmed.current = true
-    }
-  }, [photoOn])
   return (
     <div style={{ position: 'relative', width: HEAD_W, height: TOTAL_H, transformStyle: 'preserve-3d' }}>
       {/* -------- head box -------- */}
@@ -226,10 +210,6 @@ export function Kiosk3D({
             <img
               src="/assets/photos/team-heroes.jpg"
               alt={t('Ugyanaz a csoport az AI Selfiemata által generált szuperhős-képen', 'The same group in an AI Selfiemata-generated superhero image')}
-              className={ripple ? 'ep-heartbeat' : undefined}
-              // the CSS `scale` property in the heartbeat keyframes composes
-              // with (does not override) the inline transform below
-              key={`ai-${ripple}`}
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -323,15 +303,6 @@ export function Kiosk3D({
                 pointerEvents: 'none',
               }}
             />
-            {/* completion ripple: a glowing ring races outwards from the
-                centre; a matching backdrop-filter band riding the same ring
-                refracts the picture beneath — a passing lens */}
-            {ripple > 0 && (
-              <span key={`rp-${ripple}`} aria-hidden="true" className="ep-ripple">
-                <span className="ep-ripple-lens" />
-                <span className="ep-ripple-glow" />
-              </span>
-            )}
           </div>
         </div>
         {/* back with service door */}
@@ -572,6 +543,33 @@ export function Hero({ heroP: p }: HeroProps) {
   // the AI image "generates" over a longer stretch so the scan-line reveal
   // reads as a real moment (kicked off by the second flash)
   const photoOn = cl(p, 0.408, 0.53)
+
+  // completion beat: the instant the reveal finishes, the whole machine gives
+  // one heartbeat and a lens ripple races from it out to the browser edges.
+  // One-shot, re-armed if the visitor scrubs back before the reveal (so a
+  // replay pulses again); skipped under prefers-reduced-motion.
+  const [ripple, setRipple] = useState(0)
+  const rippleArmed = useRef(true)
+  const kioskRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (photoOn >= 0.999 && rippleArmed.current) {
+      rippleArmed.current = false
+      const reduce =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (reduce) return
+      setRipple((k) => k + 1)
+      // restart the machine's heartbeat without remounting the 3D kiosk:
+      // drop the class, force a reflow, re-add
+      const el = kioskRef.current
+      if (el) {
+        el.classList.remove('ep-heartbeat')
+        void el.offsetWidth
+        el.classList.add('ep-heartbeat')
+      }
+    } else if (photoOn < 0.5 && !rippleArmed.current) {
+      rippleArmed.current = true
+    }
+  }, [photoOn])
   // the landed photo gets a long sticky moment (~350px of scroll) before
   // the copy rises in, then holds to the end. Scroll only sets the TARGET —
   // the reveal itself chases it with a ~1s time constant, so a hard flick
@@ -696,6 +694,9 @@ export function Hero({ heroP: p }: HeroProps) {
               transform-style back to flat and collapses the box to 2D — the
               fade is done by the scrim layer below instead */}
           <div
+            ref={kioskRef}
+            // the heartbeat animates the standalone `scale` property, which
+            // composes with (never overrides) this inline transform
             style={{
               position: 'relative',
               transform: `translateY(${ty.toFixed(1)}px) rotateX(calc(${tiltX.toFixed(2)}deg + var(--mys, 0) * 5deg)) rotateY(calc(${rotY.toFixed(2)}deg + var(--mxs, 0) * -10deg)) scale(${finalScale.toFixed(3)})`,
@@ -745,6 +746,16 @@ export function Hero({ heroP: p }: HeroProps) {
             mixBlendMode: 'screen',
           }}
         />
+
+        {/* completion ripple: a glowing ring races from the machine out to
+            the browser edges; a matching backdrop-filter band riding the same
+            ring refracts the whole stage beneath — a passing lens */}
+        {ripple > 0 && (
+          <div key={`rip-${ripple}`} aria-hidden="true" className="ep-ripple-stage">
+            <span className="ep-ripple-lens" />
+            <span className="ep-ripple-glow" />
+          </div>
+        )}
 
         {/* hero copy — the box is inset 84px top+bottom with safe centering:
             visually identical to true centering, but when the headline grows

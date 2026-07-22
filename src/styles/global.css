@@ -363,55 +363,59 @@ a {
     scale: 1;
   }
 }
-.ep-ripple {
+/* full-stage ripple layer inside the sticky hero viewport */
+.ep-ripple-stage {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 0;
-  height: 0;
+  inset: 0;
   pointer-events: none;
+  overflow: hidden;
 }
+/* the ring starts at the machine's screen (~42% height) and expands past
+   the browser corners: base 400px × scale 8 → 1600px radius */
 .ep-ripple-glow,
 .ep-ripple-lens {
   position: absolute;
-  left: -170px;
-  top: -170px;
-  width: 340px;
-  height: 340px;
+  left: 50%;
+  top: 42%;
+  width: 400px;
+  height: 400px;
+  margin: -200px 0 0 -200px;
   border-radius: 50%;
-  animation: ep-ripple 1.15s cubic-bezier(0.16, 0.6, 0.35, 1) both;
+  animation: ep-ripple 1.5s cubic-bezier(0.3, 0.45, 0.35, 1) both;
 }
-/* thin bright ring, brand purple→blue→white, additive over the photo */
+/* bright ring, brand purple→blue→white, additive over the stage; a faint
+   inner glow trails behind the wavefront so its path stays readable */
 .ep-ripple-glow {
   background: radial-gradient(
     closest-side,
-    transparent 58%,
-    rgba(155, 107, 242, 0.55) 68%,
-    rgba(127, 180, 255, 0.9) 73%,
-    rgba(255, 255, 255, 0.95) 76%,
-    rgba(72, 136, 248, 0.45) 81%,
-    transparent 88%
+    rgba(155, 107, 242, 0.1) 30%,
+    rgba(155, 107, 242, 0.16) 52%,
+    rgba(155, 107, 242, 0.75) 64%,
+    rgba(127, 180, 255, 1) 71%,
+    rgba(255, 255, 255, 1) 75%,
+    rgba(72, 136, 248, 0.6) 82%,
+    transparent 90%
   );
   mix-blend-mode: screen;
 }
 /* the same ring as a glassy band: backdrop-filter masked to the ring
    refracts/brightens the picture it passes over — the lens feel */
 .ep-ripple-lens {
-  backdrop-filter: blur(2.6px) saturate(1.5) brightness(1.07);
-  -webkit-backdrop-filter: blur(2.6px) saturate(1.5) brightness(1.07);
-  -webkit-mask: radial-gradient(closest-side, transparent 58%, #000 68%, #000 82%, transparent 90%);
-  mask: radial-gradient(closest-side, transparent 58%, #000 68%, #000 82%, transparent 90%);
+  backdrop-filter: blur(3.5px) saturate(1.6) brightness(1.12);
+  -webkit-backdrop-filter: blur(3.5px) saturate(1.6) brightness(1.12);
+  -webkit-mask: radial-gradient(closest-side, transparent 56%, #000 66%, #000 84%, transparent 92%);
+  mask: radial-gradient(closest-side, transparent 56%, #000 66%, #000 84%, transparent 92%);
 }
 @keyframes ep-ripple {
   0% {
-    transform: scale(0.05);
+    transform: scale(0.04);
     opacity: 1;
   }
-  65% {
-    opacity: 0.95;
+  70% {
+    opacity: 0.9;
   }
   100% {
-    transform: scale(2.15);
+    transform: scale(8);
     opacity: 0;
   }
 }
@@ -421,7 +425,7 @@ a {
   .ep-ripple-lens {
     animation: none;
   }
-  .ep-ripple {
+  .ep-ripple-stage {
     display: none;
   }
 }
