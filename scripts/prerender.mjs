@@ -33,13 +33,13 @@ const ROUTES = [
       title: 'AI fotóautomata bérlés rendezvényre — AI Selfiemata | Élménypont',
       description:
         'Valós idejű AI-képgenerálás rendezvényre: a vendég fotójából 9–15 másodperc alatt egyedi, brandingelt alkotás készül. Nem arccsere — teljes képi újragenerálás. 105 000 Ft-tól.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/ai/hero-uhajos-full.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/ai/hero-uhajos-full.jpg',
     },
     en: {
       title: 'AI photo booth (AI Selfiemata) rental for events | Élménypont',
       description:
         'Real-time AI image generation for events: a guest photo becomes a unique, branded artwork in 9–15 seconds. Not a face swap — full image regeneration. From 105 000 HUF.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/ai/hero-uhajos-full.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/ai/hero-uhajos-full.jpg',
     },
   },
   {
@@ -59,13 +59,13 @@ const ROUTES = [
       title: 'Greenbox fotózás bérlés rendezvényre | Élménypont — Greenbox Selfiemata',
       description:
         'Zöld hátteres stúdió-automata rendezvényre: 24 hüvelykes érintőképernyő, élő előnézet, kész fotó 15 másodperc alatt nyomtatva vagy online. 80 000 Ft-tól, Budapesten.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/greenbox-before-after.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/greenbox-before-after.jpg',
     },
     en: {
       title: 'Greenbox photo studio rental for events | Élménypont — Greenbox Selfiemata',
       description:
         'Green-screen studio automat for events: 24-inch touchscreen, live preview, finished photo in 15 seconds — printed or online. From 80 000 HUF, in Budapest.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/greenbox-before-after.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/greenbox-before-after.jpg',
     },
   },
   {
@@ -74,13 +74,13 @@ const ROUTES = [
       title: 'Smart Wall — interaktív fal bérlés rendezvényre | Élménypont',
       description:
         'Érintésre életre kelő vetített fal konferenciára, kiállításra, termékbemutatóra. AI-alapú tartalomgyártással már 600 000 Ft-tól — a rendezvényed arculatában.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/smartwall-event.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/smartwall-event.jpg',
     },
     en: {
       title: 'Smart Wall — interactive projection wall rental for events | Élménypont',
       description:
         'A projected wall that comes alive at a touch — for conferences, expos and product launches. With AI-assisted content production from 600 000 HUF, in your event branding.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/smartwall-event.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/smartwall-event.jpg',
     },
   },
   {
@@ -89,13 +89,13 @@ const ROUTES = [
       title: 'Mosaic Wall — mozaikfal rendezvényre | Élménypont',
       description:
         'A vendégek fotóiból közösen összeálló nagy mozaikkép: fotózz, nyomtass, ragassz. 200 darabos mozaik 450 000 Ft-tól. Nagylétszámú rendezvényekre.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/mosaic-wall-real.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/mosaic-wall-real.jpg',
     },
     en: {
       title: 'Mosaic Wall — photo mosaic wall for events | Élménypont',
       description:
         'One big mosaic image built together from guest photos: shoot, print, stick. 200-piece mosaic from 450 000 HUF. For large events.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/mosaic-wall-real.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/mosaic-wall-real.jpg',
     },
   },
   {
@@ -104,13 +104,13 @@ const ROUTES = [
       title: 'Selfiebox — szelfigép és fotóbox bérlés rendezvényre | Élménypont',
       description:
         'Szelfigép, fotóbox és fotókabin bérlés rendezvényre azonnali nyomtatással. Egyszerű, gyors, minden korosztálynak. 80 000 Ft-tól, Budapesten.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/team-original.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/team-original.jpg',
     },
     en: {
       title: 'Selfiebox — selfie machine & photo booth rental for events | Élménypont',
       description:
         'Selfie machine, photo booth and photo cabin rental for events with instant printing. Simple, fast, for all ages. From 80 000 HUF, in Budapest.',
-      ogImage: 'https://elmenypont.vercel.app/assets/photos/team-original.jpg',
+      ogImage: 'https://elmeny.hu/assets/photos/team-original.jpg',
     },
   },
 ]
