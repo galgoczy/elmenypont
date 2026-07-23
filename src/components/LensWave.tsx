@@ -219,6 +219,7 @@ uniform vec2 uAsp;      // (aspect, 1)
 uniform vec2 uC;        // wave centre, screen UV
 uniform float uR;       // main radius (aspect units)
 uniform float uW;       // band width
+uniform float uWo;      // outer-side width ratio — the leading skirt races ahead
 uniform float uAmp;     // displacement strength
 vec3 sample3(vec2 p, vec2 off) {
   return vec3(
@@ -233,7 +234,9 @@ void main() {
   float d = length(q);
   vec2 dir = q / max(d, 1e-5);
 
-  float x1 = (d - uR) / uW;
+  // asymmetric band: the outer (leading) side widens over time, so the
+  // wavefront's outer skirt accelerates ahead of the crest
+  float x1 = (d - uR) / (d > uR ? uW * uWo : uW);
   float g1 = exp(-x1 * x1);
   float s1 = -x1 * g1;                         // elastic push/pull
   float r2 = uR * 0.58;
@@ -324,6 +327,7 @@ export function LensWave({ fire }: { fire: number }) {
       const uC = gl.getUniformLocation(prog, 'uC')
       const uR = gl.getUniformLocation(prog, 'uR')
       const uW = gl.getUniformLocation(prog, 'uW')
+      const uWo = gl.getUniformLocation(prog, 'uWo')
       const uAmp = gl.getUniformLocation(prog, 'uAmp')
       const asp = w / h
       gl.uniform2f(uAsp, asp, 1)
@@ -349,6 +353,8 @@ export function LensWave({ fire }: { fire: number }) {
         canvas.style.opacity = fade.toFixed(3)
         gl.uniform1f(uR, 0.015 + e * rMax)
         gl.uniform1f(uW, 0.075 + 0.05 * t)
+        // outer skirt accelerates: symmetric at first, stretching ahead late
+        gl.uniform1f(uWo, 1 + 1.6 * t * t)
         gl.uniform1f(uAmp, 0.042 * (1 - 0.55 * t))
         gl.drawArrays(gl.TRIANGLES, 0, 3)
         if (t < 1) raf = requestAnimationFrame(step)
