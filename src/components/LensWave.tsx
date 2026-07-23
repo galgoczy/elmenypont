@@ -221,6 +221,7 @@ uniform float uR;       // main radius (aspect units)
 uniform float uW;       // band width
 uniform float uWo;      // outer-side width ratio — the leading skirt races ahead
 uniform float uAmp;     // displacement strength
+uniform float uEcho;    // echo-wave strength — fades out before the slow-down
 vec3 sample3(vec2 p, vec2 off) {
   return vec3(
     texture2D(uTex, clamp(p + off * 1.05, 0.001, 0.999)).r,
@@ -242,13 +243,13 @@ void main() {
   float r2 = uR * 0.58;
   float x2 = (d - r2) / (uW * 0.85);
   float g2 = exp(-x2 * x2);
-  float s2 = -x2 * g2 * 0.42;                  // echo wave
+  float s2 = -x2 * g2 * 0.42 * uEcho;          // echo wave
 
   vec2 off = dir * (s1 + s2) * uAmp / uAsp;
   vec3 col = sample3(vec2(vUv.x, vUv.y), vec2(off.x, -off.y));
 
   // travelling specular catch + faint dispersion fringes on the main wave
-  float spec = pow(g1, 2.6) * 0.16 + pow(g2, 2.6) * 0.05;
+  float spec = pow(g1, 2.6) * 0.16 + pow(g2, 2.6) * 0.05 * uEcho;
   col += vec3(1.0, 0.985, 0.95) * spec;
   col.b += 0.045 * g1 * smoothstep(0.0, 1.0, x1);
   col.r += 0.035 * g1 * smoothstep(0.0, 1.0, -x1);
@@ -329,6 +330,7 @@ export function LensWave({ fire }: { fire: number }) {
       const uW = gl.getUniformLocation(prog, 'uW')
       const uWo = gl.getUniformLocation(prog, 'uWo')
       const uAmp = gl.getUniformLocation(prog, 'uAmp')
+      const uEcho = gl.getUniformLocation(prog, 'uEcho')
       const asp = w / h
       gl.uniform2f(uAsp, asp, 1)
       gl.uniform2f(uC, 0.5, 0.42)
@@ -356,6 +358,10 @@ export function LensWave({ fire }: { fire: number }) {
         // outer skirt accelerates: symmetric at first, stretching ahead late
         gl.uniform1f(uWo, 1 + 1.6 * t * t)
         gl.uniform1f(uAmp, 0.042 * (1 - 0.55 * t))
+        // the echo wave dies out by ~60% of the run — gone before the
+        // wavefront enters its slow-down phase
+        const echoK = Math.max(0, 1 - t / 0.6)
+        gl.uniform1f(uEcho, echoK * echoK)
         gl.drawArrays(gl.TRIANGLES, 0, 3)
         if (t < 1) raf = requestAnimationFrame(step)
         else setActive(false)
