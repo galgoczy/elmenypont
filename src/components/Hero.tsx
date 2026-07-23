@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { cl } from '../hooks/useScene'
 import { Magnetic } from './Magnetic'
+import { LensWave, hasWebGL } from './LensWave'
 import { useT, useLoc } from '../i18n'
 
 interface HeroProps {
@@ -641,7 +642,8 @@ export function Hero({ heroP: p }: HeroProps) {
   const lensMaskRef = useRef<HTMLDivElement | null>(null)
   const lensLipRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
-    if (!ripple) return
+    // the CSS lens is the no-WebGL fallback; the shader wave handles the rest
+    if (!ripple || hasWebGL()) return
     setLensOn(true)
     const DUR = 1600
     const t0 = performance.now()
@@ -861,11 +863,12 @@ export function Hero({ heroP: p }: HeroProps) {
           }}
         />
 
-        {/* completion wave: true optical lens — inside the expanding ring
-            band a slightly magnified duplicate of the whole stage shows
-            through, so the background genuinely bends at the band edges;
-            a dark inner lip + bright outer lip make the wavefront read as
-            curved glass rolling out to the browser edges */}
+        {/* completion wave, WebGL: elastic glass ring with true shader
+            refraction, chromatic aberration and a travelling specular catch */}
+        <LensWave fire={hasWebGL() ? ripple : 0} />
+
+        {/* no-WebGL fallback: magnified stage duplicate in an expanding ring
+            band — real displacement at the band edges, mask + transform only */}
         {lensOn && (
           <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
             <div
