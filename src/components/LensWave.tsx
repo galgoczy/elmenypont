@@ -257,7 +257,16 @@ void main() {
   gl_FragColor = vec4(col, 1.0);
 }`
 
-export function LensWave({ fire }: { fire: number }) {
+export function LensWave({
+  fire,
+  fade,
+}: {
+  fire: number
+  /** optional external fade multiplier (0..1) read every frame — lets the
+   *  caller dissolve the overlay early (e.g. when the stage background has
+   *  started lightening behind it, so the dark snapshot never lingers) */
+  fade?: () => number
+}) {
   const [active, setActive] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -351,8 +360,15 @@ export function LensWave({ fire }: { fire: number }) {
         const e = 1 - Math.pow(1 - t, 2.1)
         // crossfade the overlay in/out so snapshot seams never pop
         const ms = now - t0
-        const fade = Math.min(1, ms / FADE) * Math.min(1, Math.max(0, (DUR - ms) / (FADE * 1.8)))
-        canvas.style.opacity = fade.toFixed(3)
+        const timeFade = Math.min(1, ms / FADE) * Math.min(1, Math.max(0, (DUR - ms) / (FADE * 1.8)))
+        const extFade = fade ? Math.max(0, Math.min(1, fade())) : 1
+        const op = timeFade * extFade
+        canvas.style.opacity = op.toFixed(3)
+        // once the caller has fully dissolved us, stop early
+        if (extFade <= 0.02 && ms > FADE) {
+          setActive(false)
+          return
+        }
         gl.uniform1f(uR, 0.015 + e * rMax)
         gl.uniform1f(uW, 0.075 + 0.05 * t)
         // outer skirt accelerates: symmetric at first, stretching ahead late

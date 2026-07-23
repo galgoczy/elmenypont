@@ -30,10 +30,10 @@ const LINKS = [
 ]
 
 export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
-  // reveal mix: at the end of the hero the stage turns cream, so the nav
-  // switches from light-on-dark to dark-on-cream (same window as the
-  // hero's reveal phase).
-  const mix = cl(heroP, 0.711, 0.826)
+  // reveal mix: the nav switches from light-on-dark to dark-on-cream in
+  // step with the hero background's own (earlier) lightening track — see
+  // bgMix in Hero.tsx, cl(p, 0.56, 0.78).
+  const mix = cl(heroP, 0.56, 0.78)
   const navDark = !scrolled && mix < 0.5
   const lang = useLang()
   const en = lang === 'en'

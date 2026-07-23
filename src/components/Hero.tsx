@@ -719,22 +719,28 @@ export function Hero({ heroP: p }: HeroProps) {
   const tiltX = 5 - 4 * spinE
   const ty = 40 + 150 * spinE
 
-  const mix = reveal
+  // the stage background lightens on its own, earlier track: it starts
+  // around the wave's middle (shortly after the AI image completes at
+  // p≈0.53) and is fully cream before the copy rises at p≈0.711 — so by
+  // the time the text arrives, the backdrop is already right
+  const bgMix = cl(p, 0.56, 0.78)
+  const bgMixRef = useRef(bgMix)
+  bgMixRef.current = bgMix
   const dark = [23, 21, 13]
   const cream = [246, 241, 233]
-  const bg = dark.map((d, i) => Math.round(d + (cream[i] - d) * mix))
+  const bg = dark.map((d, i) => Math.round(d + (cream[i] - d) * bgMix))
   const heroBg = `rgb(${bg[0]},${bg[1]},${bg[2]})`
 
   // gala atmosphere: full at the opening (kiosk far away), gone by the time
   // it has spun close — beams + bokeh fade as the machine approaches
   const galaOp = Math.max(0, 1 - cl(p, 0.03, 0.32))
-  const heroGlow = (0.5 * (1 - mix) * (0.35 + 0.65 * spinE)).toFixed(3)
+  const heroGlow = (0.5 * (1 - bgMix) * (0.35 + 0.65 * spinE)).toFixed(3)
   const copyOp = reveal.toFixed(2)
   // once risen, the copy stands perfectly still until the sticky releases
   const copyY = ((1 - reveal) * 40).toFixed(1)
   const copyPe: CSSProperties['pointerEvents'] = reveal > 0.6 ? 'auto' : 'none'
   const hintOp = (1 - cl(p, 0, 0.1)).toFixed(2)
-  const hintColor = mix > 0.5 ? '#7A766B' : 'rgba(255,255,255,.7)'
+  const hintColor = bgMix > 0.5 ? '#7A766B' : 'rgba(255,255,255,.7)'
   const shadowOp = (0.55 * (1 - reveal)).toFixed(3)
 
   // chip visuals live in .ep-chip (global.css) so mobile can compact them
@@ -865,7 +871,12 @@ export function Hero({ heroP: p }: HeroProps) {
 
         {/* completion wave, WebGL: elastic glass ring with true shader
             refraction, chromatic aberration and a travelling specular catch */}
-        <LensWave fire={hasWebGL() ? ripple : 0} />
+        <LensWave
+          fire={hasWebGL() ? ripple : 0}
+          // dissolve the overlay as the stage background lightens behind it,
+          // so the dark snapshot never covers the brightening backdrop
+          fade={() => 1 - Math.min(1, bgMixRef.current / 0.22)}
+        />
 
         {/* no-WebGL fallback: magnified stage duplicate in an expanding ring
             band — real displacement at the band edges, mask + transform only */}
