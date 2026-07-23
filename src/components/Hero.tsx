@@ -719,11 +719,12 @@ export function Hero({ heroP: p }: HeroProps) {
   const tiltX = 5 - 4 * spinE
   const ty = 40 + 150 * spinE
 
-  // the stage background lightens on its own, earlier track: it starts
-  // around the wave's middle (shortly after the AI image completes at
-  // p≈0.53) and is fully cream before the copy rises at p≈0.711 — so by
-  // the time the text arrives, the backdrop is already right
-  const bgMix = cl(p, 0.56, 0.78)
+  // the stage background lightens on its own, earlier track: it leaves
+  // breathing room after the AI image completes at p≈0.53 (so the lens
+  // wave gets its moment on the dark stage), then brightens and is fully
+  // cream before the copy has risen — the text always lands on the light
+  // backdrop
+  const bgMix = cl(p, 0.63, 0.78)
   const bgMixRef = useRef(bgMix)
   bgMixRef.current = bgMix
   const dark = [23, 21, 13]

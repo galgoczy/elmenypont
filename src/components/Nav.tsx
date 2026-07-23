@@ -32,8 +32,8 @@ const LINKS = [
 export function Nav({ heroP = 1, scrolled, base = '' }: NavProps) {
   // reveal mix: the nav switches from light-on-dark to dark-on-cream in
   // step with the hero background's own (earlier) lightening track — see
-  // bgMix in Hero.tsx, cl(p, 0.56, 0.78).
-  const mix = cl(heroP, 0.56, 0.78)
+  // bgMix in Hero.tsx, cl(p, 0.63, 0.78).
+  const mix = cl(heroP, 0.63, 0.78)
   const navDark = !scrolled && mix < 0.5
   const lang = useLang()
   const en = lang === 'en'
