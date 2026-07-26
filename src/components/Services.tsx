@@ -182,27 +182,65 @@ export function Services() {
                 </div>
               ))}
             </div>
-            <a
-              href={loc('/ai-fotoautomata')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 9,
-                marginTop: 30,
-                fontWeight: 600,
-                fontSize: 16,
-                color: '#fff',
-                border: '1.5px solid rgba(246,241,233,.28)',
-                padding: '13px 24px',
-                borderRadius: 100,
-                transition: 'background .3s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(246,241,233,.08)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-            >
-              {t('AI fotóautomata bérlés', 'AI photo booth rental')} <span>→</span>{' '}
-              <span style={{ opacity: 0.55, fontWeight: 400 }}>{t('105 000 Ft-tól', 'from 105,000 HUF')}</span>
-            </a>
+            {/* price as plain text, then conversion-first actions: quote →
+                on-page form, demo → the AI page's demo form, and a quiet
+                deeper-info link last */}
+            <p style={{ marginTop: 26, fontSize: 14.5, color: 'rgba(246,241,233,.6)' }}>
+              {t('105 000 Ft-tól', 'from 105,000 HUF')}
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, marginTop: 12 }}>
+              <a
+                href="#kapcsolat"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontWeight: 600,
+                  fontSize: 16,
+                  background: '#F6F1E9',
+                  color: '#17150D',
+                  padding: '13px 24px',
+                  borderRadius: 100,
+                  transition: 'box-shadow .3s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 14px 30px -12px rgba(246,241,233,.45)')}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
+              >
+                {t('Ajánlatot kérek', 'Get a quote')} →
+              </a>
+              <a
+                href={`${loc('/ai-fotoautomata')}#bemutato`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontWeight: 600,
+                  fontSize: 16,
+                  background: '#4888F8',
+                  color: '#fff',
+                  padding: '13px 22px',
+                  borderRadius: 100,
+                  transition: 'box-shadow .3s',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 14px 30px -12px rgba(72,136,248,.55)')}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
+              >
+                {t('Hogyan működik?', 'How does it work?')}
+              </a>
+              <a
+                href={loc('/ai-fotoautomata')}
+                style={{
+                  fontWeight: 600,
+                  fontSize: 15,
+                  color: 'rgba(246,241,233,.7)',
+                  textDecoration: 'underline',
+                  textUnderlineOffset: 4,
+                  padding: '13px 4px',
+                }}
+              >
+                {t('További infó', 'More info')} →
+              </a>
+            </div>
           </div>
           <div style={{ position: 'relative' }}>
             <BeforeAfter

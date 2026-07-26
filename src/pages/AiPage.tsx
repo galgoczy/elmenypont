@@ -616,8 +616,24 @@ export function AiPage() {
                   flexWrap: 'wrap',
                 }}
               >
-                <div style={{ flex: '1 1 320px' }}>
-                  <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 22, color: '#17150D' }}>
+                {/* appetizer image: a striking AI sample makes the promise
+                    tangible right where the visitor decides to try it */}
+                <img
+                  className="ep-demo-img"
+                  src="/assets/photos/ai/hero-uhajos-full.jpg"
+                  alt={t(
+                    'AI Selfiemata minta: vendégfotóból generált űrhajós-portré',
+                    'AI Selfiemata sample: an astronaut portrait generated from a guest photo',
+                  )}
+                />
+                <div style={{ flex: '1 1 300px' }}>
+                  <p style={{ fontSize: 14.5, fontWeight: 700, color: '#9B6BF2' }}>
+                    {t(
+                      '✦ Az AI Selfiemata elképesztő képeket készít — nézd meg te is, hogyan működik!',
+                      '✦ AI Selfiemata makes jaw-dropping images — see for yourself how it works!',
+                    )}
+                  </p>
+                  <h3 style={{ fontFamily: 'Syne', fontWeight: 700, fontSize: 22, color: '#17150D', marginTop: 8 }}>
                     {t('Kérek bemutatót!', 'Request a demo!')}
                   </h3>
                   <p style={{ fontSize: 15.5, lineHeight: 1.55, color: '#46433A', marginTop: 8 }}>

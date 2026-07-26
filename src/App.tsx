@@ -28,6 +28,8 @@ export default function App() {
       <main>
         <Hero heroP={heroP} />
         <Marquee />
+        {/* social proof right below the hero — trust lands before the pitch */}
+        <Partners />
         <TrendSection />
         <WhatWeDo />
         <Services />
@@ -36,7 +38,6 @@ export default function App() {
         <DoodleBreak />
         <IsoScene />
         <WhyUs />
-        <Partners />
         <Faq />
         <ContactCTA preselect={["AI Selfiemata"]} />
         <Footer />

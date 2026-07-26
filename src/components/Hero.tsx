@@ -1011,9 +1011,12 @@ export function Hero({ heroP: p }: HeroProps) {
               marginTop: 38,
             }}
           >
+            {/* conversion-first CTA order: quote (primary, highest contrast),
+                demo (secondary), then a quiet in-page pointer — the deeper
+                product pages are reachable from the nav, not pushed here */}
             <Magnetic strength={8}>
               <a
-                href={loc('/ai-fotoautomata')}
+                href="#kapcsolat"
                 style={{
                   background: '#17150D',
                   color: '#F6F1E9',
@@ -1029,27 +1032,26 @@ export function Hero({ heroP: p }: HeroProps) {
                 onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 34px -14px rgba(23,21,13,.55)')}
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
               >
-                {t('Érdekel! Mutasd', "I'm in! Show me")} →
+                {t('Ajánlatot kérek', 'Get a quote')} →
               </a>
             </Magnetic>
             <Magnetic strength={6}>
               <a
-                href="#elmeny"
+                href={`${loc('/ai-fotoautomata')}#bemutato`}
                 style={{
                   display: 'inline-block',
-                  background: 'transparent',
-                  color: '#17150D',
+                  background: '#4888F8',
+                  color: '#fff',
                   fontWeight: 600,
                   fontSize: 17,
-                  padding: '17px 30px',
+                  padding: '17px 28px',
                   borderRadius: 100,
-                  border: '1.5px solid rgba(0,0,0,.18)',
-                  transition: 'background .25s',
+                  transition: 'box-shadow .3s',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,.05)')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 16px 34px -14px rgba(72,136,248,.5)')}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = 'none')}
               >
-                {t('Szolgáltatások', 'Services')}
+                {t('Bemutatót kérek', 'Request a demo')}
               </a>
             </Magnetic>
             <a
@@ -1066,7 +1068,7 @@ export function Hero({ heroP: p }: HeroProps) {
                 animation: 'ep-nudge 1.8s ease-in-out infinite',
               }}
             >
-              {t('Ismerd meg!', 'See how it works')}
+              {t('Mit csinálunk?', 'What we do')}
               <span aria-hidden="true" style={{ fontSize: 18, lineHeight: 1 }}>
                 ↓
               </span>
@@ -1127,13 +1129,34 @@ export function Hero({ heroP: p }: HeroProps) {
             pointerEvents: Number(hintOp) > 0.05 ? 'auto' : 'none',
           }}
         >
-          <span style={{ fontSize: 12, letterSpacing: '.16em', textTransform: 'uppercase' }}>
-            {t('Görgess vagy koppints', 'Scroll or tap')}
+          {/* visible play pill: the opening screen's single clear action */}
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 10,
+              fontSize: 15,
+              fontWeight: 600,
+              padding: '12px 26px',
+              borderRadius: 100,
+              border: '1.5px solid currentColor',
+              background: 'rgba(246,241,233,.08)',
+              backdropFilter: 'blur(4px)',
+              WebkitBackdropFilter: 'blur(4px)',
+            }}
+          >
+            <span aria-hidden="true" style={{ fontSize: 12 }}>
+              ▶
+            </span>
+            {t('Mutasd', 'Show me')}
+          </span>
+          <span style={{ fontSize: 11, letterSpacing: '.16em', textTransform: 'uppercase', opacity: 0.75 }}>
+            {t('vagy görgess', 'or scroll')}
           </span>
           <span
             style={{
               width: 1,
-              height: 38,
+              height: 26,
               background: 'currentColor',
               animation: 'ep-bob 1.8s ease-in-out infinite',
             }}
