@@ -1110,6 +1110,7 @@ export function Hero({ heroP: p }: HeroProps) {
           type="button"
           onClick={playHero}
           aria-label={t('Animáció lejátszása', 'Play animation')}
+          className="ep-play-hint"
           style={{
             position: 'absolute',
             bottom: 64,

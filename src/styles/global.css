@@ -402,6 +402,13 @@ a {
   }
 }
 
+/* the opening play pill sits a bit higher on phones */
+@media (max-width: 640px) {
+  .ep-play-hint {
+    bottom: 100px !important;
+  }
+}
+
 /* AI demo card appetizer image: portrait beside the copy on desktop, a
    full-width banner on phones so the card stacks cleanly */
 .ep-demo-img {
