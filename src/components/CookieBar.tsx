@@ -4,13 +4,29 @@ import { useT, useLoc } from '../i18n'
 declare global {
   interface Window {
     epLoadGa?: () => void
+    epLoadFbq?: () => void
     gtag?: (...args: unknown[]) => void
+    fbq?: (...args: unknown[]) => void
   }
 }
 
-/** GA4 event helper — no-op until the visitor consented and gtag loaded. */
+/** Meta Pixel names for our key events; anything else goes as trackCustom. */
+const FB_EVENTS: Record<string, string> = {
+  generate_lead: 'Lead',
+  demo_request: 'Lead',
+  contact_click: 'Contact',
+}
+
+/** Analytics event helper (GA4 + Meta Pixel) — no-op until the visitor
+ *  consented and the trackers loaded. */
 export function track(name: string, params?: Record<string, unknown>) {
-  if (typeof window !== 'undefined' && window.gtag) window.gtag('event', name, params || {})
+  if (typeof window === 'undefined') return
+  if (window.gtag) window.gtag('event', name, params || {})
+  if (window.fbq) {
+    const std = FB_EVENTS[name]
+    if (std) window.fbq('track', std, params || {})
+    else window.fbq('trackCustom', name, params || {})
+  }
 }
 
 /**
@@ -39,7 +55,10 @@ export function CookieBar() {
     } catch {
       /* ignore */
     }
-    if (ok) window.epLoadGa?.()
+    if (ok) {
+      window.epLoadGa?.()
+      window.epLoadFbq?.()
+    }
     setShow(false)
   }
 

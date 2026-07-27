@@ -73,11 +73,11 @@ export function PrivacyPage() {
           )}
         </p>
 
-        <h2 style={h2}>{t('5. Webanalitika', '5. Web analytics')}</h2>
+        <h2 style={h2}>{t('5. Webanalitika és hirdetésmérés', '5. Web analytics and ad measurement')}</h2>
         <p style={{ marginTop: 10 }}>
           {t(
-            'A weboldal a látogatottság méréséhez Google Analytics 4 szolgáltatást használ, kizárólag a látogató hozzájárulása esetén (süti-beállítások). A mérés anonimizált; személyre szabott hirdetési adatkezelés nem történik.',
-            "To measure traffic, the website uses Google Analytics 4, only with the visitor's consent (cookie settings). The measurement is anonymised; no personalised advertising data processing takes place.",
+            'A weboldal a látogatottság méréséhez Google Analytics 4 szolgáltatást, a hirdetési kampányok eredményességének méréséhez pedig Meta (Facebook) Pixelt használ — mindkettőt kizárólag a látogató hozzájárulása esetén (süti-beállítások). A Google Analytics mérése anonimizált. A Meta Pixel a Meta Platforms Ireland Ltd. részére továbbít eseményadatokat (pl. oldalmegtekintés, ajánlatkérés ténye); részletek a Meta adatkezelési tájékoztatójában (facebook.com/privacy). Hozzájárulás hiányában egyik mérőkód sem töltődik be.',
+            "To measure traffic, the website uses Google Analytics 4, and to measure the effectiveness of advertising campaigns, the Meta (Facebook) Pixel — both only with the visitor's consent (cookie settings). Google Analytics measurement is anonymised. The Meta Pixel transmits event data (e.g. page views, the fact of a quote request) to Meta Platforms Ireland Ltd.; see Meta's privacy policy (facebook.com/privacy) for details. Without consent, neither tracking code is loaded.",
           )}
         </p>
 
