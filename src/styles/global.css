@@ -494,6 +494,9 @@ a {
   .ep-chip {
     padding: 10px 13px;
     border-radius: 12px;
+    /* three equal boxes — only the text differs */
+    flex: 1 1 0;
+    min-width: 0;
   }
   .ep-chip-value {
     font-size: 18px;
