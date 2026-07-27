@@ -1112,7 +1112,7 @@ export function Hero({ heroP: p }: HeroProps) {
           aria-label={t('Animáció lejátszása', 'Play animation')}
           style={{
             position: 'absolute',
-            bottom: 34,
+            bottom: 64,
             left: '50%',
             transform: 'translateX(-50%)',
             display: 'flex',
@@ -1134,10 +1134,10 @@ export function Hero({ heroP: p }: HeroProps) {
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 10,
-              fontSize: 15,
+              gap: 11,
+              fontSize: 17.5,
               fontWeight: 600,
-              padding: '12px 26px',
+              padding: '15px 34px',
               borderRadius: 100,
               border: '1.5px solid currentColor',
               background: 'rgba(246,241,233,.08)',
@@ -1145,7 +1145,7 @@ export function Hero({ heroP: p }: HeroProps) {
               WebkitBackdropFilter: 'blur(4px)',
             }}
           >
-            <span aria-hidden="true" style={{ fontSize: 12 }}>
+            <span aria-hidden="true" style={{ fontSize: 14 }}>
               ▶
             </span>
             {t('Mutasd', 'Show me')}
