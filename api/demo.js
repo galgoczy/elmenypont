@@ -1,5 +1,6 @@
 import { sendMail, mailMode } from '../lib/mailer.js'
 import { emailShell, button, panel, p } from '../lib/emailLayout.js'
+import { spamReason } from '../lib/spamGuard.js'
 
 const DEMO_URL = 'https://aidemo.elmeny.hu'
 const DEMO_PASS = 'aifénykép'
@@ -17,6 +18,12 @@ export default async function handler(req, res) {
   const en = (req.body || {}).lang === 'en' // requester's language
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ ok: false, error: 'Érvénytelen email cím' })
+  }
+  // invisible spam guards — dropped silently, see lib/spamGuard.js
+  const spam = spamReason(req.body || {})
+  if (spam) {
+    console.warn('demo: dropped spam', { reason: spam, domain: email.split('@')[1] || '' })
+    return res.status(200).json({ ok: true })
   }
 
   const delivered = []

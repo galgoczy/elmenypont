@@ -8,6 +8,7 @@ import { Magnetic } from '../components/Magnetic'
 import { BeforeAfter } from '../components/BeforeAfter'
 import { RocketTrail, ScrollTrail } from '../components/RocketTrail'
 import { Faq } from '../components/Faq'
+import { getFormToken } from '../formToken'
 import { ContactCTA } from '../components/ContactCTA'
 import { track } from '../components/CookieBar'
 import { Footer } from '../components/Footer'
@@ -130,14 +131,20 @@ export function AiPage() {
 
   // demo request mini-form state
   const [demoState, setDemoState] = useState<'idle' | 'sending' | 'ok' | 'err'>('idle')
+  // invisible spam guards (see lib/spamGuard.js): page-open time + signed token
+  const loadedAt = useRef(Date.now())
+  useEffect(() => {
+    void getFormToken()
+  }, [])
   const demoSubmit = async (form: HTMLFormElement) => {
     setDemoState('sending')
     try {
       const email = new FormData(form).get('demoEmail')
+      const formToken = await getFormToken()
       const res = await fetch('/api/demo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, lang }),
+        body: JSON.stringify({ email, lang, elapsedMs: Date.now() - loadedAt.current, formToken }),
       })
       const json = await res.json().catch(() => ({ ok: false }))
       if (!res.ok || !json.ok) throw new Error()

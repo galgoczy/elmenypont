@@ -1,9 +1,10 @@
-import { useRef, useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type FocusEvent as ReactFocusEvent } from 'react'
 import { useT, useLoc, useLang } from '../i18n'
 import { Reveal } from './Reveal'
 import { Doodle } from './Doodle'
 import { Magnetic } from './Magnetic'
 import { track } from './CookieBar'
+import { getFormToken } from '../formToken'
 
 const EMAIL = 'hello@elmeny.hu'
 const PHONE_LABEL = '+36 20 468 0489'
@@ -56,6 +57,10 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
   // invisible spam guard: when the form first mounted, so the server can
   // drop implausibly fast (bot) submissions — see api/contact.js
   const loadedAt = useRef(Date.now())
+  // signed token proving the page itself is posting (see lib/spamGuard.js)
+  useEffect(() => {
+    void getFormToken()
+  }, [])
 
   const toggleService = (s: string) =>
     setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))
@@ -65,6 +70,7 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
     setError('')
     const f = new FormData(form)
     try {
+      const formToken = await getFormToken()
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -80,6 +86,7 @@ export function ContactCTA({ preselect = [] }: { preselect?: string[] }) {
           // bot traps (invisible to real users)
           website: f.get('website'),
           elapsedMs: Date.now() - loadedAt.current,
+          formToken,
           // requester's language — the confirmation email is sent in it
           lang,
         }),
